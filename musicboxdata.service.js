@@ -1,5 +1,5 @@
 (function(){
-    var app = angular.module("AddshowroomApp");
+    var app = angular.module("AddMusicApp");
     app.service("MusicBoxDataServiceSvc", function($http){
        
         var self = this;

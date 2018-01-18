@@ -1,10 +1,10 @@
-var app = angular.module("AddshowroomApp", []);
+var app = angular.module("AddMusicApp", []);
 
 (function () {
-    var app = angular.module("AddshowroomApp");
-    app.controller("AddshowroomCtrl", AddshowroomCtrl);
+    var app = angular.module("AddMusicApp");
+    app.controller("AddMusicCtrl", AddMusicCtrl);
 
-    function AddshowroomCtrl(MusicBoxDataServiceSvc) {
+    function AddMusicCtrl(MusicBoxDataServiceSvc) {
         var self = this;
         self.editMode = false;
         self.addMode = false;
@@ -65,15 +65,18 @@ var app = angular.module("AddshowroomApp", []);
 
         this.toggleEditMode = function () {
             this.editMode = !this.editMode;
-            self.addMode = false;
+            this.addMode = false;
         }
 
         this.addMusicbox = function () {
-            self.addMode = true;
+            this.addMode = true;
             this.selectedMusicBox = {
                 "id": new Date().toTimeString()
             };
             this.editMode = true;
+            self.successMessage = undefined;
+            self.errorMessage = undefined;
+            self.addMessage = undefined;
 
 
         }

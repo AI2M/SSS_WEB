@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="AddshowroomApp">
+<html lang="en" ng-app="AddMusicApp">
 
 <head>
     <meta charset="UTF-8">
@@ -9,11 +9,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
         crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-    <script src="addshowroom.controller.js"></script>
-    <script src="addshowroom.service.js"></script>
+    <script src="addMusic.controller.js"></script>
+    <script src="addMusic.service.js"></script>
     <script src="musicboxdata.service.js"></script>
 </head>
-
 <body>
     <div class="pos-f-t">
         <div class="collapse" id="navbarToggleExternalContent">
@@ -34,7 +33,7 @@
 
         </nav>
     </div>
-    <div class="container" ng-controller="AddshowroomCtrl as ctrl">
+    <div class="container" ng-controller="AddMusicCtrl as ctrl">
         <div class="row">
             <div class="col-md-6">
 
@@ -42,10 +41,12 @@
                     <div class="alert alert-primary" ng-if="ctrl.addMessage">{{ctrl.addMessage}}</div>
                     <button class="btn btn-primary" ng-click="ctrl.addMusicbox()">Add</button>
                     <li class="list-group-item" ng-repeat="musicbox in ctrl.musicboxs" ng-click="ctrl.selectMusicBox($index)">
-                        <span> {{musicbox.name + " -- detail " + musicbox.detail}}</span>
+                        <span> {{musicbox.id+" "+musicbox.name}} </span>
+                        <span class="font-weight-bold">{{" detail: "}} </span>
+                        <span>{{musicbox.detail}}</span>
 
                     </li>
-                   
+
                 </ul>
 
             </div>
@@ -56,38 +57,37 @@
                     <div class="media-left">
                         <a href="#">
                             <img src="http://seveneyesantiques.com/wp-content/plugins/special-recent-posts/cache/srpthumb-p1772-100x100-no.jpg">
-
                         </a>
-
+                        <p>
+                            <button type="button" class="btn btn-secondary btn-sm">upload</button>
+                        </p>
                     </div>
+
                     <div class="media-body">
 
                         <span ng-hide="ctrl.editMode" class="media-heading">
-                            <h2>{{ctrl.selectedMusicBox.name}}</h2>
+                            <p>
+                                <h2>{{ctrl.selectedMusicBox.name}}</h2>
+                            </p>
                         </span>
 
+                        <span ng-show="ctrl.editMode">Name:</span>
                         <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.name">
                         <div>
+                            <p>
+                                <span>Id:</span>
+                                <span ng-hide="ctrl.editMode">{{ctrl.selectedMusicBox.id}}</span>
+                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.id">
+                            </p>
                             <p>
                                 <span>Price:</span>
                                 <span ng-hide="ctrl.editMode">{{ctrl.selectedMusicBox.price}}</span>
                                 <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.price">
-
-
                             </p>
                             <p>
                                 <span>Detail:</span>
                                 <span ng-hide="ctrl.editMode">{{ctrl.selectedMusicBox.detail}}</span>
                                 <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.detail">
-
-
-                            </p>
-                            <p>
-                                <span>Position:</span>
-                                <span ng-hide="ctrl.editMode">{{ctrl.selectedMusicBox.position}}</span>
-                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.position">
-
-
                             </p>
                             <button ng-hide="ctrl.editMode" class="btn btn-warning" ng-click="ctrl.toggleEditMode()">Edit</button>
                             <button ng-show="ctrl.editMode" class="btn btn-success" ng-click="ctrl.saveMusic()">Save</button>
