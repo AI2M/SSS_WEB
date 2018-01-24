@@ -2,35 +2,33 @@
   "showrooms": [
     {
       "id": "7",
-      "location": "a",
-      "region": "as",
-      "password": "3"
+      "location": "maya",
+      "region": "chiangmai",
+      "password": "maya023"
     },
     {
       "id": "6",
-      "location": "b",
-      "region": "sd",
-      "password": "3"
+      "location": "jamfha",
+      "region": "cmu",
+      "password": "3232"
     },
     {
       "id": "5",
-      "location": "c",
-      "region": "df",
-      "password": "3"
+      "location": "Oasys",
+      "region": "CPE",
+      "password": "oasys23"
     },
     {
       "id": "4",
-      "location": "d",
-      "region": "ds",
-      "password": "3"
+      "location": "central",
+      "region": "chiangmai",
+      "password": "cen3"
     },
     {
-      "id": "3",
-      "location": "e",
-      "region": "fg",
-      "password": "3"
+      "id": "23",
+      "location": "robinson",
+      "password": "1234",
+      "region": "chiangrai"
     }
-
-    
   ]
 }

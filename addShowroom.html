@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="AddMusicApp">
+<html lang="en" ng-app="AddShowroomApp">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>addMusic</title>
+    <title>addShowroom</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
         crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-    <script src="addMusic.controller.js"></script>
-    <script src="addMusic.service.js"></script>
-    <script src="musicboxdata.service.js"></script>
+    <script src="addShowroom.controller.js"></script>
+    <script src="showroomdata.service.js"></script>
 </head>
 <body>
     <div class="pos-f-t">
@@ -33,17 +32,18 @@
 
         </nav>
     </div>
-    <div class="container" ng-controller="AddMusicCtrl as ctrl">
+    <div class="container" ng-controller="AddShowroomCtrl as ctrl">
         <div class="row">
             <div class="col-md-6">
 
                 <ul class="list-group">
                     <div class="alert alert-primary" ng-if="ctrl.addMessage">{{ctrl.addMessage}}</div>
-                    <button class="btn btn-primary" ng-click="ctrl.addMusicbox()">Add</button>
-                    <li class="list-group-item" ng-repeat="musicbox in ctrl.musicboxs" ng-click="ctrl.selectMusicBox($index)">
-                        <span> {{musicbox.id+" "+musicbox.name}} </span>
-                        <span class="font-weight-bold">{{" detail: "}} </span>
-                        <span>{{musicbox.detail}}</span>
+                    <button class="btn btn-primary" ng-click="ctrl.addShowroom()">Add</button>
+                    <li class="list-group-item" ng-repeat="showroom in ctrl.showrooms" ng-click="ctrl.selectShowroom($index)">
+                        <span class="font-weight-bold">{{" id: "}} </span>
+                        <span> {{showroom.id}} </span>
+                        <span class="font-weight-bold">{{" loaction: "}} </span>
+                        <span>{{showroom.location}}</span>
 
                     </li>
 
@@ -67,31 +67,31 @@
 
                         <span ng-hide="ctrl.editMode" class="media-heading">
                             <p>
-                                <h2>{{ctrl.selectedMusicBox.name}}</h2>
+                                <h2>{{ctrl.selectedShowroom.location}}</h2>
                             </p>
                         </span>
 
-                        <span ng-show="ctrl.editMode">Name:</span>
-                        <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.name">
+                        <span ng-show="ctrl.editMode">Location:</span>
+                        <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedShowroom.location">
                         <div>
                             <p>
                                 <span>Id:</span>
-                                <span ng-hide="ctrl.editMode">{{ctrl.selectedMusicBox.id}}</span>
-                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.id">
+                                <span ng-hide="ctrl.editMode">{{ctrl.selectedShowroom.id}}</span>
+                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedShowroom.id">
                             </p>
                             <p>
-                                <span>Price:</span>
-                                <span ng-hide="ctrl.editMode">{{ctrl.selectedMusicBox.price}}</span>
-                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.price">
+                                <span>Password:</span>
+                                <span ng-hide="ctrl.editMode">{{ctrl.selectedShowroom.password}}</span>
+                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedShowroom.password">
                             </p>
                             <p>
-                                <span>Detail:</span>
-                                <span ng-hide="ctrl.editMode">{{ctrl.selectedMusicBox.detail}}</span>
-                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.detail">
+                                <span>Region:</span>
+                                <span ng-hide="ctrl.editMode">{{ctrl.selectedShowroom.region}}</span>
+                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedShowroom.region">
                             </p>
                             <button ng-hide="ctrl.editMode" class="btn btn-warning" ng-click="ctrl.toggleEditMode()">Edit</button>
-                            <button ng-show="ctrl.editMode" class="btn btn-success" ng-click="ctrl.saveMusic()">Save</button>
-                            <button ng-hide="ctrl.editMode" type="button" ng-click="ctrl.deleteMusicBox()" class="btn btn-danger">Delete</button>
+                            <button ng-show="ctrl.editMode" class="btn btn-success" ng-click="ctrl.saveShowroom()">Save</button>
+                            <button ng-hide="ctrl.editMode" type="button" ng-click="ctrl.deleteShowroom()" class="btn btn-danger">Delete</button>
                             <button ng-show="ctrl.editMode" class="btn btn-danger" ng-click="ctrl.cancel()">Cancel</button>
 
 
