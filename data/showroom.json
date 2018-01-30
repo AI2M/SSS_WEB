@@ -1,0 +1,28 @@
+{
+  "showrooms": [
+    {
+      "id": "6",
+      "location": "jamfha",
+      "region": "cmu",
+      "password": "32322"
+    },
+    {
+      "id": "4",
+      "location": "central",
+      "region": "chiangmai thailand",
+      "password": "cen32"
+    },
+    {
+      "id": "23",
+      "location": "robinson",
+      "password": "1234",
+      "region": "chiangrai"
+    },
+    {
+      "id": "21",
+      "location": "cenFes",
+      "password": "1234",
+      "region": "ChiangRai"
+    }
+  ]
+}

@@ -6,17 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>addMusic</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-    <script src="addMusic.controller.js"></script>
-    <script src="addMusic.service.js"></script>
-    <script src="musicboxdata.service.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="addMusic/addMusic.controller.js"></script>
 </head>
+
 <body>
     <div class="pos-f-t">
-        <div class="collapse" id="navbarToggleExternalContent">   
-            <div class="bg-dark p-4">            
+        <div class="collapse" id="navbarToggleExternalContent">
+            <div class="bg-dark p-4">
                 <h4 class="text-white">Collapsed content</h4>
                 <span class="text-muted">Toggleable via the navbar brand.</span>
             </div>
@@ -33,14 +39,14 @@
 
         </nav>
     </div>
-    <div class="container" ng-controller="AddMusicCtrl as ctrl">
+    <div class="container" ng-controller="AddMusicCtrl">
         <div class="row">
             <div class="col-md-6">
 
                 <ul class="list-group">
-                    <div class="alert alert-primary" ng-if="ctrl.addMessage">{{ctrl.addMessage}}</div>
-                    <button class="btn btn-primary" ng-click="ctrl.addMusicbox()">Add</button>
-                    <li class="list-group-item" ng-repeat="musicbox in ctrl.musicboxs" ng-click="ctrl.selectMusicBox($index)">
+                    <div class="alert alert-primary" ng-if="addMessage">{{addMessage}}</div>
+                    <button class="btn btn-primary" ng-click="addMusicbox()">Add</button>
+                    <li class="list-group-item" ng-repeat="musicbox in musicboxs" ng-click="selectMusicBox($index)">
                         <span> {{musicbox.id+" "+musicbox.name}} </span>
                         <span class="font-weight-bold">{{" detail: "}} </span>
                         <span>{{musicbox.detail}}</span>
@@ -51,8 +57,8 @@
 
             </div>
             <div class="col-md-6">
-                <div class="alert alert-success" ng-if="ctrl.successMessage">{{ctrl.successMessage}}</div>
-                <div class="alert alert-danger" ng-if="ctrl.errorMessage">{{ctrl.errorMessage}}</div>
+                <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
+                <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
@@ -65,34 +71,34 @@
 
                     <div class="media-body">
 
-                        <span ng-hide="ctrl.editMode" class="media-heading">
+                        <span ng-hide="editMode" class="media-heading">
                             <p>
-                                <h2>{{ctrl.selectedMusicBox.name}}</h2>
+                                <h2>{{selectedMusicBox.name}}</h2>
                             </p>
                         </span>
 
-                        <span ng-show="ctrl.editMode">Name:</span>
-                        <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.name">
+                        <span ng-show="editMode">Name:</span>
+                        <input type="text" ng-show="editMode" ng-model="selectedMusicBox.name">
                         <div>
                             <p>
                                 <span>Id:</span>
-                                <span ng-hide="ctrl.editMode">{{ctrl.selectedMusicBox.id}}</span>
-                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.id">
+                                <span ng-hide="addMode">{{selectedMusicBox.id}}</span>
+                                <input type="text" ng-show="addMode" ng-model="selectedMusicBox.id">
                             </p>
                             <p>
                                 <span>Price:</span>
-                                <span ng-hide="ctrl.editMode">{{ctrl.selectedMusicBox.price}}</span>
-                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.price">
+                                <span ng-hide="editMode">{{selectedMusicBox.price}}</span>
+                                <input type="text" ng-show="editMode" ng-model="selectedMusicBox.price">
                             </p>
                             <p>
                                 <span>Detail:</span>
-                                <span ng-hide="ctrl.editMode">{{ctrl.selectedMusicBox.detail}}</span>
-                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedMusicBox.detail">
+                                <span ng-hide="editMode">{{selectedMusicBox.detail}}</span>
+                                <input type="text" ng-show="editMode" ng-model="selectedMusicBox.detail">
                             </p>
-                            <button ng-hide="ctrl.editMode" class="btn btn-warning" ng-click="ctrl.toggleEditMode()">Edit</button>
-                            <button ng-show="ctrl.editMode" class="btn btn-success" ng-click="ctrl.saveMusic()">Save</button>
-                            <button ng-hide="ctrl.editMode" type="button" ng-click="ctrl.deleteMusicBox()" class="btn btn-danger">Delete</button>
-                            <button ng-show="ctrl.editMode" class="btn btn-danger" ng-click="ctrl.cancel()">Cancel</button>
+                            <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
+                            <button ng-show="editMode" class="btn btn-success" ng-click="saveMusic()">Save</button>
+                            <button ng-hide="editMode" type="button" ng-click="deleteMusic()" class="btn btn-danger">Delete</button>
+                            <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
 
 
                         </div>

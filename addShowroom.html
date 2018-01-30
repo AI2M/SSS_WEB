@@ -6,16 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>addShowroom</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
-        crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-    <script src="addShowroom.controller.js"></script>
-    <script src="showroomdata.service.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+<script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
+<script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="addShowroom/addShowroom.controller.js"></script>
+    
 </head>
+
 <body>
     <div class="pos-f-t">
-        <div class="collapse" id="navbarToggleExternalContent">   
-            <div class="bg-dark p-4">            
+        <div class="collapse" id="navbarToggleExternalContent">
+            <div class="bg-dark p-4">
                 <h4 class="text-white">Collapsed content</h4>
                 <span class="text-muted">Toggleable via the navbar brand.</span>
             </div>
@@ -32,14 +40,14 @@
 
         </nav>
     </div>
-    <div class="container" ng-controller="AddShowroomCtrl as ctrl">
+    <div class="container" ng-controller="AddShowroomCtrl">
         <div class="row">
             <div class="col-md-6">
 
                 <ul class="list-group">
-                    <div class="alert alert-primary" ng-if="ctrl.addMessage">{{ctrl.addMessage}}</div>
-                    <button class="btn btn-primary" ng-click="ctrl.addShowroom()">Add</button>
-                    <li class="list-group-item" ng-repeat="showroom in ctrl.showrooms" ng-click="ctrl.selectShowroom($index)">
+                    <div class="alert alert-primary" ng-if="addMessage">{{addMessage}}</div>
+                    <button class="btn btn-primary" ng-click="addShowroom()">Add</button>
+                    <li class="list-group-item" ng-repeat="showroom in showrooms" ng-click="selectShowroom($index)">
                         <span class="font-weight-bold">{{" id: "}} </span>
                         <span> {{showroom.id}} </span>
                         <span class="font-weight-bold">{{" loaction: "}} </span>
@@ -51,8 +59,8 @@
 
             </div>
             <div class="col-md-6">
-                <div class="alert alert-success" ng-if="ctrl.successMessage">{{ctrl.successMessage}}</div>
-                <div class="alert alert-danger" ng-if="ctrl.errorMessage">{{ctrl.errorMessage}}</div>
+                <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
+                <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
@@ -65,34 +73,34 @@
 
                     <div class="media-body">
 
-                        <span ng-hide="ctrl.editMode" class="media-heading">
+                        <span ng-hide="editMode" class="media-heading">
                             <p>
-                                <h2>{{ctrl.selectedShowroom.location}}</h2>
+                                <h2>{{selectedShowroom.location}}</h2>
                             </p>
                         </span>
 
-                        <span ng-show="ctrl.editMode">Location:</span>
-                        <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedShowroom.location">
+                        <span ng-show="editMode">Location:</span>
+                        <input type="text" ng-show="editMode" ng-model="selectedShowroom.location">
                         <div>
                             <p>
                                 <span>Id:</span>
-                                <span ng-hide="ctrl.editMode">{{ctrl.selectedShowroom.id}}</span>
-                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedShowroom.id">
+                                <span ng-hide="addMode">{{selectedShowroom.id}}</span>
+                                <input type="text" ng-show="addMode" ng-model="selectedShowroom.id">
                             </p>
                             <p>
                                 <span>Password:</span>
-                                <span ng-hide="ctrl.editMode">{{ctrl.selectedShowroom.password}}</span>
-                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedShowroom.password">
+                                <span ng-hide="editMode">{{selectedShowroom.password}}</span>
+                                <input type="text" ng-show="editMode" ng-model="selectedShowroom.password">
                             </p>
                             <p>
                                 <span>Region:</span>
-                                <span ng-hide="ctrl.editMode">{{ctrl.selectedShowroom.region}}</span>
-                                <input type="text" ng-show="ctrl.editMode" ng-model="ctrl.selectedShowroom.region">
+                                <span ng-hide="editMode">{{selectedShowroom.region}}</span>
+                                <input type="text" ng-show="editMode" ng-model="selectedShowroom.region">
                             </p>
-                            <button ng-hide="ctrl.editMode" class="btn btn-warning" ng-click="ctrl.toggleEditMode()">Edit</button>
-                            <button ng-show="ctrl.editMode" class="btn btn-success" ng-click="ctrl.saveShowroom()">Save</button>
-                            <button ng-hide="ctrl.editMode" type="button" ng-click="ctrl.deleteShowroom()" class="btn btn-danger">Delete</button>
-                            <button ng-show="ctrl.editMode" class="btn btn-danger" ng-click="ctrl.cancel()">Cancel</button>
+                            <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
+                            <button ng-show="editMode" class="btn btn-success" ng-click="saveShowroom()">Save</button>
+                            <button ng-hide="editMode" type="button" ng-click="deleteShowroom()" class="btn btn-danger">Delete</button>
+                            <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
 
 
                         </div>

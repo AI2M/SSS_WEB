@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ShowTranApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>showTransaction</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/chart.js/dist/Chart.min.js"></script>
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="http://jtblin.github.io/angular-chart.js/dist/angular-chart.js"></script>
+
+   
+
+    <script src="showTransaction/showTran.controller.js"></script>
+
+
+
+
+
+
+</head>
+
+<body>
+    <div class="pos-f-t">
+        <div class="collapse" id="navbarToggleExternalContent">
+            <div class="bg-dark p-4">
+                <h4 class="text-white">Collapsed content</h4>
+                <span class="text-muted">Toggleable via the navbar brand.</span>
+            </div>
+        </div>
+        <nav class="navbar navbar-light" style="background-color: #a9cee9;">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search ">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+
+        </nav>
+    </div>
+    <div class="container" ng-controller="ShowTranCtrl">
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="transaction in transactions" ng-click="selectTransaction($index)">
+                        <span> {{transaction.id}} </span>
+                        <span class="font-weight-bold">{{" date: "}} </span>
+                        <span>{{transaction.date}}</span>
+                        <span class="font-weight-bold">{{" time: "}} </span>
+                        <span>{{transaction.time}}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                    <div class="dropdown" ng-controller="DropDownCtrl">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Dropdown
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" >
+                              <button class="dropdown-item" type="button" ng-repeat="item in items" ng-click="MusicBoxChart()">{{item}}</button>
+                           
+                            </div>
+                          </div>
+                <div class="col-lg-6 col-sm-12" id="doughnut-chart">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Doughnut Chart</div>
+                        <div class="panel-body">
+                            <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-data="num" chart-labels="ids_data"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</body>
+
+</html>
