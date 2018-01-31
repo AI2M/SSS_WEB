@@ -8,22 +8,21 @@
     <title>showTransaction</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
-</head>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 
-    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
-    <script src="http://jtblin.github.io/angular-chart.js/node_modules/chart.js/dist/Chart.min.js"></script>
-    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="http://jtblin.github.io/angular-chart.js/dist/angular-chart.js"></script>
+<script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
+<script src="http://jtblin.github.io/angular-chart.js/node_modules/chart.js/dist/Chart.min.js"></script>
+<script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="http://jtblin.github.io/angular-chart.js/dist/angular-chart.js"></script>
 
-   
 
-    <script src="showTransaction/showTran.controller.js"></script>
+
+<script src="showTransaction/showTran.controller.js"></script>
 
 
 
@@ -55,6 +54,15 @@
     <div class="container" ng-controller="ShowTranCtrl">
         <div class="row">
             <div class="col-md-6">
+                <center>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-primary" ng-click="BarChart(0)">last 7 Day</button>
+                        <button type="button" class="btn btn-success" ng-click="BarChart(1)">this Month</button>
+                        <button type="button" class="btn btn-warning" ng-click="BarChart(2)">this Years</button>
+                    </div>
+
+                </center>
+
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="transaction in transactions" ng-click="selectTransaction($index)">
                         <span> {{transaction.id}} </span>
@@ -64,25 +72,41 @@
                         <span>{{transaction.time}}</span>
                     </li>
                 </ul>
-            </div>
-            <div class="col-md-6">
-                    <div class="dropdown" ng-controller="DropDownCtrl">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Dropdown
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" >
-                              <button class="dropdown-item" type="button" ng-repeat="item in items" ng-click="MusicBoxChart()">{{item}}</button>
-                           
+                <center>
+                    <div id="bar-chart">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{{nameBarChart}}</div>
+                            <div class="panel-body">
+                                <canvas id="bar" class="chart chart-bar" chart-data="y_axis" chart-labels="x_axis" chart-series="series" chart-options="options"></canvas>
                             </div>
-                          </div>
-                <div class="col-lg-6 col-sm-12" id="doughnut-chart">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Doughnut Chart</div>
-                        <div class="panel-body">
-                            <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-data="num" chart-labels="ids_data"></canvas>
                         </div>
                     </div>
-                </div>
+                </center>
+                <button type="button" class="btn btn-primary btn-lg btn-block">See All Transactions</button>
+
+            </div>
+            <div class="col-md-6">
+                <center>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Select Tpye
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <button class="dropdown-item" type="button" ng-repeat="item in DropdownItems" ng-click="Change(item)">{{item}}</button>
+
+                        </div>
+                    </div>
+
+                    <div id="doughnut-chart">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{{nameDoughnutChart}}</div>
+                            <div class="panel-body">
+                                <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-data="num" chart-labels="ids_data"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </center>
             </div>
         </div>
     </div>

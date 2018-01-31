@@ -1,0 +1,52 @@
+{
+  "customers": [
+    {
+      "id": "0928321232",
+      "salary": "20000",
+      "age": "22",
+      "sex": "female",
+      "job":"nurse",
+      "showroom_id": "1"
+    },
+    {
+      "id": "0913234212",
+      "salary": "30000",
+      "age": "25",
+      "sex": "female",
+      "job":"nurse",
+      "showroom_id": "5"
+    },
+    {
+      "id": "0872346789",
+      "salary": "40000",
+      "age": "28",
+      "sex": "male",
+      "job":"Doctor",
+      "showroom_id": "2"
+    },
+    {
+      "id": "0987236477",
+      "salary": "32000",
+      "age": "22",
+      "sex": "female",
+      "job":"nurse",
+      "showroom_id": "3"
+    },
+    {
+      "id": "0642312342",
+      "salary": "21000",
+      "age": "21",
+      "sex": "male",
+      "job":"Teacher",
+      "showroom_id": "1"
+    },
+    {
+      "id": "0816488099",
+      "salary": "43000",
+      "age": "43",
+      "sex": "male",
+      "job":"Doctor",
+      "showroom_id": "2"
+    }
+  ]
+}
