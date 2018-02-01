@@ -1,4 +1,4 @@
-var app = angular.module("ShowCusApp", ['chart.js', 'ui.bootstrap']);
+var app = angular.module("SSS", ['chart.js', 'ui.bootstrap']);
 app.controller("ShowCusCtrl", ['$scope', '$http', function ($scope, $http) {
     $scope.customers = "";
     $http.get("http://localhost:3000/customers")

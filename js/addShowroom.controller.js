@@ -1,5 +1,5 @@
 
-var app = angular.module("AddShowroomApp", []);
+var app = angular.module("SSS", []);
 app.controller("AddShowroomCtrl", ['$scope', '$http', function ($scope, $http) {
 
     $scope.editMode = false;

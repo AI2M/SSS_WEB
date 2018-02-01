@@ -1,5 +1,5 @@
 
-var app = angular.module("AddMusicApp", []);
+var app = angular.module("SSS", []);
 app.controller("AddMusicCtrl", ['$scope', '$http', function ($scope, $http) {
 
     $scope.editMode = false;

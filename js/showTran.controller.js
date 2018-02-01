@@ -1,4 +1,4 @@
-var app = angular.module("ShowTranApp", ['chart.js', 'ui.bootstrap']);
+var app = angular.module("SSS", ['chart.js', 'ui.bootstrap']);
 
 app.controller("ShowTranCtrl", ['$scope', '$http', function ($scope, $http) {
     $scope.transactions = "";

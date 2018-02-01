@@ -2,9 +2,10 @@
   "showrooms": [
     {
       "id": "6",
-      "location": "jamfha",
+      "location": "B2s",
       "region": "cmu",
-      "password": "32322"
+      "password": "1234",
+      "detail": "asda"
     },
     {
       "id": "4",

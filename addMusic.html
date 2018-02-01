@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="AddMusicApp">
+<html lang="en" ng-app="SSS">
 
 <head>
     <meta charset="UTF-8">
@@ -16,28 +16,49 @@
         crossorigin="anonymous"></script>
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="addMusic/addMusic.controller.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+    <script src="js/routing.js"></script>
+    <script src="js/addMusic.controller.js"></script>
 </head>
 
 <body>
-    <div class="pos-f-t">
-        <div class="collapse" id="navbarToggleExternalContent">
-            <div class="bg-dark p-4">
-                <h4 class="text-white">Collapsed content</h4>
-                <span class="text-muted">Toggleable via the navbar brand.</span>
-            </div>
-        </div>
-        <nav class="navbar navbar-light" style="background-color: #a9cee9;">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+    <div>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search ">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+            <a class="navbar-brand" href="#">Smart Small Showroom</a>
 
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="showTransactions.html">Transaction
+                            <span class="sr-only">(Transaction)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="showCustomers.html">Customer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href=addShowroom.html>Showroom</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="addMusic.html">Music Box</a>
+                    </li>
+
+
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
         </nav>
+
     </div>
     <div class="container" ng-controller="AddMusicCtrl">
         <div class="row">
@@ -50,66 +71,69 @@
                         <span> {{musicbox.id+" "+musicbox.name}} </span>
                         <span class="font-weight-bold">{{" detail: "}} </span>
                         <span>{{musicbox.detail}}</span>
-
                     </li>
-
                 </ul>
 
             </div>
             <div class="col-md-6">
+
                 <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
                 <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
-                <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                            <img src="http://seveneyesantiques.com/wp-content/plugins/special-recent-posts/cache/srpthumb-p1772-100x100-no.jpg">
-                        </a>
-                        <p>
-                            <button type="button" class="btn btn-secondary btn-sm">upload</button>
-                        </p>
+                <div class="card mb-2" style="width: 24rem;">
+
+                    <img class="card-img-top" src="http://fb1-ck.lnwfile.com/yt3bxi.jpg" alt="Card image cap">
+                    <div ng-show="editMode" class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile">
+                        <label class="custom-file-label" for="customFile">Choose picture file</label>
                     </div>
 
-                    <div class="media-body">
-
-                        <span ng-hide="editMode" class="media-heading">
-                            <p>
-                                <h2>{{selectedMusicBox.name}}</h2>
-                            </p>
-                        </span>
-
-                        <span ng-show="editMode">Name:</span>
-                        <input type="text" ng-show="editMode" ng-model="selectedMusicBox.name">
-                        <div>
-                            <p>
-                                <span>Id:</span>
-                                <span ng-hide="addMode">{{selectedMusicBox.id}}</span>
-                                <input type="text" ng-show="addMode" ng-model="selectedMusicBox.id">
-                            </p>
-                            <p>
-                                <span>Price:</span>
-                                <span ng-hide="editMode">{{selectedMusicBox.price}}</span>
-                                <input type="text" ng-show="editMode" ng-model="selectedMusicBox.price">
-                            </p>
-                            <p>
-                                <span>Detail:</span>
-                                <span ng-hide="editMode">{{selectedMusicBox.detail}}</span>
-                                <input type="text" ng-show="editMode" ng-model="selectedMusicBox.detail">
-                            </p>
-                            <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
-                            <button ng-show="editMode" class="btn btn-success" ng-click="saveMusic()">Save</button>
-                            <button ng-hide="editMode" type="button" ng-click="deleteMusic()" class="btn btn-danger">Delete</button>
-                            <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
-
-
+                    <div class="card-body">
+                        <h2 ng-hide="editMode" class="card-title">{{selectedMusicBox.name}}</h2>
+                        <div ng-show="editMode" class="form-group row">
+                            <label class="col-sm-3 col-form-label">Name</label>
+                            <div class="col-sm-7">
+                                <input ng-model="selectedMusicBox.name" type="text" class="form-control" placeholder="Name">
+                            </div>
                         </div>
+
+                        <p class="card-text" ng-hide="addMode">Id: {{selectedMusicBox.id}} </p>
+                        <div ng-show="addMode" class="form-group row">
+                            <label class="col-sm-3 col-form-label">Id</label>
+                            <div class="col-sm-7">
+                                <input ng-model="selectedMusicBox.id" type="text" class="form-control" placeholder="Id">
+                            </div>
+                        </div>
+
+                        <p class="card-text" ng-hide="editMode">Price: {{selectedMusicBox.price}} </p>
+                        <div ng-show="editMode" class="form-group row">
+                            <label class="col-sm-3 col-form-label">Price</label>
+                            <div class="col-sm-7">
+                                <input ng-model="selectedMusicBox.price" type="text" class="form-control" placeholder="Price">
+                            </div>
+                        </div>
+
+                        <p class="card-text" ng-hide="editMode">Detail: {{selectedMusicBox.detail}} </p>
+
+                        <div ng-show="editMode" class="form-group">
+                            <label for="exampleFormControlTextarea1">Detail</label>
+                            <textarea ng-model="selectedMusicBox.detail" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                        <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
+                        <button ng-show="editMode" class="btn btn-success" ng-click="saveMusic()">Save</button>
+                        <button ng-hide="editMode" type="button" ng-click="deleteMusic()" class="btn btn-danger">Delete</button>
+                        <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
+
 
                     </div>
 
                 </div>
+
             </div>
 
         </div>
+
     </div>
+
 
 
 
