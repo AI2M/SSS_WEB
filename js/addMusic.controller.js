@@ -6,10 +6,10 @@ app.controller("AddMusicCtrl", ['$scope', '$http', function ($scope, $http) {
     $scope.addMode = false;
 
     $scope.loadData = function () {
-        $http.get("http://localhost:3000/musicboxs")
+        $http.get("http://localhost/SSS_web_api/getMusicBoxData.php")
             .then(function successCallback(response) {
                 console.log(response);
-                $scope.musicboxs = response.data;
+                $scope.musicboxs = response.data.musicboxs;
                 $scope.selectedMusicBox = $scope.musicboxs[0];
             }, function errorCallback(response) {
                 console.log(response);
@@ -32,33 +32,57 @@ app.controller("AddMusicCtrl", ['$scope', '$http', function ($scope, $http) {
         var musicboxData = $scope.selectedMusicBox;
         if ($scope.addMode) {
             //addmode
-            $http.post("http://localhost:3000/musicboxs/", musicboxData)
-                .then(function successCallback(response) {
-                    console.log(response);
-                    $scope.loadData();
-                    $scope.addMessage = "Succesfully added";
-                }, function errorCallback(response) {
-                    console.log(response);
+            $http({
+                method: 'POST',
+                url: 'http://localhost/SSS_web_api/postMusicBoxData.php',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'  },
+                data: musicboxData,
+            })
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.loadData();
+                if(response.data.error == true){
                     $scope.errorMessage = "Error,Please try again";
-                });
-            $scope.addMode = false;
+                }
+                else{
+                    $scope.addMessage = "Succesfully added";
+                }
+               
+            }, function errorCallback(response) {
+                console.log(response);
+                $scope.errorMessage = "Error,Please try again";
+            });
+             $scope.addMode = false;
         }
         else {
             //savemode
-            $http.put("http://localhost:3000/musicboxs/" + musicboxData.id, musicboxData)
-                .then(function successCallback(response) {
-                    console.log(response);
-                    $scope.successMessage = "Succesfully updated";
-                }, function errorCallback(response) {
-                    console.log(response);
+            $http({
+                method: 'POST',
+                url: 'http://localhost/SSS_web_api/putMusicBoxData.php',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'  },
+                data: musicboxData,
+            })
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.loadData();
+                if(response.data.error == true){
                     $scope.errorMessage = "Error,Please try again";
-                });
+                }
+                else{
+                    $scope.addMessage = "Succesfully updated";
+                }
+               
+            }, function errorCallback(response) {
+                console.log(response);
+                $scope.errorMessage = "Error,Please try again";
+            });
+             $scope.addMode = false;
         }
     }
 
     $scope.deleteMusic = function () {
         var musicboxData = $scope.selectedMusicBox;
-        $http.delete("http://localhost:3000/musicboxs/" + musicboxData.id, musicboxData)
+        $http.delete("http://localhost/SSS_web_api/deleteMusicBoxData.php/?music_box_id=" + musicboxData.music_box_id)
             .then(function successCallback(response) {
                 console.log(response);
                 $scope.loadData();

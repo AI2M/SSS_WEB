@@ -1,35 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="test" >
-<head>
-    <meta charset="UTF-8">
+<html ng-app="demoapp">
+  <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-   
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+    <script src="../bower_components/angular/angular.min.js"></script>
+    <script src="../bower_components/leaflet/dist/leaflet.js"></script>
+    <script src="../bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
+    <script src="../dist/ui-leaflet.min.js"></script>
+    <link rel="stylesheet" href="../bower_components/leaflet/dist/leaflet.css" />
+    <script>
+        var app = angular.module("demoapp", ['ui-leaflet']);
+        app.controller("BasicFirstController", [ "$scope", function($scope) {
+            // Nothing here!
+        }]);
+    </script>
+  </head>
 
-    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
-    <script src="http://jtblin.github.io/angular-chart.js/node_modules/chart.js/dist/Chart.min.js"></script>
-    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="http://jtblin.github.io/angular-chart.js/dist/angular-chart.js"></script>
-   
-    <script src="js/aaa.js"></script>
-    <script src="js/bbb.js"></script>
-</head>
-<body>
-    <div ng-controller="aaa">
-aaaa
-    </div>
-    <div ng-controller="bbb">
-bbbb
-    </div>
-    
-</body>
+  <body ng-controller="BasicFirstController">
+    <leaflet width="100%" height="480px"></leaflet>
+    <h1>First steps, basic example</h1>
+  </body>
 </html>

@@ -17,8 +17,6 @@
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
-    <script src="js/routing.js"></script>
     <script src="js/addShowroom.controller.js"></script>
 
 </head>
@@ -69,8 +67,8 @@
                     <div class="alert alert-primary" ng-if="addMessage">{{addMessage}}</div>
                     <button class="btn btn-primary" ng-click="addShowroom()">Add</button>
                     <li class="list-group-item" ng-repeat="showroom in showrooms" ng-click="selectShowroom($index)">
-                        <span class="font-weight-bold">{{" id: "}} </span>
-                        <span> {{showroom.id}} </span>
+                        <span class="font-weight-bold">{{" showroom_id: "}} </span>
+                        <span> {{showroom.showroom_id}} </span>
                         <span class="font-weight-bold">{{" loaction: "}} </span>
                         <span>{{showroom.location}}</span>
 
@@ -100,11 +98,11 @@
                             </div>
                         </div>
 
-                        <p class="card-text" ng-hide="addMode">Id: {{selectedShowroom.id}} </p>
+                        <p class="card-text" ng-hide="addMode">Id: {{selectedShowroom.showroom_id}} </p>
                         <div ng-show="addMode" class="form-group row">
                             <label class="col-sm-4 col-form-label">Id</label>
                             <div class="col-sm-7">
-                                <input ng-model="selectedShowroom.id" type="text" class="form-control" placeholder="Id">
+                                <input ng-model="selectedShowroom.showroom_id" type="text" class="form-control" placeholder="Id">
                             </div>
                         </div>
 
