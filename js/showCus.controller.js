@@ -1,6 +1,7 @@
 var app = angular.module("SSS", ['chart.js', 'ui.bootstrap']);
 app.controller("ShowCusCtrl", ['$scope', '$http', function ($scope, $http) {
     $scope.customers = "";
+    $scope.Col2 = "Count";
     $scope.loadData = function(type){
         if(type==1){
             $http.get("http://localhost/SSS_web_api/getCustomerData.php/?type=age")
@@ -12,6 +13,8 @@ app.controller("ShowCusCtrl", ['$scope', '$http', function ($scope, $http) {
             }, function errorCallback(response) {
                 console.log(response);
             });
+            $scope.tabletype = 1; 
+            $scope.Col1 = "Age";  
         }
         else if(type==2){
             $http.get("http://localhost/SSS_web_api/getCustomerData.php/?type=sex")
@@ -23,8 +26,10 @@ app.controller("ShowCusCtrl", ['$scope', '$http', function ($scope, $http) {
             }, function errorCallback(response) {
                 console.log(response);
             });
+            $scope.tabletype = 2; 
+            $scope.Col1 = "Sex";
         }
-        else if(type==3){
+        else if(type==3){ 
             $http.get("http://localhost/SSS_web_api/getCustomerData.php/?type=job")
             .then(function successCallback(response) {
                 console.log(response);
@@ -34,6 +39,8 @@ app.controller("ShowCusCtrl", ['$scope', '$http', function ($scope, $http) {
             }, function errorCallback(response) {
                 console.log(response);
             });
+            $scope.tabletype = 3; 
+            $scope.Col1 = "Job";
         }
         else if(type==4){
             $http.get("http://localhost/SSS_web_api/getCustomerData.php/?type=salary")
@@ -45,6 +52,8 @@ app.controller("ShowCusCtrl", ['$scope', '$http', function ($scope, $http) {
             }, function errorCallback(response) {
                 console.log(response);
             });
+            $scope.tabletype = 4; 
+            $scope.Col1 = "Salary";
         }
         else if(type==5){
             $http.get("http://localhost/SSS_web_api/getCustomerData.php/?type=showroom_id")
@@ -56,6 +65,8 @@ app.controller("ShowCusCtrl", ['$scope', '$http', function ($scope, $http) {
             }, function errorCallback(response) {
                 console.log(response);
             });
+            $scope.tabletype = 5; 
+            $scope.Col1 = "Showroom";
         }
     }
 

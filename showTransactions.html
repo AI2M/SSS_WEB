@@ -83,9 +83,7 @@
                     <li class="list-group-item" ng-repeat="transaction in transactions" ng-click="selectTransaction($index)">
                         <span> {{transaction.id}} </span>
                         <span class="font-weight-bold">{{" date: "}} </span>
-                        <span>{{transaction.date}}</span>
-                        <span class="font-weight-bold">{{" time: "}} </span>
-                        <span>{{transaction.time}}</span>
+                        <span>{{transaction.datetime}}</span>
                     </li>
                 </ul>
                 <center>

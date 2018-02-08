@@ -90,11 +90,36 @@
                 <div>
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="customer in customers" ng-click="selectCustomer($index)">
-                            <span> {{customer.id}} </span>
-                            <span class="font-weight-bold">{{" Age: "}} </span>
-                            <span>{{customer.age}}</span>
-                            <span class="font-weight-bold">{{" Job: "}} </span>
-                            <span>{{customer.job}}</span>
+                            <div ng-if="tabletype==1">
+                                <span class="font-weight-bold">{{ Col1 }} </span>
+                                <span>{{customer.age}}</span>
+                                <span class="font-weight-bold">{{ Col2 }} </span>
+                                <span>{{customer.age_count}}</span>
+                            </div>
+                            <div ng-if="tabletype==2">
+                                <span class="font-weight-bold">{{ Col1 }} </span>
+                                <span>{{customer.sex}}</span>
+                                <span class="font-weight-bold">{{ Col2 }} </span>
+                                <span>{{customer.sex_count}}</span>
+                            </div>
+                            <div ng-if="tabletype==3">
+                                <span class="font-weight-bold">{{ Col1 }} </span>
+                                <span>{{customer.job}}</span>
+                                <span class="font-weight-bold">{{ Col2 }} </span>
+                                <span>{{customer.job_count}}</span>
+                            </div>
+                            <div ng-if="tabletype==4">
+                                <span class="font-weight-bold">{{ Col1 }} </span>
+                                <span>{{customer.salary}}</span>
+                                <span class="font-weight-bold">{{ Col2 }} </span>
+                                <span>{{customer.salary_count}}</span>
+                            </div>
+                            <div ng-if="tabletype==5">
+                                <span class="font-weight-bold">{{ Col1 }} </span>
+                                <span>{{customer.showroom_id}}</span>
+                                <span class="font-weight-bold">{{ Col2 }} </span>
+                                <span>{{customer.counts}}</span>
+                            </div>
                         </li>
                     </ul>
                 </div>
