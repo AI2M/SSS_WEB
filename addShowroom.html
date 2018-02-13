@@ -17,6 +17,7 @@
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 
+    <script src="js/map/script-tags-for-development.js"></script>
     <script src="js/addShowroom.controller.js"></script>
 
 </head>
@@ -59,13 +60,14 @@
         </nav>
 
     </div>
-    <div class="container" ng-controller="AddShowroomCtrl">
-        <div class="row">
-            <div class="col-md-6">
+    <div class="container" ng-controller="AddShowroomCtrl as vm">
+        <div class="row-md-1">
 
-                <ul class="list-group">
-                    <div class="alert alert-primary" ng-if="addMessage">{{addMessage}}</div>
-                    <button class="btn btn-primary" ng-click="addShowroom()">Add</button>
+            <ul class="list-group">
+                <h4>Showrooms</h4>
+                <div class="alert alert-primary" ng-if="addMessage">{{addMessage}}</div>
+                <div style=" max-height: 400px;
+                    overflow-y: scroll;">
                     <li class="list-group-item" ng-repeat="showroom in showrooms" ng-click="selectShowroom($index)">
                         <span class="font-weight-bold">{{" showroom_id: "}} </span>
                         <span> {{showroom.showroom_id}} </span>
@@ -73,73 +75,105 @@
                         <span>{{showroom.location}}</span>
 
                     </li>
-
-                </ul>
-
-            </div>
-            <div class="col-md-6">
-                <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
-                <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
-                <div class="card mb-2" style="width: 24rem;">
-
-                    <img class="card-img-top" src="https://www.tourismthailand.org/fileadmin/upload_img/Shopping/3751/IMG_0094_1391758975.JPG"
-                        alt="Card image cap">
-                    <div ng-show="editMode" class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label" for="customFile">Choose picture file</label>
-                    </div>
-
-                    <div class="card-body">
-                        <h2 ng-hide="editMode" class="card-title">{{selectedShowroom.location}}</h2>
-                        <div ng-show="editMode" class="form-group row">
-                            <label class="col-sm-4 col-form-label">Location</label>
-                            <div class="col-sm-7">
-                                <input ng-model="selectedShowroom.location" type="text" class="form-control" placeholder="Location">
-                            </div>
-                        </div>
-
-                        <p class="card-text" ng-hide="addMode">Id: {{selectedShowroom.showroom_id}} </p>
-                        <div ng-show="addMode" class="form-group row">
-                            <label class="col-sm-4 col-form-label">Id</label>
-                            <div class="col-sm-7">
-                                <input ng-model="selectedShowroom.showroom_id" type="text" class="form-control" placeholder="Id">
-                            </div>
-                        </div>
-
-                        <p class="card-text" ng-hide="editMode">Region: {{selectedShowroom.region}} </p>
-                        <div ng-show="editMode" class="form-group row">
-                            <label class="col-sm-4 col-form-label">Region</label>
-                            <div class="col-sm-7">
-                                <input ng-model="selectedShowroom.region" type="text" class="form-control" placeholder="Region">
-                            </div>
-                        </div>
-                        <p class="card-text" ng-hide="editMode">Password: {{selectedShowroom.password}} </p>
-                        <div ng-show="editMode" class="form-group row">
-                            <label class="col-sm-4 col-form-label">Password</label>
-                            <div class="col-sm-7">
-                                <input ng-model="selectedShowroom.password" type="password" class="form-control" placeholder="Password">
-                            </div>
-                        </div>
-
-                        <p class="card-text" ng-hide="editMode">Detail: {{selectedShowroom.detail}} </p>
-
-                        <div ng-show="editMode" class="form-group">
-                            <label for="exampleFormControlTextarea1">Detail</label>
-                            <textarea ng-model="selectedShowroom.detail" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
-                        <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
-                        <button ng-show="editMode" class="btn btn-success" ng-click="saveShowroom()">Save</button>
-                        <button ng-hide="editMode" type="button" ng-click="deleteShowroom()" class="btn btn-danger">Delete</button>
-                        <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
-
-
-                    </div>
-
                 </div>
-            </div>
+                <button class="btn btn-primary" ng-click="addShowroom()">Add</button>
+
+            </ul>
 
         </div>
-    </div>
+        <div class="row" style="padding-top:20px">
+            <div class="col-md-6" style="padding-left:90px">
+                <div>
+                    <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
+                    <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
+                    <div class="card mb-2" style="width: 24rem;">
+
+                        <img class="card-img-top" src="https://www.tourismthailand.org/fileadmin/upload_img/Shopping/3751/IMG_0094_1391758975.JPG"
+                            alt="Card image cap">
+                        <div ng-show="editMode" class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose picture file</label>
+                        </div>
+
+                        <div class="card-body">
+                            <h2 ng-hide="editMode" class="card-title">{{selectedShowroom.location}}</h2>
+                            <div ng-show="editMode" class="form-group row">
+                                <label class="col-sm-4 col-form-label">Location</label>
+                                <div class="col-sm-7">
+                                    <input ng-model="selectedShowroom.location" type="text" class="form-control" placeholder="Location">
+                                </div>
+                            </div>
+
+                            <p class="card-text" ng-hide="addMode">Id: {{selectedShowroom.showroom_id}} </p>
+                            <div ng-show="addMode" class="form-group row">
+                                <label class="col-sm-4 col-form-label">Id</label>
+                                <div class="col-sm-7">
+                                    <input ng-model="selectedShowroom.showroom_id" type="text" class="form-control" placeholder="Id">
+                                </div>
+                            </div>
+
+                            <p class="card-text" ng-hide="editMode">Region: {{selectedShowroom.region}} </p>
+                            <div ng-show="editMode" class="form-group row">
+                                <label class="col-sm-4 col-form-label">Region</label>
+                                <div class="col-sm-7">
+                                    <input ng-model="selectedShowroom.region" type="text" class="form-control" placeholder="Region">
+                                </div>
+                            </div>
+                            <p class="card-text" ng-hide="editMode">Latitude: {{selectedShowroom.latitude}} </p>
+                            <div ng-show="editMode" class="form-group row">
+                                <label class="col-sm-4 col-form-label">Latitude</label>
+                                <div class="col-sm-7">
+                                    <input ng-model="selectedShowroom.latitude" type="text" class="form-control" placeholder="Latitude">
+                                </div>
+                            </div>
+                            <p class="card-text" ng-hide="editMode">Longitude: {{selectedShowroom.longitude}} </p>
+                            <div ng-show="editMode" class="form-group row">
+                                <label class="col-sm-4 col-form-label">Longitude</label>
+                                <div class="col-sm-7">
+                                    <input ng-model="selectedShowroom.longitude" type="text" class="form-control" placeholder="Longitude">
+                                </div>
+                            </div>
+                            <p class="card-text" ng-hide="editMode">Password: {{selectedShowroom.password}} </p>
+                            <div ng-show="editMode" class="form-group row">
+                                <label class="col-sm-4 col-form-label">Password</label>
+                                <div class="col-sm-7">
+                                    <input ng-model="selectedShowroom.password" type="password" class="form-control" placeholder="Password">
+                                </div>
+                            </div>
+
+                            <p class="card-text" ng-hide="editMode">Detail: {{selectedShowroom.detail}} </p>
+
+                            <div ng-show="editMode" class="form-group">
+                                <label for="exampleFormControlTextarea1">Detail</label>
+                                <textarea ng-model="selectedShowroom.detail" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                            <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
+                            <button ng-show="editMode" class="btn btn-success" ng-click="saveShowroom()">Save</button>
+                            <button ng-hide="editMode" type="button" ng-click="deleteShowroom()" class="btn btn-danger">Delete</button>
+                            <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <input ng-show="editMode" class="form-control" places-auto-complete size="55" ng-model="vm.address" types="{{types}}" on-place-changed="vm.placeChanged()"
+                />
+                <div ng-show="editMode" style="height: 150px;">
+                    <ng-map id="map" zoom="17" center='{{lalong}}' scrollwheel="true" zoom-to-include-markers="true" on-click="vm.addMarker()">
+                        <marker ng-repeat="p in vm.positions" position="{{p.pos}}" title="pos: {{p.pos}}"></marker>
+                    </ng-map>
+                </div>
+
+                <div ng-hide="editMode" style="height: 150px;">
+                        <ng-map id="map" zoom="17" center="{{lalong}}">
+                                <marker position="{{lalong}}" title="you" ></marker>
+                        </ng-map>
+                </div>
+            </div>
+        </div>
 
 
 

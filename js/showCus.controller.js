@@ -1,5 +1,7 @@
-var app = angular.module("SSS", ['chart.js', 'ui.bootstrap']);
-app.controller("ShowCusCtrl", ['$scope', '$http', function ($scope, $http) {
+var app = angular.module("SSS", ['chart.js', 'ui.bootstrap','datatables']);
+app.controller('ShowCusCtrl', ShowCusCtrl);
+function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $compile ,$scope) {
+
     $scope.customers = "";
     $scope.Col2 = "Count";
     $scope.loadData = function(type){
@@ -170,22 +172,61 @@ app.controller("ShowCusCtrl", ['$scope', '$http', function ($scope, $http) {
         console.log($scope.ids_data);
         console.log($scope.num);
     }
+    
 
-}]);
+    //datatable
+    var vm = this;
+    vm.dtInstance = {};
+    vm.reloadData = reloadData;
 
-app.controller('TabsDemoCtrl', function ($scope, $window) {
-    $scope.tabs = [
-      { title:'Dynamic Title 1', content:'Dynamic content 1' },
-      { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
-    ];
-  
-    $scope.alertMe = function() {
-      setTimeout(function() {
-        $window.alert('You\'ve selected the alert tab!');
-      });
-    };
-  
-    $scope.model = {
-      name: 'Tabs'
-    };
-  });
+    $scope.loadTable = function(){
+        vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+            var datain = "";
+            var defer = $q.defer();
+            // var data = {'url' : 'http://139.59.251.210/api-prevent/ajax/getallrounds'};
+            // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
+    
+            $http({
+                method : 'GET',
+                url :'http://localhost/SSS_web_api/getCustomerData.php/?type=all',
+                headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+                 },
+                // data: data,
+            })
+            .then(function(result) {
+                // console.log(result.data);
+                var datain = angular.fromJson(result.data.customers);
+                // // console.log(datain);
+                defer.resolve(datain);
+                // defer.resolve(result.data);
+            });
+            return defer.promise;
+        })
+        // vm.dtOptions = DTOptionsBuilder.fromSource('http://l-lin.github.io/angular-datatables/archives/data.json')
+            .withPaginationType('full')
+            // Active Responsive plugin
+            .withOption('responsive', true);
+        vm.dtColumns = [
+            DTColumnBuilder.newColumn('salary').withTitle('Salary'),
+            DTColumnBuilder.newColumn('phone_num').notSortable().withTitle('Phone Number'),
+            DTColumnBuilder.newColumn('sex').notSortable().withTitle('Sex'),
+            DTColumnBuilder.newColumn('age').notSortable().withTitle('Age'),
+            DTColumnBuilder.newColumn('job').notSortable().withTitle('Job'),
+            DTColumnBuilder.newColumn('showroom_id').withTitle('Showroom ID'),
+        ];
+    }
+    $scope.loadTable();
+
+    function reloadData() {
+        var resetPaging = true;
+        vm.dtInstance.reloadData(callback, resetPaging);
+    }
+
+    function callback(json) {
+        console.log(json);
+    }
+
+}
+

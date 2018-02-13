@@ -8,7 +8,7 @@
     <title>addMusic</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
-        
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -18,7 +18,21 @@
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script> -->
+    <script src="js/datatable/datatables.min.js"></script>
+    <script src="js/datatable/angular-datatables.min.js"></script>
+    <script src="js/datatable/datatable.js"></script>
+    <script src="js/datatable/datatables.bootstrap.js"></script>
+    <script src="js/datatable/dataTables.responsive.min.js"></script>
+    <script src="js/datatable/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="js/datatable/DataTables-1.10.16/js/jquery.dataTables.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://l-lin.github.io/angular-datatables/archives/dist/css/angular-datatables.css"
+    />
+    <link rel="stylesheet" href="js/datatable/datatables.bootstrap.css">
+    <link rel="stylesheet" href="js/datatable/datatables.min.css">
+    <link rel="stylesheet" href="js/datatable/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="js/datatable/DataTables-1.10.16/css/dataTables.bootstrap.min.css">
+
     <script src="js/addMusic.controller.js"></script>
 </head>
 
@@ -64,68 +78,80 @@
         <div class="row">
             <div class="col-md-6">
 
+
                 <ul class="list-group">
                     <div class="alert alert-primary" ng-if="addMessage">{{addMessage}}</div>
                     <button class="btn btn-primary" ng-click="addMusicbox()">Add</button>
-                    <li class="list-group-item" ng-repeat="musicbox in musicboxs" ng-click="selectMusicBox($index)">
-                        <span> {{musicbox.music_box_id+" "+musicbox.name}} </span>
-                        <span class="font-weight-bold">{{" detail: "}} </span>
-                        <span>{{musicbox.detail}}</span>
-                    </li>
+                    <div style=" max-height: 500px;
+                            overflow-y: scroll;">
+                        <li class="list-group-item" ng-repeat="musicbox in musicboxs" ng-click="selectMusicBox($index)">
+                            <span> {{musicbox.music_box_id+" "+musicbox.name}} </span>
+                            <span class="font-weight-bold">{{" detail: "}} </span>
+                            <span>{{musicbox.detail}}</span>
+                        </li>
+                    </div>
                 </ul>
+
+
+                <!-- <div ng-controller="AddMusicCtrl as showCase">
+                            <button class="btn btn-primary" ng-click="showCase.reloadData()">reload</button>
+                            <p class="text-danger">You clicked on: <strong>{{ showCase.message }}</strong></p>
+                        <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" dt-instance="showCase.dtInstance" class="row-border hover"></table>
+                    </div> -->
 
             </div>
             <div class="col-md-6">
+                <div style="padding-left: 50px;">
+                    <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
+                    <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
+                    <div class="card mb-2" style="width: 24rem;">
 
-                <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
-                <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
-                <div class="card mb-2" style="width: 24rem;">
+                        <img class="card-img-top" src="http://fb1-ck.lnwfile.com/yt3bxi.jpg" alt="Card image cap">
+                        <div ng-show="editMode" class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose picture file</label>
+                        </div>
 
-                    <img class="card-img-top" src="http://fb1-ck.lnwfile.com/yt3bxi.jpg" alt="Card image cap">
-                    <div ng-show="editMode" class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label" for="customFile">Choose picture file</label>
+                        <div class="card-body">
+                            <h2 ng-hide="editMode" class="card-title">{{selectedMusicBox.name}}</h2>
+                            <div ng-show="editMode" class="form-group row">
+                                <label class="col-sm-3 col-form-label">Name</label>
+                                <div class="col-sm-7">
+                                    <input ng-model="selectedMusicBox.name" type="text" class="form-control" placeholder="Name">
+                                </div>
+                            </div>
+
+                            <p class="card-text" ng-hide="addMode">Id: {{selectedMusicBox.music_box_id}} </p>
+                            <div ng-show="addMode" class="form-group row">
+                                <label class="col-sm-3 col-form-label">Id</label>
+                                <div class="col-sm-7">
+                                    <input ng-model="selectedMusicBox.music_box_id" type="text" class="form-control" placeholder="Id">
+                                </div>
+                            </div>
+
+                            <p class="card-text" ng-hide="editMode">Price: {{selectedMusicBox.price}} </p>
+                            <div ng-show="editMode" class="form-group row">
+                                <label class="col-sm-3 col-form-label">Price</label>
+                                <div class="col-sm-7">
+                                    <input ng-model="selectedMusicBox.price" type="text" class="form-control" placeholder="Price">
+                                </div>
+                            </div>
+
+                            <p class="card-text" ng-hide="editMode">Detail: {{selectedMusicBox.detail}} </p>
+
+                            <div ng-show="editMode" class="form-group">
+                                <label for="exampleFormControlTextarea1">Detail</label>
+                                <textarea ng-model="selectedMusicBox.detail" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                            <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
+                            <button ng-show="editMode" class="btn btn-success" ng-click="saveMusic()">Save</button>
+                            <button ng-hide="editMode" type="button" ng-click="deleteMusic()" class="btn btn-danger">Delete</button>
+                            <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
+
+
+                        </div>
+
                     </div>
-
-                    <div class="card-body">
-                        <h2 ng-hide="editMode" class="card-title">{{selectedMusicBox.name}}</h2>
-                        <div ng-show="editMode" class="form-group row">
-                            <label class="col-sm-3 col-form-label">Name</label>
-                            <div class="col-sm-7">
-                                <input ng-model="selectedMusicBox.name" type="text" class="form-control" placeholder="Name">
-                            </div>
-                        </div>
-
-                        <p class="card-text" ng-hide="addMode">Id: {{selectedMusicBox.music_box_id}} </p>
-                        <div ng-show="addMode" class="form-group row">
-                            <label class="col-sm-3 col-form-label">Id</label>
-                            <div class="col-sm-7">
-                                <input ng-model="selectedMusicBox.music_box_id" type="text" class="form-control" placeholder="Id">
-                            </div>
-                        </div>
-
-                        <p class="card-text" ng-hide="editMode">Price: {{selectedMusicBox.price}} </p>
-                        <div ng-show="editMode" class="form-group row">
-                            <label class="col-sm-3 col-form-label">Price</label>
-                            <div class="col-sm-7">
-                                <input ng-model="selectedMusicBox.price" type="text" class="form-control" placeholder="Price">
-                            </div>
-                        </div>
-
-                        <p class="card-text" ng-hide="editMode">Detail: {{selectedMusicBox.detail}} </p>
-
-                        <div ng-show="editMode" class="form-group">
-                            <label for="exampleFormControlTextarea1">Detail</label>
-                            <textarea ng-model="selectedMusicBox.detail" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
-                        <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
-                        <button ng-show="editMode" class="btn btn-success" ng-click="saveMusic()">Save</button>
-                        <button ng-hide="editMode" type="button" ng-click="deleteMusic()" class="btn btn-danger">Delete</button>
-                        <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
-
-
-                    </div>
-
                 </div>
 
             </div>

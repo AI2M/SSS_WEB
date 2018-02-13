@@ -1,46 +1,69 @@
-var app = angular.module("SSS", ['chart.js', 'ui.bootstrap']);
+var app = angular.module("SSS", ['chart.js', 'ui.bootstrap','datatables']);
 
-app.controller("ShowTranCtrl", ['$scope', '$http', function ($scope, $http) {
+app.controller('ShowTranCtrl', ShowTranCtrl);
+function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $compile ,$scope) {
+    var vm = this;
+    vm.dtInstance = {};
+    // vm.newPromise = newPromise;
+    vm.reloadData = reloadData;
+    // vm.newPromise = newPromise;
+    
+    var api_url = 'http://localhost/SSS_web_api/getTransactionData.php/?type=all';
     $scope.transactions = "";
+    var now = new Date();
+    $scope.nowdate = now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate();
     $scope.loadData = function (type) {
-        if (type==1) {
+        if (type == 1) {
             //last7day
             $http.get("http://localhost/SSS_web_api/getTransactionData.php/?type=last7")
                 .then(function successCallback(response) {
-                    console.log(response);
+                    // api_url='http://localhost/SSS_web_api/getTransactionData.php/?type=last7';
+                    // $scope.loadTable();
                     $scope.transactions = response.data.transactions;
-                    $scope.BarChart(0);
+                    $scope.BarChart(0);  
+                    $scope.ShowroomChart();
                 }, function errorCallback(response) {
                     console.log(response);
                 });
         }
-        else if(type==2){
-            $http.get("http://localhost:3000/transactions/?type=thismonth")
+        else if (type == 2) {
+            $http.get("http://localhost/SSS_web_api/getTransactionData.php/?type=thismonth")
                 .then(function successCallback(response) {
+                    // api_url='http://localhost/SSS_web_api/getTransactionData.php/?type=thismonth';
+                    // $scope.loadTable();
                     console.log(response);
                     $scope.transactions = response.data.transactions;
+                    $scope.BarChart(1);
+                    $scope.ShowroomChart();
                 }, function errorCallback(response) {
                     console.log(response);
                 });
         }
-        else if(type==3){
-            $http.get("http://localhost:3000/transactions/?type=thisyear")
+        else if (type == 3) {
+            $http.get("http://localhost/SSS_web_api/getTransactionData.php/?type=thisyear")
                 .then(function successCallback(response) {
+                    // api_url='http://localhost/SSS_web_api/getTransactionData.php/?type=thisyear';
+               
                     console.log(response);
                     $scope.transactions = response.data.transactions;
+                    $scope.BarChart(2); 
+                    $scope.ShowroomChart();
                 }, function errorCallback(response) {
                     console.log(response);
                 });
         }
-        else{
-            $http.get("http://localhost:3000/transactions/?type=all")
+        else {
+            $http.get("http://localhost/SSS_web_api/getTransactionData.php/?type=all")
                 .then(function successCallback(response) {
-                    console.log(response);
-                    $scope.transactions = response.data.transactions;
-                }, function errorCallback(response) {
-                    console.log(response);
-                });
+                    // api_url='http://localhost/SSS_web_api/getTransactionData.php/?type=all';
             
+                    console.log(response);
+                    $scope.transactions = response.data.transactions;
+                    $scope.BarChart(3); 
+                }, function errorCallback(response) {
+                    console.log(response);
+                });
+
         }
 
     }
@@ -75,8 +98,8 @@ app.controller("ShowTranCtrl", ['$scope', '$http', function ($scope, $http) {
         for (var l = 0; l < $scope.ids_data.length; l++) {
             $scope.ids_data[l] = "MusicBox_id " + $scope.ids_data[l];
         }
-        console.log($scope.ids_data);
-        console.log($scope.num);
+        // console.log($scope.ids_data);
+        // console.log($scope.num);
     }
 
     //chart of showroom
@@ -106,8 +129,8 @@ app.controller("ShowTranCtrl", ['$scope', '$http', function ($scope, $http) {
         for (var l = 0; l < $scope.ids_data.length; l++) {
             $scope.ids_data[l] = "Showroom_id " + $scope.ids_data[l];
         }
-        console.log($scope.ids_data);
-        console.log($scope.num);
+        // console.log($scope.ids_data);
+        // console.log($scope.num);
     }
 
     //dropdown
@@ -131,34 +154,34 @@ app.controller("ShowTranCtrl", ['$scope', '$http', function ($scope, $http) {
     $scope.BarChart = function (type) {
         var dates = new Date();
         var date = dates.getDate();
-        var month = dates.getMonth()+1;
+        var month = dates.getMonth() + 1;
         var data = $scope.transactions.data;
-        console.log(dates);
+        //console.log(dates);
         $scope.series = ['MusicBox'];
         if (type == 0) {
-            $scope.nameBarChart = "Last 7 Day";
+            $scope.nameBarChart = "Last 7 Day" ;
             // last 7 day21
-            $scope.x_axis =[];
+            $scope.x_axis = [];
             $scope.y_axis = [[]];
-            var i,t;
-            for(i=date;i>date-7;i--){
-                if(i<=0){
-                    if(month == 1||month == 3||month == 5||month == 7||month == 8||month == 10||month == 12){
-                       j= i+31;
+            var i, t;
+            for (i = date; i > date - 7; i--) {
+                if (i <= 0) {
+                    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                        j = i + 31;
                     }
-                    else if(month == 4||month == 6||month == 9||month == 11){
-                        j =i+30;
+                    else if (month == 4 || month == 6 || month == 9 || month == 11) {
+                        j = i + 30;
                     }
-                    else if(month == 2){
-                        j = i+28;
-                        
+                    else if (month == 2) {
+                        j = i + 28;
+
                     }
                     $scope.x_axis.push(j);
                 }
-                else{
+                else {
                     $scope.x_axis.push(i);
                 }
-                
+
             }
             for (var z = 0; z < 7; z++) {
                 $scope.y_axis[z] = 0;
@@ -166,13 +189,13 @@ app.controller("ShowTranCtrl", ['$scope', '$http', function ($scope, $http) {
 
             for (var p = 0; p < $scope.transactions.length; p++) {
                 var date = new Date($scope.transactions[p].datetime).getDate();
-                console.log(date);
-                for(var y = 0;y<$scope.x_axis.length;y++){
-                    if(date==$scope.x_axis[y]){
-                        $scope.y_axis[[y]]+=1;
+                //console.log(date);
+                for (var y = 0; y < $scope.x_axis.length; y++) {
+                    if (date == $scope.x_axis[y]) {
+                        $scope.y_axis[[y]] += 1;
                     }
                 }
-                
+
             }
             console.log($scope.x_axis);
             console.log($scope.y_axis);
@@ -180,25 +203,148 @@ app.controller("ShowTranCtrl", ['$scope', '$http', function ($scope, $http) {
         else if (type == 1) {
             $scope.nameBarChart = "This Month";
             //this month
-            var month = date.getMonth();
-            $scope.x_axis = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15',
-                '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'];
-            $scope.y_axis = [[65, 59, 80, 81, 56, 55, 90, 56, 55, 90,
-                65, 59, 80, 81, 56, 55, 90, 56, 55, 90,
-                65, 59, 80, 81, 56, 55, 90, 56, 55, 90]];
+            $scope.x_axis = [];
+            $scope.y_axis = [[]];
+            if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                for (var i = 1; i <= 31; i++) {
+                    $scope.x_axis.push(i);
+                }
+            }
+            else if (month == 4 || month == 6 || month == 9 || month == 11) {
+                for (var i = 1; i <= 30; i++) {
+                    $scope.x_axis.push(i);
+                }
+            }
+            else if (month == 2) {
+                for (var i = 1; i <= 28; i++) {
+                    $scope.x_axis.push(i);
+                }
+
+            }
+
+            for (var z = 0; z < $scope.x_axis.length; z++) {
+                $scope.y_axis[z] = 0;
+            }
+            for (var p = 0; p < $scope.transactions.length; p++) {
+                var date = new Date($scope.transactions[p].datetime).getDate();
+                console.log(data);
+                for (var y = 0; y < $scope.x_axis.length; y++) {
+                    if (date == $scope.x_axis[y]) {
+                        $scope.y_axis[[y]] += 1;
+                    }
+                }
+
+            }
+            // for(var r =0;r<$scope.x_axis.length;r++){
+            //     $scope.x_axis[r]=  "date "+$scope.x_axis[r];
+            // }
+
+            console.log($scope.x_axis);
+            console.log($scope.y_axis);
 
         }
         else {
             $scope.nameBarChart = "This Year";
             //this year
-            var year = date.getFullYear();
-            $scope.x_axis = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            $scope.y_axis = [[65, 59, 80, 81, 56, 55, 90, 56, 55, 90,
-                65, 59]];
+            $scope.x_axis = [];
+            $scope.y_axis = [[]];
+            
+            $scope.month_name= ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            $scope.x_axis = [01,02,03,04,05,06,07,08,09,10,11,12];
+
+            for (var z = 0; z < $scope.x_axis.length; z++) {
+                $scope.y_axis[z] = 0;
+            }
+            for (var p = 0; p < $scope.transactions.length; p++) {
+                var month = new Date($scope.transactions[p].datetime).getMonth()+1;
+                for (var y = 0; y < $scope.x_axis.length; y++) {
+                    if (month == $scope.x_axis[y]) {
+                        $scope.y_axis[[y]] += 1;
+                    }
+                }
+
+            }
+
+            for(var r =0;r<$scope.x_axis.length;r++){
+                $scope.x_axis[r]=  $scope.x_axis[r]+" "+$scope.month_name[r];
+            }
+            console.log($scope.x_axis);
+            console.log($scope.y_axis);
+            
         }
     }
+    //datatable
+    $scope.loadTable = function(){
+        vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+            var datain = "";
+            var defer = $q.defer();
+            // var data = {'url' : 'http://139.59.251.210/api-prevent/ajax/getallrounds'};
+            // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
+    
+            $http({
+                method : 'GET',
+                url :api_url,
+                headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+                 },
+                // data: data,
+            })
+            .then(function(result) {
+                // console.log(result.data);
+                var datain = angular.fromJson(result.data.transactions);
+                // // console.log(datain);
+                defer.resolve(datain);
+                // defer.resolve(result.data);
+            });
+            return defer.promise;
+        })
+        // vm.dtOptions = DTOptionsBuilder.fromSource('http://l-lin.github.io/angular-datatables/archives/data.json')
+            .withPaginationType('full')
+            // Active Responsive plugin
+            .withOption('responsive', true);
+        vm.dtColumns = [
+            DTColumnBuilder.newColumn('id').withTitle('Showroom ID'),
+            DTColumnBuilder.newColumn('datetime').notSortable().withTitle('Datetime'),
+        ];
+    }
+    $scope.loadTable();
 
-}]);
 
 
+    // $interval(function() {
+    // 	vm.dtInstance.changeData(vm.newPromise());
+    // }, 300000);
 
+    // function newPromise() {
+    // 	var defer = $q.defer();
+    //     // var data = {'url' : 'admindash/currentcon'};
+    //     // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
+
+    //     $http({
+	// 		method : 'GET',
+	// 		url : api_url,
+	// 		headers: {
+	// 	    'Content-Type': 'application/json',
+	// 	    'Accept': 'application/json'
+	// 	 	},
+	// 		// data: data,
+	// 	})
+	// 	.then(function(result) {
+	// 		// console.log(result.data);
+	// 		var datain = angular.fromJson(result.data.transactions);
+    //         defer.resolve(datain);
+    //         // defer.resolve(result.data);
+    //     });
+    //     return defer.promise;
+    // }
+
+    function reloadData() {
+        var resetPaging = true;
+        vm.dtInstance.reloadData(callback, resetPaging);
+    }
+
+    function callback(json) {
+        console.log(json);
+    }
+}

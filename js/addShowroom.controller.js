@@ -1,9 +1,10 @@
 
-var app = angular.module("SSS", []);
-app.controller("AddShowroomCtrl", ['$scope', '$http', function ($scope, $http) {
+var app = angular.module("SSS",['ngMap']);
+app.controller("AddShowroomCtrl", ['$scope', '$http','NgMap', function ($scope, $http,NgMap) {
 
     $scope.editMode = false;
     $scope.addMode = false;
+    $scope.lalong = [];
 
     $scope.loadData = function () {
         $http.get("http://localhost/SSS_web_api/getShowroomData.php")
@@ -11,6 +12,11 @@ app.controller("AddShowroomCtrl", ['$scope', '$http', function ($scope, $http) {
                 console.log(response);
                 $scope.showrooms = response.data.showrooms;
                 $scope.selectedShowroom = $scope.showrooms[0];
+                var la= $scope.selectedShowroom.latitude;
+                var long= $scope.selectedShowroom.longitude;
+                $scope.lalong = [la,long];
+                console.log("lalong = " +$scope.lalong);
+                console.log($scope.showrooms[0].longitude)
             }, function errorCallback(response) {
                 console.log(response);
             });
@@ -19,6 +25,10 @@ app.controller("AddShowroomCtrl", ['$scope', '$http', function ($scope, $http) {
 
     $scope.selectShowroom = function (index) {
         $scope.selectedShowroom = $scope.showrooms[index];
+        var la= $scope.selectedShowroom.latitude;
+        var long= $scope.selectedShowroom.longitude;
+        $scope.lalong = [la,long];
+        console.log("lalong = " +$scope.lalong);
         $scope.successMessage = undefined;
         $scope.errorMessage = undefined;
         $scope.addMessage = undefined;
@@ -127,6 +137,30 @@ app.controller("AddShowroomCtrl", ['$scope', '$http', function ($scope, $http) {
 
 
     }
+    //map
+    var vm = this;
+    vm.types = "['address']";
+    vm.positions = [];
+
+    vm.placeChanged = function () {
+        vm.place = this.getPlace();
+        console.log('location', vm.place.geometry.location);
+        vm.map.setCenter(vm.place.geometry.location);
+    }
+
+    vm.addMarker = function (event) {
+        var ll = event.latLng;
+        vm.positions[0] = { pos: [ll.lat(), ll.lng()] };
+        console.log("laaaaa======" + ll.lat());
+        console.log("longgg======" + ll.lng());
+        $scope.selectedShowroom.latitude = ll.lat();
+        $scope.selectedShowroom.longitude = ll.lng();
+    }
+
+    NgMap.getMap().then(function (map) {
+        vm.map = map;
+    });
+
 
 
 }]);

@@ -1,66 +1,81 @@
-var app = angular.module('myApp', []);
+angular.module('SSS', ['datatables']).controller('WithAjaxCtrl', WithAjaxCtrl);
 
-app.service('Map', function($q) {
+function WithAjaxCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $compile ,$scope) {
+    var vm = this;
+    vm.dtInstance = {};
+    vm.newPromise = newPromise;
+    vm.reloadData = reloadData;
+    vm.newPromise = newPromise;
     
-    this.init = function() {
-        var options = {
-            center: new google.maps.LatLng(40.7127837, -74.00594130000002),
-            zoom: 13,
-            disableDefaultUI: true    
-        }
-        this.map = new google.maps.Map(
-            document.getElementById("map"), options
-        );
-        this.places = new google.maps.places.PlacesService(this.map);
-    }
-    this.search = function(str) {
-        var d = $q.defer();
-        this.places.textSearch({query: str}, function(results, status) {
-            if (status == 'OK') {
-                d.resolve(results[0]);
-            }
-            else d.reject(status);
+
+    vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+        var defer = $q.defer();
+        // var data = {'url' : 'http://139.59.251.210/api-prevent/ajax/getallrounds'};
+        // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
+
+        $http({
+			method : 'GET',
+			url : 'http://localhost/SSS_web_api/getShowroomData.php',
+			headers: {
+		    'Content-Type': 'application/json',
+		    'Accept': 'application/json'
+		 	},
+			// data: data,
+		})
+		.then(function(result) {
+			// console.log(result.data);
+			var datain = angular.fromJson(result.data.showrooms);
+			// // console.log(datain);
+            defer.resolve(datain);
+            // defer.resolve(result.data);
         });
-        return d.promise;
-    }
-    
-    this.addMarker = function(res) {
-        if(this.marker) this.marker.setMap(null);
-        this.marker = new google.maps.Marker({
-            map: this.map,
-            position: res.geometry.location,
-            animation: google.maps.Animation.DROP
+        return defer.promise;
+    })
+    // vm.dtOptions = DTOptionsBuilder.fromSource('http://l-lin.github.io/angular-datatables/archives/data.json')
+        .withPaginationType('full')
+        // Active Responsive plugin
+        .withOption('responsive', true);
+    vm.dtColumns = [
+        DTColumnBuilder.newColumn('showroom_id').withTitle('Showroom ID'),
+        DTColumnBuilder.newColumn('location').withTitle('Location'),        
+        DTColumnBuilder.newColumn('region').notSortable().withTitle('Region'),
+        DTColumnBuilder.newColumn('password').notSortable().withTitle('Password'),
+        DTColumnBuilder.newColumn('detail').notSortable().withTitle('Detail'),
+    ];
+
+    // $interval(function() {
+    // 	vm.dtInstance.changeData(vm.newPromise());
+    // }, 300000);
+
+    function newPromise() {
+    	var defer = $q.defer();
+        // var data = {'url' : 'admindash/currentcon'};
+        // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
+
+        $http({
+			method : 'GET',
+			url : 'http://localhost/SSS_web_api/getShowroomData.php',
+			headers: {
+		    'Content-Type': 'application/json',
+		    'Accept': 'application/json'
+		 	},
+			// data: data,
+		})
+		.then(function(result) {
+			// console.log(result.data);
+			var datain = angular.fromJson(result.data.showrooms);
+            defer.resolve(datain);
+            // defer.resolve(result.data);
         });
-        this.map.setCenter(res.geometry.location);
+        return defer.promise;
     }
-    
-});
 
-app.controller('newPlaceCtrl', function($scope, Map) {
-    
-    $scope.place = {};
-    
-    $scope.search = function() {
-        $scope.apiError = false;
-        Map.search($scope.searchPlace)
-        .then(
-            function(res) { // success
-                Map.addMarker(res);
-                $scope.place.name = res.name;
-                $scope.place.lat = res.geometry.location.lat();
-                $scope.place.lng = res.geometry.location.lng();
-            },
-            function(status) { // error
-                $scope.apiError = true;
-                $scope.apiStatus = status;
-            }
-        );
+    function reloadData() {
+        var resetPaging = true;
+        vm.dtInstance.reloadData(callback, resetPaging);
     }
-    
-    $scope.send = function() {
-        alert($scope.place.name + ' : ' + $scope.place.lat + ', ' + $scope.place.lng);    
-    }
-    
-    Map.init();
-});
 
+    function callback(json) {
+        console.log(json);
+    }
+}
