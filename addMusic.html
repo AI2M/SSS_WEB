@@ -111,6 +111,10 @@
                             <input type="file" class="custom-file-input" id="customFile">
                             <label class="custom-file-label" for="customFile">Choose picture file</label>
                         </div>
+                        <div ng-show="editMode" class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose music file</label>
+                        </div>
 
                         <div class="card-body">
                             <h2 ng-hide="editMode" class="card-title">{{selectedMusicBox.name}}</h2>

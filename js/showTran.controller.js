@@ -1,17 +1,28 @@
-var app = angular.module("SSS", ['chart.js', 'ui.bootstrap','datatables']);
+var app = angular.module("SSS", ['chart.js', 'ui.bootstrap', 'datatables','ngMap']);
 
 app.controller('ShowTranCtrl', ShowTranCtrl);
-function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $compile ,$scope) {
+function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope,NgMap) {
     var vm = this;
     vm.dtInstance = {};
     // vm.newPromise = newPromise;
     vm.reloadData = reloadData;
     // vm.newPromise = newPromise;
-    
+
     var api_url = 'http://localhost/SSS_web_api/getTransactionData.php/?type=all';
     $scope.transactions = "";
+    $scope.transactionMaps = "";
     var now = new Date();
-    $scope.nowdate = now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate();
+    $scope.nowdate = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+
+    $http.get("http://localhost/SSS_web_api/getTransactionMapData.php")
+    .then(function successCallback(response) {
+        $scope.transactionMaps = response.data.transactionMaps;
+        $scope.AddPos();
+        // console.log(response);
+    }, function errorCallback(response) {
+        console.log(response);
+    });
+
     $scope.loadData = function (type) {
         if (type == 1) {
             //last7day
@@ -20,7 +31,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $c
                     // api_url='http://localhost/SSS_web_api/getTransactionData.php/?type=last7';
                     // $scope.loadTable();
                     $scope.transactions = response.data.transactions;
-                    $scope.BarChart(0);  
+                    $scope.BarChart(0);
                     $scope.ShowroomChart();
                 }, function errorCallback(response) {
                     console.log(response);
@@ -43,10 +54,10 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $c
             $http.get("http://localhost/SSS_web_api/getTransactionData.php/?type=thisyear")
                 .then(function successCallback(response) {
                     // api_url='http://localhost/SSS_web_api/getTransactionData.php/?type=thisyear';
-               
+
                     console.log(response);
                     $scope.transactions = response.data.transactions;
-                    $scope.BarChart(2); 
+                    $scope.BarChart(2);
                     $scope.ShowroomChart();
                 }, function errorCallback(response) {
                     console.log(response);
@@ -56,10 +67,10 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $c
             $http.get("http://localhost/SSS_web_api/getTransactionData.php/?type=all")
                 .then(function successCallback(response) {
                     // api_url='http://localhost/SSS_web_api/getTransactionData.php/?type=all';
-            
+
                     console.log(response);
                     $scope.transactions = response.data.transactions;
-                    $scope.BarChart(3); 
+                    $scope.BarChart(3);
                 }, function errorCallback(response) {
                     console.log(response);
                 });
@@ -159,7 +170,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $c
         //console.log(dates);
         $scope.series = ['MusicBox'];
         if (type == 0) {
-            $scope.nameBarChart = "Last 7 Day" ;
+            $scope.nameBarChart = "Last 7 Day";
             // last 7 day21
             $scope.x_axis = [];
             $scope.y_axis = [[]];
@@ -248,15 +259,15 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $c
             //this year
             $scope.x_axis = [];
             $scope.y_axis = [[]];
-            
-            $scope.month_name= ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            $scope.x_axis = [01,02,03,04,05,06,07,08,09,10,11,12];
+
+            $scope.month_name = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            $scope.x_axis = [01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12];
 
             for (var z = 0; z < $scope.x_axis.length; z++) {
                 $scope.y_axis[z] = 0;
             }
             for (var p = 0; p < $scope.transactions.length; p++) {
-                var month = new Date($scope.transactions[p].datetime).getMonth()+1;
+                var month = new Date($scope.transactions[p].datetime).getMonth() + 1;
                 for (var y = 0; y < $scope.x_axis.length; y++) {
                     if (month == $scope.x_axis[y]) {
                         $scope.y_axis[[y]] += 1;
@@ -265,48 +276,53 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $c
 
             }
 
-            for(var r =0;r<$scope.x_axis.length;r++){
-                $scope.x_axis[r]=  $scope.x_axis[r]+" "+$scope.month_name[r];
+            for (var r = 0; r < $scope.x_axis.length; r++) {
+                $scope.x_axis[r] = $scope.x_axis[r] + " " + $scope.month_name[r];
             }
             console.log($scope.x_axis);
             console.log($scope.y_axis);
-            
+
         }
     }
     //datatable
-    $scope.loadTable = function(){
-        vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+
+    $scope.loadTable = function () {
+        vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
             var datain = "";
             var defer = $q.defer();
             // var data = {'url' : 'http://139.59.251.210/api-prevent/ajax/getallrounds'};
             // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
-    
+
             $http({
-                method : 'GET',
-                url :api_url,
+                method: 'GET',
+                url: api_url,
                 headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-                 },
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 // data: data,
             })
-            .then(function(result) {
-                // console.log(result.data);
-                var datain = angular.fromJson(result.data.transactions);
-                // // console.log(datain);
-                defer.resolve(datain);
-                // defer.resolve(result.data);
-            });
+                .then(function (result) {
+                    // console.log(result.data);
+                    var datain = angular.fromJson(result.data.transactions);
+                    // // console.log(datain);
+                    defer.resolve(datain);
+                    // defer.resolve(result.data);
+                });
             return defer.promise;
         })
-        // vm.dtOptions = DTOptionsBuilder.fromSource('http://l-lin.github.io/angular-datatables/archives/data.json')
+            // vm.dtOptions = DTOptionsBuilder.fromSource('http://l-lin.github.io/angular-datatables/archives/data.json')
             .withPaginationType('full')
             // Active Responsive plugin
-            .withOption('responsive', true);
+            .withOption('responsive', true)
+            .withOption('order',[[0,'desc']]);
         vm.dtColumns = [
-            DTColumnBuilder.newColumn('id').withTitle('Showroom ID'),
-            DTColumnBuilder.newColumn('datetime').notSortable().withTitle('Datetime'),
+            DTColumnBuilder.newColumn('datetime').withTitle('Datetime'),
+            DTColumnBuilder.newColumn('showroom_id').withTitle('Showroom ID'),
+
+
         ];
+
     }
     $scope.loadTable();
 
@@ -322,17 +338,17 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $c
     //     // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
 
     //     $http({
-	// 		method : 'GET',
-	// 		url : api_url,
-	// 		headers: {
-	// 	    'Content-Type': 'application/json',
-	// 	    'Accept': 'application/json'
-	// 	 	},
-	// 		// data: data,
-	// 	})
-	// 	.then(function(result) {
-	// 		// console.log(result.data);
-	// 		var datain = angular.fromJson(result.data.transactions);
+    // 		method : 'GET',
+    // 		url : api_url,
+    // 		headers: {
+    // 	    'Content-Type': 'application/json',
+    // 	    'Accept': 'application/json'
+    // 	 	},
+    // 		// data: data,
+    // 	})
+    // 	.then(function(result) {
+    // 		// console.log(result.data);
+    // 		var datain = angular.fromJson(result.data.transactions);
     //         defer.resolve(datain);
     //         // defer.resolve(result.data);
     //     });
@@ -347,4 +363,41 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder,$http, $q, $interval, $c
     function callback(json) {
         console.log(json);
     }
+    //map
+    vm.positions = []; 
+    // vm.pos = [[18.574725983616,99.008361756933]]; 
+    vm.value=[];
+    vm.pic=[];
+    $scope.AddPos = function(){
+        for(var k = 0;k<$scope.transactionMaps.length;k++){
+            vm.positions.push([$scope.transactionMaps[k].latitude, $scope.transactionMaps[k].longitude]);
+            if($scope.transactionMaps[k].count<2){
+                vm.pic.push("js/map/icon/m1.png");
+            }
+            else if($scope.transactionMaps[k].count<4){
+                vm.pic.push("js/map/icon/m2.png");
+            }
+            else if($scope.transactionMaps[k].count<6){
+                vm.pic.push("js/map/icon/m3.png");
+            }
+            else if($scope.transactionMaps[k].count<8){
+                vm.pic.push("js/map/icon/m4.png");
+            }
+            else{
+                vm.pic.push("js/map/icon/m5.png");
+            }
+            vm.value.push($scope.transactionMaps[k].count);
+        }
+        console.log("posss = "+vm.positions[0]);
+        console.log("posss = "+vm.value);
+    }
+  
+    
+    
+    
+
+
+
+
+
 }

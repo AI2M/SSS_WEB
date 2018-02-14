@@ -28,6 +28,8 @@ app.controller("AddShowroomCtrl", ['$scope', '$http','NgMap', function ($scope, 
         var la= $scope.selectedShowroom.latitude;
         var long= $scope.selectedShowroom.longitude;
         $scope.lalong = [la,long];
+        vm.positions = [];
+        vm.positions[0]={ pos: $scope.lalong };
         console.log("lalong = " +$scope.lalong);
         $scope.successMessage = undefined;
         $scope.errorMessage = undefined;
@@ -140,7 +142,7 @@ app.controller("AddShowroomCtrl", ['$scope', '$http','NgMap', function ($scope, 
     //map
     var vm = this;
     vm.types = "['address']";
-    vm.positions = [];
+    
 
     vm.placeChanged = function () {
         vm.place = this.getPlace();
@@ -149,16 +151,24 @@ app.controller("AddShowroomCtrl", ['$scope', '$http','NgMap', function ($scope, 
     }
 
     vm.addMarker = function (event) {
-        var ll = event.latLng;
-        vm.positions[0] = { pos: [ll.lat(), ll.lng()] };
-        console.log("laaaaa======" + ll.lat());
-        console.log("longgg======" + ll.lng());
-        $scope.selectedShowroom.latitude = ll.lat();
-        $scope.selectedShowroom.longitude = ll.lng();
+
+        if($scope.editMode==true)
+        {
+            vm.positions = [];
+            var ll = event.latLng;
+            vm.positions[0] = { pos: [ll.lat(), ll.lng()] };
+            console.log("laaaaa======" + ll.lat());
+            console.log("longgg======" + ll.lng());
+            $scope.selectedShowroom.latitude = ll.lat();
+            $scope.selectedShowroom.longitude = ll.lng();
+        }
+        
     }
 
     NgMap.getMap().then(function (map) {
         vm.map = map;
+        vm.positions = [];
+        vm.positions[0]={ pos: $scope.lalong };
     });
 
 

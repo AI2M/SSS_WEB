@@ -161,16 +161,10 @@
             <div class="col-md-6">
                 <input ng-show="editMode" class="form-control" places-auto-complete size="55" ng-model="vm.address" types="{{types}}" on-place-changed="vm.placeChanged()"
                 />
-                <div ng-show="editMode" style="height: 150px;">
-                    <ng-map id="map" zoom="17" center='{{lalong}}' scrollwheel="true" zoom-to-include-markers="true" on-click="vm.addMarker()">
-                        <marker ng-repeat="p in vm.positions" position="{{p.pos}}" title="pos: {{p.pos}}"></marker>
+                <div style="height: 150px;">
+                    <ng-map id="map" zoom="17" center={{lalong}} scrollwheel="true" zoom-to-include-markers="true" on-click="vm.addMarker()">
+                        <marker ng-repeat="p in vm.positions" position="{{p.pos}}" Title="pos: {{p.pos}}" icon="js/map/icon/mapiconS.png" animation="Animation.BOUNCE" ></marker>
                     </ng-map>
-                </div>
-
-                <div ng-hide="editMode" style="height: 150px;">
-                        <ng-map id="map" zoom="17" center="{{lalong}}">
-                                <marker position="{{lalong}}" title="you" ></marker>
-                        </ng-map>
                 </div>
             </div>
         </div>

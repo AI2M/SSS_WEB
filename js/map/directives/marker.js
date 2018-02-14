@@ -57,7 +57,6 @@
         }
       }
     }
-
     if (!(options.position instanceof google.maps.LatLng)) {
       options.position = new google.maps.LatLng(0,0);
     }

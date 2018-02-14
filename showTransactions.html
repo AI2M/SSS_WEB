@@ -35,7 +35,9 @@
     <link rel="stylesheet" href="js/datatable/responsive.dataTables.min.css">
     <link rel="stylesheet" href="js/datatable/DataTables-1.10.16/css/dataTables.bootstrap.min.css">
 
+    <script src="js/map/script-tags-for-development.js"></script>
     <script src="js/showTran.controller.js"></script>
+
 </head>
 
 <body>
@@ -76,7 +78,7 @@
         </nav>
 
     </div>
-    <div class="container" ng-controller="ShowTranCtrl">
+    <div class="container" ng-controller="ShowTranCtrl as vm">
         <div class="row">
             <div class="col-md-6">
 
@@ -84,7 +86,7 @@
                 <div ng-controller="ShowTranCtrl as showCase">
                     <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" class="table table-striped table-bordered"></table>
                 </div>
-               
+
 
                 <!-- <ul class="list-group">
                     <li class="list-group-item" ng-repeat="transaction in transactions" ng-click="selectTransaction($index)">
@@ -125,35 +127,42 @@
                     </div>
                 </center>
                 <center>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                Select Tpye
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                <button class="dropdown-item" type="button" ng-repeat="item in DropdownItems" ng-click="Change(item)">{{item}}</button>
-    
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Select Tpye
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <button class="dropdown-item" type="button" ng-repeat="item in DropdownItems" ng-click="Change(item)">{{item}}</button>
+
+                        </div>
+                    </div>
+
+                    <div id="doughnut-chart">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{{nameDoughnutChart}}</div>
+                            <div class="panel-body">
+                                <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-data="num" chart-labels="ids_data"></canvas>
                             </div>
                         </div>
-    
-                        <div id="doughnut-chart">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">{{nameDoughnutChart}}</div>
-                                <div class="panel-body">
-                                    <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-data="num" chart-labels="ids_data"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </center>
+                    </div>
+                </center>
 
             </div>
         </div>
+        <div class="row-md-1">
+        <div style="padding-top:20px">
+            <ng-map style="height: 500px;" id="map" zoom="17" center="[18.574725983616,99.008361756933]"  scrollwheel="true" zoom-to-include-markers="auto" >
+                    <marker ng-repeat="p in vm.positions" position="{{p}}" icon={{vm.pic[$index]}} label='"{{vm.value[$index]}}"' ></marker>
+            </ng-map>
+        </div>
+    </div>
     </div>
 
 
 
 
-
 </body>
+
 
 </html>
