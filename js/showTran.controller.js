@@ -391,6 +391,16 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         console.log("posss = "+vm.positions[0]);
         console.log("posss = "+vm.value);
     }
+
+    // NgMap.getMap().then(function(map) {
+    //     vm.showCustomMarker= function(evt) {
+    //       map.customMarkers.foo.setVisible(true);
+    //       map.customMarkers.foo.setPosition(this.getPosition());
+    //     };
+    //     vm.closeCustomMarker= function(evt) {
+    //       this.style.display = 'none';
+    //     };
+    //   });
   
     
     

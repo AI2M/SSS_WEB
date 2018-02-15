@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="SSS">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mshow</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+    <script src="js/map/script-tags-for-development.js"></script>
+    <script src="js/MShowroom.controller.js"></script>
+
+</head>
+
+<body ng-controller="MshowCtrl as vm">
+    <div>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">Smart Small Showroom [ManageShowroom] </a>
+        </nav>
+
+    </div>
+    <div class="container">
+            <h6> Showroom ID : {{showroom_detail[0].showroom_id}}  Location : {{showroom_detail[0].location}}  
+                Region : {{showroom_detail[0].region}} 
+            </h6>
+        <div class="row" style="padding-top:20px">
+            <div class="col-md-4">
+                <ul class="list-group">
+                    <div>
+                        <center>
+                                <h6>List of Music Box in Showroom</h6>
+                        </center>
+                       
+                        <li class="list-group-item" ng-repeat="m in m_and_s" ng-click="selectM_and_S($index)">
+                            <span class="font-weight-bold">{{" Position: "}} </span>
+                            <span>{{m.position}}</span>
+                            <span class="font-weight-bold">{{" MusicBox ID: "}} </span>
+                            <span>{{m.music_box_id}}</span>
+                        </li>
+                    </div>
+
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Position1</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[0]" ng-change="selectM_and_S2(selectedM[0])">
+                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Position2</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[1]" ng-change="selectM_and_S2(selectedM[1])">
+                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Position3</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[2]" ng-change="selectM_and_S2(selectedM[2])">
+                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Position4</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[3]" ng-change="selectM_and_S2(selectedM[3])">
+                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Position5</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[4]" ng-change="selectM_and_S2(selectedM[4])">
+                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Position6</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[5]" ng-change="selectM_and_S2(selectedM[5])">
+                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Position7</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[6]" ng-change="selectM_and_S2(selectedM[6])">
+                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Position8</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[7]" ng-change="selectM_and_S2(selectedM[7])">
+                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Position9</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[8]" ng-change="selectM_and_S2(selectedM[8])">
+                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                    </select>
+                </div>
+
+
+                <button class="btn btn-primary">Add</button>
+
+            </div>
+
+            <div class="col-md-4">
+                <div>
+                    <div class="card mb-2" style="width: 24rem;">
+
+                        <img class="card-img-top" src="https://www.tourismthailand.org/fileadmin/upload_img/Shopping/3751/IMG_0094_1391758975.JPG"
+                            alt="Card image cap">
+
+                        <div class="card-body" style=" float: right;">
+                            <h2 class="card-title">{{selectedM_and_S.name}}</h2>
+
+                            <p class="card-text" ng-hide="editMode">ID: {{selectedM_and_S.music_box_id}} </p>
+
+                            <p class="card-text" ng-hide="editMode">Price: {{selectedM_and_S.price}} </p>
+
+                            <p class="card-text" ng-hide="editMode">Detail: {{selectedM_and_S.detail}} </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+</body>
+
+</html>

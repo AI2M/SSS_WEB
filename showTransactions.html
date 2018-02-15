@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="js/datatable/DataTables-1.10.16/css/dataTables.bootstrap.min.css">
 
     <script src="js/map/script-tags-for-development.js"></script>
+    <link href="custom-marker.css"  rel="stylesheet" />
     <script src="js/showTran.controller.js"></script>
 
 </head>
@@ -152,8 +153,11 @@
         </div>
         <div class="row-md-1">
         <div style="padding-top:20px">
-            <ng-map style="height: 500px;" id="map" zoom="17" center="[18.574725983616,99.008361756933]"  scrollwheel="true" zoom-to-include-markers="auto" >
+            <ng-map style="height: 500px;" id="map" zoom="17" scrollwheel="true" zoom-to-include-markers="auto" >
                     <marker ng-repeat="p in vm.positions" position="{{p}}" icon={{vm.pic[$index]}} label='"{{vm.value[$index]}}"' ></marker>
+                    <!-- <custom-marker id="foo" position="[18.574725983616,99.008361756933]" on-click="vm.closeCustomMarker()">
+                         <h4>click to see</h4>
+                      </custom-marker> -->
             </ng-map>
         </div>
     </div>
