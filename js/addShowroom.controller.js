@@ -86,6 +86,7 @@ app.controller("AddShowroomCtrl", ['$scope', '$http','NgMap', function ($scope, 
                 data: showroomData,
             })
             .then(function successCallback(response) {
+                //console.log( "showroomData = "+$scope.selectedShowroom);
                 console.log(response);
                 $scope.loadData();
                 if(response.data.error == true){
