@@ -18,7 +18,9 @@
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/chart.js/dist/Chart.min.js"></script>
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="http://jtblin.github.io/angular-chart.js/dist/angular-chart.js"></script>
+    
 
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
 
     <script src="js/datatable/datatables.min.js"></script>
     <script src="js/datatable/angular-datatables.min.js"></script>
@@ -70,10 +72,10 @@
 
 
                 </ul>
-                <form class="form-inline my-2 my-lg-0">
+                <!-- <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
+                </form> -->
             </div>
         </nav>
 
@@ -141,22 +143,23 @@
 
                     </center>
                     <center>
-                        <div id="doughnut-chart">
+                        <!-- <div id="pie-chart">
                             <div class="panel panel-default">
                                 <p></p>
                                 <h5 class="panel-heading">{{nameDoughnutChart}}</h5>
                                 <div class="panel-body">
-                                    <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-data="num" chart-labels="ids_data"></canvas>
+                                    <canvas id="pie33" class="chart chart-pie" chart-data="num" chart-labels="ids_data" chart-options="options1"></canvas>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
+                        <hc-pie-chart id="pieHi" title="Browser usage" data="pieData">Placeholder for pie chart</hc-pie-chart>
+
+                       
+
                     </center>
 
                 </div>
             </div>
-            <!-- <div class="col-md-6">
-
-            </div> -->
         </div>
 
     </div>

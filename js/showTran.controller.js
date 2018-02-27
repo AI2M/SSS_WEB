@@ -1,7 +1,7 @@
-var app = angular.module("SSS", ['chart.js', 'ui.bootstrap', 'datatables','ngMap']);
+var app = angular.module("SSS", ['chart.js', 'ui.bootstrap', 'datatables', 'ngMap']);
 
 app.controller('ShowTranCtrl', ShowTranCtrl);
-function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope,NgMap) {
+function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope, NgMap) {
     var vm = this;
     vm.dtInstance = {};
     // vm.newPromise = newPromise;
@@ -11,17 +11,33 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
     var api_url = 'http://localhost/SSS_web_api/getTransactionData.php/?type=all';
     $scope.transactions = "";
     $scope.transactionMaps = "";
+    $scope.musicboxs = "";
+    $scope.showrooms = "";
     var now = new Date();
     $scope.nowdate = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
 
     $http.get("http://localhost/SSS_web_api/getTransactionMapData.php")
-    .then(function successCallback(response) {
-        $scope.transactionMaps = response.data.transactionMaps;
-        $scope.AddPos();
-        // console.log(response);
-    }, function errorCallback(response) {
-        console.log(response);
-    });
+        .then(function successCallback(response) {
+            $scope.transactionMaps = response.data.transactionMaps;
+            $scope.AddPos();
+            // console.log(response);
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    $http.get("http://localhost/SSS_web_api/getShowroomData.php")
+        .then(function successCallback(response) {
+            $scope.showrooms = response.data.showrooms;
+            // console.log(response);
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    $http.get("http://localhost/SSS_web_api/getMusicBoxData.php")
+        .then(function successCallback(response) {
+            $scope.musicboxs = response.data.musicboxs;
+            // console.log(response);
+        }, function errorCallback(response) {
+            console.log(response);
+        });
 
     $scope.loadData = function (type) {
         if (type == 1) {
@@ -31,7 +47,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                     // api_url='http://localhost/SSS_web_api/getTransactionData.php/?type=last7';
                     // $scope.loadTable();
                     $scope.transactions = response.data.transactions;
-                    $scope.BarChart(0);
+                    $scope.LineChart(0);
                     $scope.ShowroomChart();
                 }, function errorCallback(response) {
                     console.log(response);
@@ -44,7 +60,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                     // $scope.loadTable();
                     console.log(response);
                     $scope.transactions = response.data.transactions;
-                    $scope.BarChart(1);
+                    $scope.LineChart(1);
                     $scope.ShowroomChart();
                 }, function errorCallback(response) {
                     console.log(response);
@@ -57,7 +73,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
                     console.log(response);
                     $scope.transactions = response.data.transactions;
-                    $scope.BarChart(2);
+                    $scope.LineChart(2);
                     $scope.ShowroomChart();
                 }, function errorCallback(response) {
                     console.log(response);
@@ -70,7 +86,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
                     console.log(response);
                     $scope.transactions = response.data.transactions;
-                    $scope.BarChart(3);
+                    $scope.LineChart(3);
                 }, function errorCallback(response) {
                     console.log(response);
                 });
@@ -79,13 +95,35 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
     }
 
+    //bubble sort 
+    $scope.sorting = function (arr, arr2) {
+        for (var i = 0; i < arr.length; i++) {
+            // Last i elements are already in place   
+            for (var j = 0; j < (arr.length); j++) {
+                if (arr[j] < arr[j + 1]) {
+                    var temp = arr[j + 1];
+                    arr[j + 1] = arr[j];
+                    arr[j] = temp;
+
+                    var temp2 = arr2[j + 1];
+                    arr2[j + 1] = arr2[j];
+                    arr2[j] = temp2;
+                }
+
+            }
+        }
+        console.log($scope.num);
+
+    }
+
 
 
     //chart of musicbox
     $scope.MusicBoxChart = function () {
-        $scope.nameDoughnutChart = "MusicBoxChart";
+        $scope.nameBarChart = "Drilldown By Music Box";
         $scope.ids_data = [];
         $scope.num = [];
+        $scope.numuse = [];
         var data = $scope.transactions;
 
         for (var i = 0; i < $scope.transactions.length; i++) {
@@ -105,19 +143,58 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             }
 
         }
-
-        for (var l = 0; l < $scope.ids_data.length; l++) {
-            $scope.ids_data[l] = "MusicBox_id " + $scope.ids_data[l];
-        }
-        // console.log($scope.ids_data);
+        //console.log($scope.ids_data);
         // console.log($scope.num);
+        $scope.sorting($scope.num, $scope.ids_data);
+        for (var p = 0; p < 10; p++) {
+            $scope.numuse[p] = $scope.num[p];
+        }
+        if ($scope.ids_data.length > 10) {
+            for (var p = 0; p < 10; p++) {
+                $scope.ids_datause[p] = $scope.ids_data[p];
+            }
+            $scope.ids_data = $scope.ids_datause;
+        }
+        console.log($scope.numuse);
+        $scope.m_name = [];
+        for(var i = 0 ;i< $scope.ids_data.length;i++){
+            for(var k = 0 ; k<$scope.musicboxs.length;k++){
+                if($scope.ids_data[i]==$scope.musicboxs[k].music_box_id){
+                    $scope.m_name[i] = $scope.musicboxs[k].name;
+                }
+            }
+        }
+        for (var l = 0; l < $scope.ids_data.length; l++) {
+            $scope.ids_data[l] = "id: " + $scope.ids_data[l]+"-"+$scope.m_name[l];
+        }
+
+        $scope.options = {
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Transactions'
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        //labelString: 'Music Box ID'
+                    }
+                }]
+            }
+        };
+
+
     }
 
     //chart of showroom
     $scope.ShowroomChart = function () {
-        $scope.nameDoughnutChart = "ShowroomChart";
+        $scope.nameBarChart = "Drilldown By Showroom";
         $scope.ids_data = [];
+        $scope.ids_datause = [];
         $scope.num = [];
+        $scope.numuse = [];
         var data = $scope.transactions;
         for (var i = 0; i < $scope.transactions.length; i++) {
             if ($scope.ids_data.indexOf(data[i].showroom_id) == -1) {
@@ -136,24 +213,63 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             }
 
         }
-
-        for (var l = 0; l < $scope.ids_data.length; l++) {
-            $scope.ids_data[l] = "Showroom_id " + $scope.ids_data[l];
-        }
-        // console.log($scope.ids_data);
         // console.log($scope.num);
+        $scope.sorting($scope.num, $scope.ids_data);
+        for (var p = 0; p < 10; p++) {
+            $scope.numuse[p] = $scope.num[p];
+        }
+        if ($scope.ids_data.length > 10) {
+            for (var p = 0; p < 10; p++) {
+                $scope.ids_datause[p] = $scope.ids_data[p];
+            }
+            $scope.ids_data = $scope.ids_datause;
+        }
+        console.log($scope.numuse);
+
+        $scope.s_locations = [];
+        for(var i = 0 ;i< $scope.ids_data.length;i++){
+            for(var k = 0 ; k<$scope.showrooms.length;k++){
+                if($scope.ids_data[i]==$scope.showrooms[k].showroom_id){
+                    $scope.s_locations[i] = $scope.showrooms[k].location;
+                }
+            }
+        }
+
+          for (var l = 0; l < $scope.ids_data.length; l++) {
+            $scope.ids_data[l] = "id: " + $scope.ids_data[l]+ "-"+$scope.s_locations[l];
+        }
+
+
+        $scope.options2 = {
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Transactions'
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        //labelString: 'Showroom ID'
+                    }
+                }]
+            }
+        };
+
+
     }
 
     //dropdown
     $scope.DropdownItems = ["Showroom", "Music Box"];
     $scope.Change = function (DropdownItems) {
         if (DropdownItems == "Showroom") {
-            console.log("click Showroom");
+            //console.log("click Showroom");
             $scope.ShowroomChart();
 
         }
         else {
-            console.log("click Music Box");
+            //console.log("click Music Box");
             $scope.MusicBoxChart();
 
         }
@@ -162,15 +278,15 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
     $scope.loadData(1);
     //bar chart
 
-    $scope.BarChart = function (type) {
+    $scope.LineChart = function (type) {
         var dates = new Date();
         var date = dates.getDate();
         var month = dates.getMonth() + 1;
         var data = $scope.transactions.data;
         //console.log(dates);
-        $scope.series = ['MusicBox'];
+        $scope.series = ['Transaction'];
         if (type == 0) {
-            $scope.nameBarChart = "Last 7 Day";
+            $scope.nameLineChart = "Last 7 Day";
             // last 7 day21
             $scope.x_axis = [];
             $scope.y_axis = [[]];
@@ -195,7 +311,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
             }
             for (var z = 0; z < 7; z++) {
-                $scope.y_axis[z] = 0;
+                $scope.y_axis[0].push(0);
             }
 
             for (var p = 0; p < $scope.transactions.length; p++) {
@@ -203,16 +319,32 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 //console.log(date);
                 for (var y = 0; y < $scope.x_axis.length; y++) {
                     if (date == $scope.x_axis[y]) {
-                        $scope.y_axis[[y]] += 1;
+                        $scope.y_axis[[0]][y] += 1;
                     }
                 }
 
             }
-            console.log($scope.x_axis);
-            console.log($scope.y_axis);
+            // console.log($scope.x_axis);
+            // console.log($scope.y_axis);
+            $scope.options = {
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Transactions'
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        }
+                    }]
+                }
+            };
         }
         else if (type == 1) {
-            $scope.nameBarChart = "This Month";
+            $scope.nameLineChart = "This Month";
             //this month
             $scope.x_axis = [];
             $scope.y_axis = [[]];
@@ -234,14 +366,14 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             }
 
             for (var z = 0; z < $scope.x_axis.length; z++) {
-                $scope.y_axis[z] = 0;
+                $scope.y_axis[0].push(0);
             }
             for (var p = 0; p < $scope.transactions.length; p++) {
                 var date = new Date($scope.transactions[p].datetime).getDate();
-                console.log(data);
+                // console.log(data);
                 for (var y = 0; y < $scope.x_axis.length; y++) {
                     if (date == $scope.x_axis[y]) {
-                        $scope.y_axis[[y]] += 1;
+                        $scope.y_axis[[0]][y] += 1;
                     }
                 }
 
@@ -250,12 +382,28 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             //     $scope.x_axis[r]=  "date "+$scope.x_axis[r];
             // }
 
-            console.log($scope.x_axis);
-            console.log($scope.y_axis);
+            // console.log($scope.x_axis);
+            // console.log($scope.y_axis);
+            $scope.options = {
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Transactions'
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        }
+                    }]
+                }
+            };
 
         }
         else {
-            $scope.nameBarChart = "This Year";
+            $scope.nameLineChart = "This Year";
             //this year
             $scope.x_axis = [];
             $scope.y_axis = [[]];
@@ -264,13 +412,13 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             $scope.x_axis = [01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12];
 
             for (var z = 0; z < $scope.x_axis.length; z++) {
-                $scope.y_axis[z] = 0;
+                $scope.y_axis[0].push(0);
             }
             for (var p = 0; p < $scope.transactions.length; p++) {
                 var month = new Date($scope.transactions[p].datetime).getMonth() + 1;
                 for (var y = 0; y < $scope.x_axis.length; y++) {
                     if (month == $scope.x_axis[y]) {
-                        $scope.y_axis[[y]] += 1;
+                        $scope.y_axis[[0]][y] += 1;
                     }
                 }
 
@@ -279,9 +427,25 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             for (var r = 0; r < $scope.x_axis.length; r++) {
                 $scope.x_axis[r] = $scope.x_axis[r] + " " + $scope.month_name[r];
             }
-            console.log($scope.x_axis);
-            console.log($scope.y_axis);
-
+            // console.log($scope.x_axis);
+            // console.log($scope.y_axis);
+            // console.log($scope.y_axis[[0]][1]);
+            $scope.options = {
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Transactions'
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Months'
+                        }
+                    }]
+                }
+            };
         }
     }
     //datatable
@@ -315,10 +479,11 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             .withPaginationType('full')
             // Active Responsive plugin
             .withOption('responsive', true)
-            .withOption('order',[[0,'desc']]);
+            .withOption('order', [[0, 'desc']]);
         vm.dtColumns = [
             DTColumnBuilder.newColumn('datetime').withTitle('Datetime'),
             DTColumnBuilder.newColumn('showroom_id').withTitle('Showroom ID'),
+            DTColumnBuilder.newColumn('location').notSortable().withTitle('Showroom Name')
 
 
         ];
@@ -364,32 +529,32 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         console.log(json);
     }
     //map
-    vm.positions = []; 
+    vm.positions = [];
     // vm.pos = [[18.574725983616,99.008361756933]]; 
-    vm.value=[];
-    vm.pic=[];
-    $scope.AddPos = function(){
-        for(var k = 0;k<$scope.transactionMaps.length;k++){
+    vm.value = [];
+    vm.pic = [];
+    $scope.AddPos = function () {
+        for (var k = 0; k < $scope.transactionMaps.length; k++) {
             vm.positions.push([$scope.transactionMaps[k].latitude, $scope.transactionMaps[k].longitude]);
-            if($scope.transactionMaps[k].count<2){
+            if ($scope.transactionMaps[k].count < 2) {
                 vm.pic.push("js/map/icon/m1.png");
             }
-            else if($scope.transactionMaps[k].count<4){
+            else if ($scope.transactionMaps[k].count < 4) {
                 vm.pic.push("js/map/icon/m2.png");
             }
-            else if($scope.transactionMaps[k].count<6){
+            else if ($scope.transactionMaps[k].count < 6) {
                 vm.pic.push("js/map/icon/m3.png");
             }
-            else if($scope.transactionMaps[k].count<8){
+            else if ($scope.transactionMaps[k].count < 8) {
                 vm.pic.push("js/map/icon/m4.png");
             }
-            else{
+            else {
                 vm.pic.push("js/map/icon/m5.png");
             }
-            vm.value.push($scope.transactionMaps[k].count);
+            vm.value.push($scope.transactionMaps[k].location + " : " + $scope.transactionMaps[k].count);
         }
-        console.log("posss = "+vm.positions[0]);
-        console.log("posss = "+vm.value);
+        console.log("posss = " + vm.positions[0]);
+        console.log("posss = " + vm.value);
     }
 
     // NgMap.getMap().then(function(map) {
@@ -401,10 +566,17 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
     //       this.style.display = 'none';
     //     };
     //   });
-  
-    
-    
-    
+
+
+    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+    $scope.series = ['Series A'];
+    $scope.data = [
+        [65, 59, 80, 81, 56, 55, 40]
+    ];
+
+
+
+
 
 
 

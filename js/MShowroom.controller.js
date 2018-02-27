@@ -150,11 +150,11 @@ app.controller("MshowCtrl", ['$scope', '$http','NgMap', function ($scope, $http,
     }
     $scope.push_MusicBox_id = function(){
         $scope.list_musicbox_id=[];
-        $scope.list_musicbox_id[0]="none";
+        $scope.list_musicbox_id[0]="0";
         for(var i=0;i<$scope.musicboxs.length;i++){
             $scope.list_musicbox_id.push($scope.musicboxs[i].music_box_id);
         }
-        console.log($scope.list_musicbox_id);
+       // console.log($scope.list_musicbox_id);
     }
 
 

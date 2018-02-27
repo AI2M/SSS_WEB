@@ -1,52 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="SSS">
-
+<html lang="en" ng-app="ngAppDemo">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>test</title>
-    
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-    crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
+    <title>Document</title>
 
-<script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
-<script src="http://jtblin.github.io/angular-chart.js/node_modules/chart.js/dist/Chart.min.js"></script>
-<script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-<script src="http://jtblin.github.io/angular-chart.js/dist/angular-chart.js"></script>
-
-
-<script src="js/datatable/datatables.min.js"></script>
-<script src="js/datatable/angular-datatables.min.js"></script>
-<script src="js/datatable/datatable.js"></script>
-<script src="js/datatable/datatables.bootstrap.js"></script>
-<script src="js/datatable/dataTables.responsive.min.js"></script>
-<script src="js/datatable/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="js/datatable/DataTables-1.10.16/js/jquery.dataTables.js"></script>
-
-<link rel="stylesheet" type="text/css" href="http://l-lin.github.io/angular-datatables/archives/dist/css/angular-datatables.css"
-/>
-<link rel="stylesheet" href="js/datatable/datatables.bootstrap.css">
-<link rel="stylesheet" href="js/datatable/datatables.min.css">
-<link rel="stylesheet" href="js/datatable/responsive.dataTables.min.css">
-<link rel="stylesheet" href="js/datatable/DataTables-1.10.16/css/dataTables.bootstrap.min.css">
-
-    <script src="js/a.js"></script>
-
-     
-
+    <link rel="stylesheet" href="http://institut-de-genomique.github.io/Ultimate-DataTable/js/bootstrap/css/bootstrap-3.3.4.min.css">
+ <link rel="stylesheet" href="http://institut-de-genomique.github.io/Ultimate-DataTable/js/font-awesome/css/font-awesome.min.css">
+ <link rel="stylesheet" href="http://institut-de-genomique.github.io/Ultimate-DataTable/css/ultimate-datatable-3.3.1-SNAPSHOT.css">
+ <script src="http://institut-de-genomique.github.io/Ultimate-DataTable/js/jquery/jquery_1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+ <script src="http://institut-de-genomique.github.io/Ultimate-DataTable/js/bootstrap/js/bootstrap-3.3.4.min.js" type="text/javascript" charset="utf-8"></script>
+ <script src="http://institut-de-genomique.github.io/Ultimate-DataTable/js/angular-js/angular-1.3.16.min.js" type="text/javascript" charset="utf-8"></script>
+  <!-- <script src="http://institut-de-genomique.github.io/Ultimate-DataTable/js/momentjs.js" type="text/javascript" charset="utf-8"></script> -->
+ <script src="http://institut-de-genomique.github.io/Ultimate-DataTable/js/ultimate-datatable-3.3.1-SNAPSHOT.js" type="text/javascript" charset="utf-8"></script>
+ <script src="js/a.js"></script>
+</head>
 <body>
-    <div ng-controller="WithAjaxCtrl as showCase">
-        <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" class="table table-striped table-bordered"></table>
-    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <h1 align=center>Simple Ultimate DataTable exemple</h1><br>
+            <div ng-controller="ngAppDemoController">
+                <div class="col-md-12 col-lg-12" ultimate-datatable="datatable">
+                </div>
+            </div>
+        </div>
+     </div>
 </body>
-
-
-
 </html>

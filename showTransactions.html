@@ -36,7 +36,7 @@
     <link rel="stylesheet" href="js/datatable/DataTables-1.10.16/css/dataTables.bootstrap.min.css">
 
     <script src="js/map/script-tags-for-development.js"></script>
-    <link href="custom-marker.css"  rel="stylesheet" />
+    <link href="custom-marker.css" rel="stylesheet" />
     <script src="js/showTran.controller.js"></script>
 
 </head>
@@ -71,10 +71,10 @@
 
 
                 </ul>
-                <form class="form-inline my-2 my-lg-0">
+                <!-- <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
+                </form> -->
             </div>
         </nav>
 
@@ -115,7 +115,7 @@
 
                 </center>
                 <center>
-                    <div id="bar-chart">
+                    <!-- <div id="bar-chart">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <span class="font-weight-bold">{{nameBarChart}}</span>
@@ -125,9 +125,17 @@
                                 <canvas id="bar" class="chart chart-bar" chart-data="y_axis" chart-labels="x_axis" chart-series="series" chart-options="options"></canvas>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{{nameLineChart}} Transactions, Now Date {{nowdate}} </div>
+                        <div class="panel-body">
+                          <canvas id="line" class="chart chart-line" chart-data="y_axis" chart-labels="x_axis"
+                                  chart-click="onClickChart" chart-hover="onHover" chart-series="series" chart-options="options"
+                                  chart-dataset-override="datasetOverride" ></canvas>
+                        </div>
+                      </div>
                 </center>
-                <center>
+                <center style="padding-top:50px">
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
@@ -139,11 +147,21 @@
                         </div>
                     </div>
 
-                    <div id="doughnut-chart">
+                    <!-- <div id="doughnut-chart">
                         <div class="panel panel-default">
                             <div class="panel-heading">{{nameDoughnutChart}}</div>
                             <div class="panel-body">
-                                <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-data="num" chart-labels="ids_data"></canvas>
+                                <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-data="numuse" chart-labels="ids_data"></canvas>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div id="bar-chart">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-heading">{{nameBarChart}}</div>
+                            </div>
+                            <div class="panel-body">
+                                <canvas id="bar" class="chart chart-bar" chart-data="numuse" chart-labels="ids_data"  chart-options="options2"></canvas>
                             </div>
                         </div>
                     </div>
@@ -152,15 +170,15 @@
             </div>
         </div>
         <div class="row-md-1">
-        <div style="padding-top:20px">
-            <ng-map style="height: 500px;" id="map" zoom="17" scrollwheel="true" zoom-to-include-markers="auto" >
-                    <marker ng-repeat="p in vm.positions" position="{{p}}" icon={{vm.pic[$index]}} label='"{{vm.value[$index]}}"' ></marker>
+            <div style="padding-top:20px">
+                <ng-map style="height: 500px;" id="map" zoom="17" scrollwheel="true" zoom-to-include-markers="auto">
+                    <marker ng-repeat="p in vm.positions" position="{{p}}" icon={{vm.pic[$index]}} label='"{{vm.value[$index]}}"'></marker>
                     <!-- <custom-marker id="foo" position="[18.574725983616,99.008361756933]" on-click="vm.closeCustomMarker()">
                          <h4>click to see</h4>
                       </custom-marker> -->
-            </ng-map>
+                </ng-map>
+            </div>
         </div>
-    </div>
     </div>
 
 
