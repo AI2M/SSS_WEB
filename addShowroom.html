@@ -17,6 +17,21 @@
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 
+    <script src="js/datatable/datatables.min.js"></script>
+    <script src="js/datatable/angular-datatables.min.js"></script>
+    <script src="js/datatable/datatable.js"></script>
+    <script src="js/datatable/datatables.bootstrap.js"></script>
+    <script src="js/datatable/dataTables.responsive.min.js"></script>
+    <script src="js/datatable/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="js/datatable/DataTables-1.10.16/js/jquery.dataTables.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://l-lin.github.io/angular-datatables/archives/dist/css/angular-datatables.css"
+    />
+    <link rel="stylesheet" href="js/datatable/datatables.bootstrap.css">
+    <link rel="stylesheet" href="js/datatable/datatables.min.css">
+    <link rel="stylesheet" href="js/datatable/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="js/datatable/DataTables-1.10.16/css/dataTables.bootstrap.min.css">
+
     <script src="js/map/script-tags-for-development.js"></script>
     <script src="js/addShowroom.controller.js"></script>
 
@@ -63,7 +78,7 @@
     <div class="container" ng-controller="AddShowroomCtrl as vm">
         <div class="row-md-1">
 
-            <ul class="list-group">
+            <!-- <ul class="list-group">
                 <h4>Showrooms</h4>
                 <div class="alert alert-primary" ng-if="addMessage">{{addMessage}}</div>
                 <div style=" max-height: 400px;
@@ -78,7 +93,13 @@
                 </div>
                 <button class="btn btn-primary" ng-click="addShowroom()">Add</button>
 
-            </ul>
+            </ul> -->
+            <div>
+                <!-- <button class="btn btn-primary" ng-click="showCase.reloadData()">reload</button> -->
+                <!-- <p class="text-danger">You clicked on: <strong>{{ showCase.message }}</strong></p> -->
+                <table datatable="" dt-options="vm.dtOptions" dt-columns="vm.dtColumns" dt-instance="vm.dtInstance" class="row-border hover"></table>
+                <button type="button" ng-click="addShowroom()" class="btn btn-primary btn-lg btn-block">Add</button>
+            </div>
 
         </div>
         <div class="row" style="padding-top:20px">
@@ -148,8 +169,8 @@
                                 <textarea ng-model="selectedShowroom.detail" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                             </div>
                             <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
-                            <button ng-show="editMode" class="btn btn-success" ng-click="saveShowroom()">Save</button>
-                            <button ng-hide="editMode" type="button" ng-click="deleteShowroom()" class="btn btn-danger">Delete</button>
+                            <button ng-show="editMode" class="btn btn-success" ng-click="saveShowroom(); vm.reloadData()">Save</button>
+                            <button ng-hide="editMode" type="button" ng-click="deleteShowroom(); vm.reloadData()" class="btn btn-danger">Delete</button>
                             <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
 
 
@@ -163,7 +184,7 @@
                 />
                 <div style="height: 150px;">
                     <ng-map id="map" zoom="17" center={{lalong}} scrollwheel="true" zoom-to-include-markers="true" on-click="vm.addMarker()">
-                        <marker ng-repeat="p in vm.positions" position="{{p.pos}}" Title="pos: {{p.pos}}" icon="js/map/icon/mapiconS.png" animation="Animation.BOUNCE" ></marker>
+                        <marker ng-repeat="p in vm.positions" position="{{p.pos}}" Title="pos: {{p.pos}}" icon="js/map/icon/mapiconS.png" animation="Animation.BOUNCE"></marker>
                     </ng-map>
                 </div>
             </div>

@@ -74,12 +74,12 @@
         </nav>
 
     </div>
-    <div class="container" ng-controller="AddMusicCtrl">
+    <div class="container" ng-controller="AddMusicCtrl as showCase">
         <div class="row">
             <div class="col-md-6">
 
 
-                <ul class="list-group">
+                <!-- <ul class="list-group">
                     <div class="alert alert-primary" ng-if="addMessage">{{addMessage}}</div>
                     <button class="btn btn-primary" ng-click="addMusicbox()">Add</button>
                     <div style=" max-height: 500px;
@@ -90,14 +90,15 @@
                             <span>{{musicbox.detail}}</span>
                         </li>
                     </div>
-                </ul>
+                </ul> -->
 
 
-                <!-- <div ng-controller="AddMusicCtrl as showCase">
-                            <button class="btn btn-primary" ng-click="showCase.reloadData()">reload</button>
-                            <p class="text-danger">You clicked on: <strong>{{ showCase.message }}</strong></p>
-                        <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" dt-instance="showCase.dtInstance" class="row-border hover"></table>
-                    </div> -->
+                <div>
+                    <button type="button" ng-click="addMusicbox()" class="btn btn-primary btn-lg btn-block">Add</button>
+                    <!-- <button class="btn btn-primary" ng-click="showCase.reloadData()">reload</button> -->
+                    <!-- <p class="text-danger">You clicked on: <strong>{{ showCase.message }}</strong></p> -->
+                    <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" dt-instance="showCase.dtInstance" class="row-border hover"></table>
+                </div>
 
             </div>
             <div class="col-md-6">
@@ -148,8 +149,8 @@
                                 <textarea ng-model="selectedMusicBox.detail" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                             </div>
                             <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
-                            <button ng-show="editMode" class="btn btn-success" ng-click="saveMusic()">Save</button>
-                            <button ng-hide="editMode" type="button" ng-click="deleteMusic()" class="btn btn-danger">Delete</button>
+                            <button ng-show="editMode" class="btn btn-success" ng-click="saveMusic(); showCase.reloadData()">Save</button>
+                            <button ng-hide="editMode" type="button" ng-click="deleteMusic(); showCase.reloadData()" class="btn btn-danger">Delete</button>
                             <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
 
 
