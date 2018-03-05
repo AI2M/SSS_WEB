@@ -13,6 +13,8 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
     $scope.transactionMaps = "";
     $scope.musicboxs = "";
     $scope.showrooms = "";
+    $scope.tab_month = false;
+    $scope.tab_7day = false;
     var now = new Date();
     $scope.nowdate = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
 
@@ -46,9 +48,17 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 .then(function successCallback(response) {
                     // api_url='http://localhost/SSS_web_api/getTransactionData.php/?type=last7';
                     // $scope.loadTable();
-                    $scope.transactions = response.data.transactions;
-                    $scope.LineChart(0);
-                    $scope.ShowroomChart();
+                    if (response.data.error == true) {
+                        console.log("error get 7 day data");
+                        $scope.tab_7day = true;
+                    }
+                    else {
+                        console.log(response);
+                        $scope.transactions = response.data.transactions;
+                        $scope.LineChart(0);
+                        $scope.ShowroomChart();
+                    }
+
                 }, function errorCallback(response) {
                     console.log(response);
                 });
@@ -58,10 +68,17 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 .then(function successCallback(response) {
                     // api_url='http://localhost/SSS_web_api/getTransactionData.php/?type=thismonth';
                     // $scope.loadTable();
-                    console.log(response);
-                    $scope.transactions = response.data.transactions;
-                    $scope.LineChart(1);
-                    $scope.ShowroomChart();
+                    if (response.data.error == true) {
+                        console.log("error get month data");
+                        $scope.tab_month = true;
+                    }
+                    else {
+                        console.log(response);
+                        $scope.transactions = response.data.transactions;
+                        $scope.LineChart(1);
+                        $scope.ShowroomChart();
+                    }
+
                 }, function errorCallback(response) {
                     console.log(response);
                 });
@@ -157,15 +174,15 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         }
         console.log($scope.numuse);
         $scope.m_name = [];
-        for(var i = 0 ;i< $scope.ids_data.length;i++){
-            for(var k = 0 ; k<$scope.musicboxs.length;k++){
-                if($scope.ids_data[i]==$scope.musicboxs[k].music_box_id){
+        for (var i = 0; i < $scope.ids_data.length; i++) {
+            for (var k = 0; k < $scope.musicboxs.length; k++) {
+                if ($scope.ids_data[i] == $scope.musicboxs[k].music_box_id) {
                     $scope.m_name[i] = $scope.musicboxs[k].name;
                 }
             }
         }
         for (var l = 0; l < $scope.ids_data.length; l++) {
-            $scope.ids_data[l] = "id: " + $scope.ids_data[l]+"-"+$scope.m_name[l];
+            $scope.ids_data[l] = "id: " + $scope.ids_data[l] + "-" + $scope.m_name[l];
         }
 
         $scope.options = {
@@ -173,7 +190,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Transactions'
+                        labelString: 'Engagements (Click)'
                     }
                 }],
                 xAxes: [{
@@ -227,16 +244,16 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         console.log($scope.numuse);
 
         $scope.s_locations = [];
-        for(var i = 0 ;i< $scope.ids_data.length;i++){
-            for(var k = 0 ; k<$scope.showrooms.length;k++){
-                if($scope.ids_data[i]==$scope.showrooms[k].showroom_id){
+        for (var i = 0; i < $scope.ids_data.length; i++) {
+            for (var k = 0; k < $scope.showrooms.length; k++) {
+                if ($scope.ids_data[i] == $scope.showrooms[k].showroom_id) {
                     $scope.s_locations[i] = $scope.showrooms[k].location;
                 }
             }
         }
 
-          for (var l = 0; l < $scope.ids_data.length; l++) {
-            $scope.ids_data[l] = "id: " + $scope.ids_data[l]+ "-"+$scope.s_locations[l];
+        for (var l = 0; l < $scope.ids_data.length; l++) {
+            $scope.ids_data[l] = "id: " + $scope.ids_data[l] + "-" + $scope.s_locations[l];
         }
 
 
@@ -245,7 +262,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Transactions'
+                        labelString: 'Engagements (Click)'
                     }
                 }],
                 xAxes: [{
@@ -276,6 +293,8 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
     }
     $scope.loadData(1);
+    $scope.loadData(2);
+    $scope.loadData(3);
     //bar chart
 
     $scope.LineChart = function (type) {
@@ -293,13 +312,13 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             var i, t;
             for (i = date; i > date - 7; i--) {
                 if (i <= 0) {
-                    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                    if (month == 1 || month == 2 || month == 4 || month == 6 || month == 8 || month == 9 || month == 11) {
                         j = i + 31;
                     }
-                    else if (month == 4 || month == 6 || month == 9 || month == 11) {
+                    else if (month == 5 || month == 7 || month == 10 || month == 12) {
                         j = i + 30;
                     }
-                    else if (month == 2) {
+                    else if (month == 3) {
                         j = i + 28;
 
                     }
@@ -331,7 +350,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Transactions'
+                            labelString: 'Engagements (Click)'
                         }
                     }],
                     xAxes: [{
@@ -389,7 +408,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Transactions'
+                            labelString: 'Engagements (Click)'
                         }
                     }],
                     xAxes: [{
@@ -435,7 +454,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Transactions'
+                            labelString: 'Engagements (Click)'
                         }
                     }],
                     xAxes: [{

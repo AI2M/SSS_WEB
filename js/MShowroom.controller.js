@@ -2,11 +2,12 @@
 var app = angular.module("SSS",['ngMap']);
 app.controller("MshowCtrl", ['$scope', '$http','NgMap', function ($scope, $http,NgMap) {
     
-    $scope.id=2;
+    $scope.id=10;
     $scope.m_and_s="";
     $scope.musicboxs="";
     $scope.showroom_detail="";
     $scope.list_musicbox_id=[];
+    $scope.list_musicbox_name=[];
     $scope.list_pos=[];
     $scope.newpos=[];
     $scope.addBtn=false;
@@ -56,9 +57,9 @@ app.controller("MshowCtrl", ['$scope', '$http','NgMap', function ($scope, $http,
         $scope.selectedM_and_S= $scope.m_and_s[index];
     }
 
-    $scope.selectM_and_S2= function (id) {
+    $scope.selectM_and_S2= function (name) {
         for(var j=0;j<$scope.musicboxs.length;j++){
-            if(id==$scope.musicboxs[j].music_box_id)
+            if(name==$scope.musicboxs[j].name)
             {
                 $scope.selectedM_and_S= $scope.musicboxs[j];
             }
@@ -72,19 +73,35 @@ app.controller("MshowCtrl", ['$scope', '$http','NgMap', function ($scope, $http,
 
     }
 
+    $scope.newpos_id = [];
+    $scope.match_ID_and_name = function(arr_name){
+        $scope.newpos_id = [];
+        for (var i = 0 ;i< arr_name.length;i++){
+            for(var j =0 ; j<$scope.list_musicbox_name.length;j++){
+                if(arr_name[i]==$scope.list_musicbox_name[j]){
+                    $scope.newpos_id[i]=$scope.list_musicbox_id[j];
+                }
+                
+            }
+        }
+        console.log($scope.newpos_id);
+
+    }
+
     $scope.SubmitPos = function(){
         var pos={};
         
         $scope.newpos=[];
+        $scope.newpos_name = [];
         $scope.musicID_of_mands=[];//9tua
 
         if($scope.new==false){
             for(var t=0;t<9;t++){
-                $scope.musicID_of_mands[t]="0";
+                $scope.musicID_of_mands[t]="none";
                 for(var j=0;j<$scope.m_and_s.length;j++){
                     if($scope.m_and_s[j].position==t+1)
                     {
-                        $scope.musicID_of_mands[t]=$scope.m_and_s[j].music_box_id;
+                        $scope.musicID_of_mands[t]=$scope.m_and_s[j].name;
                     }
                 }
             }
@@ -100,7 +117,7 @@ app.controller("MshowCtrl", ['$scope', '$http','NgMap', function ($scope, $http,
                 }
                 else
                 {
-                    $scope.newpos.push("0");
+                    $scope.newpos.push("none");
                 }
               
             }
@@ -109,6 +126,8 @@ app.controller("MshowCtrl", ['$scope', '$http','NgMap', function ($scope, $http,
             }
            
         }
+        $scope.match_ID_and_name($scope.newpos);
+        $scope.newpos = $scope.newpos_id;
        
         pos["m1"] = $scope.newpos[0];
         pos["m2"] = $scope.newpos[1];
@@ -150,11 +169,15 @@ app.controller("MshowCtrl", ['$scope', '$http','NgMap', function ($scope, $http,
     }
     $scope.push_MusicBox_id = function(){
         $scope.list_musicbox_id=[];
+        $scope.list_musicbox_name=[];
         $scope.list_musicbox_id[0]="0";
+        $scope.list_musicbox_name[0]="none";
         for(var i=0;i<$scope.musicboxs.length;i++){
             $scope.list_musicbox_id.push($scope.musicboxs[i].music_box_id);
+            $scope.list_musicbox_name.push($scope.musicboxs[i].name);
         }
-       // console.log($scope.list_musicbox_id);
+        console.log($scope.list_musicbox_id);
+        console.log($scope.list_musicbox_name);
     }
 
 

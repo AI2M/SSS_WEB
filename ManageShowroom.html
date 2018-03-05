@@ -48,11 +48,11 @@
                         </center>
                        
                         <li class="list-group-item" ng-repeat="m in m_and_s" ng-click="selectM_and_S($index)">
-                            <span class="font-weight-bold">{{" Position: "}} </span>
+                            <span class="font-weight-bold">{{" Position:    "}} </span>
                             <span>{{m.position}}</span>
-                            <span class="font-weight-bold">{{"ID: "}} </span>
-                            <span>{{m.music_box_id}}</span>
-                            <span class="font-weight-bold">{{"Name: "}} </span>
+                            <!-- <span class="font-weight-bold">{{"ID:   "}} </span>
+                            <span style="padding-left:0.5mm">{{m.music_box_id}}</span> -->
+                            <span  style="padding-left:5mm" class="font-weight-bold">{{"Name: "}} </span>
                             <span>{{m.name}}</span>
                         </li>
                     </div>
@@ -65,7 +65,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Position1</label>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[0]" ng-change="selectM_and_S2(selectedM[0])">
-                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                        <option ng-repeat="x in list_musicbox_name">{{x}}</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -73,7 +73,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Position2</label>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[1]" ng-change="selectM_and_S2(selectedM[1])">
-                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                        <option ng-repeat="x in list_musicbox_name">{{x}}</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -81,7 +81,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Position3</label>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[2]" ng-change="selectM_and_S2(selectedM[2])">
-                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                        <option ng-repeat="x in list_musicbox_name">{{x}}</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -89,7 +89,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Position4</label>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[3]" ng-change="selectM_and_S2(selectedM[3])">
-                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                        <option ng-repeat="x in list_musicbox_name">{{x}}</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -97,7 +97,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Position5</label>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[4]" ng-change="selectM_and_S2(selectedM[4])">
-                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                        <option ng-repeat="x in list_musicbox_name">{{x}}</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -105,7 +105,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Position6</label>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[5]" ng-change="selectM_and_S2(selectedM[5])">
-                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                        <option ng-repeat="x in list_musicbox_name">{{x}}</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -113,7 +113,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Position7</label>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[6]" ng-change="selectM_and_S2(selectedM[6])">
-                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                        <option ng-repeat="x in list_musicbox_name">{{x}}</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -121,7 +121,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Position8</label>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[7]" ng-change="selectM_and_S2(selectedM[7])">
-                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                        <option ng-repeat="x in list_musicbox_name">{{x}}</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -129,7 +129,7 @@
                         <label class="input-group-text" for="inputGroupSelect01">Position9</label>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01" ng-model="selectedM[8]" ng-change="selectM_and_S2(selectedM[8])">
-                        <option ng-repeat="x in list_musicbox_id">{{x}}</option>
+                        <option ng-repeat="x in list_musicbox_name">{{x}}</option>
                     </select>
                 </div>
                 <button class="btn btn-primary btn-lg btn-block" ng-show="addBtn" ng-click="SubmitPos()">Submit</button>

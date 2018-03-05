@@ -279,7 +279,7 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
             DTColumnBuilder.newColumn('age').notSortable().withTitle('Age'),
             DTColumnBuilder.newColumn('job').notSortable().withTitle('Job'),
             DTColumnBuilder.newColumn('showroom_id').withTitle('Showroom ID'),
-            DTColumnBuilder.newColumn('location').notSortable().withTitle('Showroom name'),
+            DTColumnBuilder.newColumn('location').withTitle('Showroom Name'),
         ];
     }
     $scope.loadTable();

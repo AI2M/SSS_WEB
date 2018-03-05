@@ -1,4 +1,3 @@
-
 var app = angular.module("SSS", ['ngMap', 'datatables']);
 app.controller('AddShowroomCtrl', AddShowroomCtrl);
 function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope, NgMap) {
@@ -16,6 +15,8 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
                 var la = $scope.selectedShowroom.latitude;
                 var long = $scope.selectedShowroom.longitude;
                 $scope.lalong = [la, long];
+                vm.positions = [];
+                vm.positions[0] = { pos: $scope.lalong };
                 console.log("lalong = " + $scope.lalong);
                 console.log($scope.showrooms[0].longitude)
             }, function errorCallback(response) {
@@ -254,7 +255,17 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
     }
     function someClickHandler(info) {
         //vm.message = info.music_box_id + ' - ' + info.name;
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.addMessage = undefined;
         $scope.selectedShowroom = info;
+        var la = $scope.selectedShowroom.latitude;
+        var long = $scope.selectedShowroom.longitude;
+        $scope.lalong = [la, long];
+        vm.positions = [];
+        vm.positions[0] = { pos: $scope.lalong };
+        console.log("lalong = " + $scope.lalong);
+        
     }
     function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
         // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
@@ -268,13 +279,3 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
     }
 
 }
-// app.controller("AddShowroomCtrl", ['DTOptionsBuilder', 'DTColumnBuilder','$scope', '$http','NgMap', function (DTOptionsBuilder, DTColumnBuilder,$scope, $http,NgMap) {
-
-
-
-
-
-// }]);
-
-
-

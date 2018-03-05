@@ -50,8 +50,8 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="showTransactions.html">Transaction
-                            <span class="sr-only">(Transaction)</span>
+                        <a class="nav-link" href="showTransactions.html">Engagement
+                            <span class="sr-only">(Engagement)</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -94,6 +94,9 @@
 
 
                 <div>
+                        <div class="alert alert-primary" ng-if="addMessage">{{addMessage}}</div>
+                        <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
+                        <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
                     <button type="button" ng-click="addMusicbox()" class="btn btn-primary btn-lg btn-block">Add</button>
                     <!-- <button class="btn btn-primary" ng-click="showCase.reloadData()">reload</button> -->
                     <!-- <p class="text-danger">You clicked on: <strong>{{ showCase.message }}</strong></p> -->
@@ -103,8 +106,6 @@
             </div>
             <div class="col-md-6">
                 <div style="padding-left: 50px;">
-                    <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
-                    <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
                     <div class="card mb-2" style="width: 24rem;">
 
                         <img class="card-img-top" src="http://fb1-ck.lnwfile.com/yt3bxi.jpg" alt="Card image cap">

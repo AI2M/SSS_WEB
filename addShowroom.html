@@ -88,25 +88,24 @@
                         <span> {{showroom.showroom_id}} </span>
                         <span class="font-weight-bold">{{" loaction: "}} </span>
                         <span>{{showroom.location}}</span>
-
                     </li>
                 </div>
                 <button class="btn btn-primary" ng-click="addShowroom()">Add</button>
-
             </ul> -->
             <div>
                 <!-- <button class="btn btn-primary" ng-click="showCase.reloadData()">reload</button> -->
                 <!-- <p class="text-danger">You clicked on: <strong>{{ showCase.message }}</strong></p> -->
                 <table datatable="" dt-options="vm.dtOptions" dt-columns="vm.dtColumns" dt-instance="vm.dtInstance" class="row-border hover"></table>
                 <button type="button" ng-click="addShowroom()" class="btn btn-primary btn-lg btn-block">Add</button>
+                <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
+                <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
+                <div class="alert alert-primary" ng-if="addMessage">{{addMessage}}</div>
             </div>
 
         </div>
         <div class="row" style="padding-top:20px">
             <div class="col-md-6" style="padding-left:90px">
                 <div>
-                    <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
-                    <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
                     <div class="card mb-2" style="width: 24rem;">
 
                         <img class="card-img-top" src="https://www.tourismthailand.org/fileadmin/upload_img/Shopping/3751/IMG_0094_1391758975.JPG"
@@ -183,7 +182,7 @@
                 <input ng-show="editMode" class="form-control" places-auto-complete size="55" ng-model="vm.address" types="{{types}}" on-place-changed="vm.placeChanged()"
                 />
                 <div style="height: 150px;">
-                    <ng-map id="map" zoom="17" center={{lalong}} scrollwheel="true" zoom-to-include-markers="true" on-click="vm.addMarker()">
+                    <ng-map id="map" zoom="17" center={{lalong}} scrollwheel="true" zoom-to-include-markers="false" on-click="vm.addMarker()">
                         <marker ng-repeat="p in vm.positions" position="{{p.pos}}" Title="pos: {{p.pos}}" icon="js/map/icon/mapiconS.png" animation="Animation.BOUNCE"></marker>
                     </ng-map>
                 </div>

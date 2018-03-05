@@ -203,7 +203,10 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         console.log(json);
     }
     function someClickHandler(info) {
-        vm.message = info.music_box_id + ' - ' + info.name;
+        //vm.message = info.music_box_id + ' - ' + info.name;
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.addMessage = undefined;
         $scope.selectedMusicBox = info;
     }
     function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
