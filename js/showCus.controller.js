@@ -275,7 +275,7 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
         vm.dtColumns = [
             DTColumnBuilder.newColumn('salary').withTitle('Salary'),
             DTColumnBuilder.newColumn('phone_num').notSortable().withTitle('Phone Number'),
-            DTColumnBuilder.newColumn('sex').notSortable().withTitle('Sex'),
+            DTColumnBuilder.newColumn('sex').notSortable().withTitle('Gender'),
             DTColumnBuilder.newColumn('age').notSortable().withTitle('Age'),
             DTColumnBuilder.newColumn('job').notSortable().withTitle('Job'),
             DTColumnBuilder.newColumn('showroom_id').withTitle('Showroom ID'),
@@ -316,7 +316,7 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
                     cursor: 'pointer',
                     dataLabels: {
                         enabled: true,
-                        format: '<b>{point.name}</b> : {point.y} customer',
+                        format: '<b>{point.name}</b> : {point.y} customers',
                         style: {
                             color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                         }

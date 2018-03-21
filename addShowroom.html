@@ -34,6 +34,8 @@
 
     <script src="js/map/script-tags-for-development.js"></script>
     <script src="js/addShowroom.controller.js"></script>
+    <script src="js/upload/directives.js"></script>
+    <script src="js/upload/services.js"></script>
 
 </head>
 
@@ -51,8 +53,8 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="showTransactions.html">Transaction
-                            <span class="sr-only">(Transaction)</span>
+                        <a class="nav-link" href="showTransactions.html">Engagement
+                            <span class="sr-only">(Engagement)</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -95,6 +97,7 @@
             <div>
                 <!-- <button class="btn btn-primary" ng-click="showCase.reloadData()">reload</button> -->
                 <!-- <p class="text-danger">You clicked on: <strong>{{ showCase.message }}</strong></p> -->
+                <h2 class="font-weight-bold">Showrooms</h2>
                 <table datatable="" dt-options="vm.dtOptions" dt-columns="vm.dtColumns" dt-instance="vm.dtInstance" class="row-border hover"></table>
                 <button type="button" ng-click="addShowroom()" class="btn btn-primary btn-lg btn-block">Add</button>
                 <div class="alert alert-success" ng-if="successMessage">{{successMessage}}</div>
@@ -111,8 +114,8 @@
                         <img class="card-img-top" src="https://www.tourismthailand.org/fileadmin/upload_img/Shopping/3751/IMG_0094_1391758975.JPG"
                             alt="Card image cap">
                         <div ng-show="editMode" class="custom-file">
-                            <input type="file" class="custom-file-input" id="customFile">
-                            <label class="custom-file-label" for="customFile">Choose picture file</label>
+                            <input type="file" demo-file-model="myFile"  class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">{{filename}}</label>
                         </div>
 
                         <div class="card-body">
@@ -128,7 +131,8 @@
                             <div ng-show="addMode" class="form-group row">
                                 <label class="col-sm-4 col-form-label">Id</label>
                                 <div class="col-sm-7">
-                                    <input ng-model="selectedShowroom.showroom_id" type="text" class="form-control" placeholder="Id">
+                                    <input ng-model="selectedShowroom.showroom_id" class="form-control" placeholder="Id">
+
                                 </div>
                             </div>
 
@@ -168,7 +172,7 @@
                                 <textarea ng-model="selectedShowroom.detail" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                             </div>
                             <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
-                            <button ng-show="editMode" class="btn btn-success" ng-click="saveShowroom(); vm.reloadData()">Save</button>
+                            <button ng-show="editMode" class="btn btn-success" ng-click="uploadFile();saveShowroom(); vm.reloadData()">Save</button>
                             <button ng-hide="editMode" type="button" ng-click="deleteShowroom(); vm.reloadData()" class="btn btn-danger">Delete</button>
                             <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
 

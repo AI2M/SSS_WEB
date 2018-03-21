@@ -1,10 +1,13 @@
 var app = angular.module("SSS", ['ngMap', 'datatables']);
 app.controller('AddShowroomCtrl', AddShowroomCtrl);
-function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope, NgMap) {
+function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope, NgMap,fileUploadService) {
 
     $scope.editMode = false;
     $scope.addMode = false;
     $scope.lalong = [];
+    var file;
+    var file2;
+    $scope.filename = "Choose picture";
 
     $scope.loadData = function () {
         $http.get("http://localhost/SSS_web_api/getShowroomData.php")
@@ -102,6 +105,9 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
                     $scope.errorMessage = "Error,Please try again";
                 });
         }
+        $scope.myFile = undefined;
+        $scope.filename = "Choose picture";
+       
     }
 
     $scope.deleteShowroom = function () {
@@ -137,6 +143,8 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
     }
 
     $scope.cancel = function () {
+        $scope.myFile = undefined;
+        $scope.filename = "Choose picture";
         $scope.toggleEditMode();
         $scope.selectedShowroom = $scope.showrooms[0];
 
@@ -258,6 +266,8 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
         $scope.successMessage = undefined;
         $scope.errorMessage = undefined;
         $scope.addMessage = undefined;
+        $scope.myFile = undefined;
+        $scope.filename = "Choose picture";
         $scope.selectedShowroom = info;
         var la = $scope.selectedShowroom.latitude;
         var long = $scope.selectedShowroom.longitude;
@@ -277,5 +287,33 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
         });
         return nRow;
     }
+
+    //upload 
+    $scope.$watch('myFile', function (newFileObj) {
+        if (newFileObj)
+            $scope.filename = newFileObj.name;
+        console.log($scope.filename);
+    });
+
+    $scope.uploadFile = function () {
+        file = $scope.myFile;
+        file2 = $scope.myFile2;
+        var uploadUrl = "http://localhost/SSS_web_api/server.php", //Url of web service
+            promise = fileUploadService.uploadFileToUrl(file, uploadUrl);
+        var uploadUrl2 = "http://localhost/SSS_web_api/server.php", //Url of web service
+            promise2 = fileUploadService.uploadFileToUrl(file2, uploadUrl2);
+
+        promise.then(function (response) {
+            $scope.serverResponse = response;
+        }, function () {
+            $scope.serverResponse = 'An error has occurred';
+        })
+
+        promise2.then(function (response) {
+            $scope.serverResponse = response;
+        }, function () {
+            $scope.serverResponse = 'An error has occurred';
+        })
+    };
 
 }

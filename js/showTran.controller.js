@@ -305,7 +305,6 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         //console.log(dates);
         $scope.series = ['Transaction'];
         if (type == 0) {
-            $scope.nameLineChart = "Last 7 Day";
             // last 7 day21
             $scope.x_axis = [];
             $scope.y_axis = [[]];
@@ -343,6 +342,9 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 }
 
             }
+            $scope.date7 = $scope.x_axis[6] + "/" + (now.getMonth() + 1) +"/"+now.getFullYear() ;
+            $scope.date1 = $scope.x_axis[0] + "/" + (now.getMonth() + 1) +"/"+now.getFullYear() ;
+            $scope.nameLineChart = "Last 7 Day Engagements , Between "+$scope.date1+" - "+$scope.date7;
             // console.log($scope.x_axis);
             // console.log($scope.y_axis);
             $scope.options = {
@@ -363,7 +365,11 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             };
         }
         else if (type == 1) {
-            $scope.nameLineChart = "This Month";
+            $scope.thismonth = now.getMonth();
+            $scope.namemonth = ["January","February","March","April","May","June","July" ,"August"
+            ,"September","October","November","December"]
+            $scope.nameLineChart = "This Month Engagements , Now "+$scope.namemonth[$scope.thismonth];
+            
             //this month
             $scope.x_axis = [];
             $scope.y_axis = [[]];
@@ -422,7 +428,8 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
         }
         else {
-            $scope.nameLineChart = "This Year";
+            $scope.thisyear = now.getFullYear();
+            $scope.nameLineChart = "This Year Engagements , Now "+$scope.thisyear;
             //this year
             $scope.x_axis = [];
             $scope.y_axis = [[]];

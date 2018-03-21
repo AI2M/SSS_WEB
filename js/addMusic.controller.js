@@ -2,10 +2,13 @@
 var app = angular.module("SSS", ['datatables']);
 
 app.controller('AddMusicCtrl', AddMusicCtrl);
-function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope) {
+function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope, fileUploadService) {
     $scope.editMode = false;
     $scope.addMode = false;
-    
+    var file;
+    var file2;
+    $scope.filename = "Choose picture";
+    $scope.filename2 = "Choose music";
 
     $scope.loadData = function () {
         $http.get("http://localhost/SSS_web_api/getMusicBoxData.php")
@@ -80,6 +83,10 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 });
             $scope.addMode = false;
         }
+        $scope.myFile = undefined;
+        $scope.myFile2 = undefined;
+        $scope.filename = "Choose picture";
+        $scope.filename2 = "Choose music";
     }
 
     $scope.deleteMusic = function () {
@@ -114,6 +121,10 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
     $scope.cancel = function () {
         $scope.toggleEditMode();
+        $scope.myFile = undefined;
+        $scope.myFile2 = undefined;
+        $scope.filename = "Choose picture";
+        $scope.filename2 = "Choose music";
         $scope.selectedMusicBox = $scope.musicboxs[0];
     }
     //datatable
@@ -154,7 +165,7 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         .withOption('responsive', true)
         .withOption('rowCallback', rowCallback);
 
-     
+
 
     vm.dtColumns = [
         DTColumnBuilder.newColumn('music_box_id').withTitle('Music Box ID'),
@@ -193,7 +204,7 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
     //     vm.dtInstance.reloadData2(callback, resetPaging);
     //     console.log("aaa")
     // }
-   function reloadData() {
+    function reloadData() {
         var resetPaging = true;
         vm.dtInstance.reloadData(callback, resetPaging);
         console.log("aaa")
@@ -207,6 +218,10 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         $scope.successMessage = undefined;
         $scope.errorMessage = undefined;
         $scope.addMessage = undefined;
+        $scope.myFile = undefined;
+        $scope.myFile2 = undefined;
+        $scope.filename = "Choose picture";
+        $scope.filename2 = "Choose music";
         $scope.selectedMusicBox = info;
     }
     function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
@@ -219,6 +234,39 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         });
         return nRow;
     }
+
+    //upload
+
+    $scope.$watch('myFile', function (newFileObj) {
+        if (newFileObj)
+            $scope.filename = newFileObj.name;
+        console.log($scope.filename);
+    });
+    $scope.$watch('myFile2', function (newFileObj) {
+        if (newFileObj)
+            $scope.filename2 = newFileObj.name;
+        console.log($scope.filename2);
+    });
+    $scope.uploadFile = function () {
+        file = $scope.myFile;
+        file2 = $scope.myFile2;
+        var uploadUrl = "http://localhost/SSS_web_api/server.php", //Url of web service
+            promise = fileUploadService.uploadFileToUrl(file, uploadUrl);
+        var uploadUrl2 = "http://localhost/SSS_web_api/server.php", //Url of web service
+            promise2 = fileUploadService.uploadFileToUrl(file2, uploadUrl2);
+
+        promise.then(function (response) {
+            $scope.serverResponse = response;
+        }, function () {
+            $scope.serverResponse = 'An error has occurred';
+        })
+
+        promise2.then(function (response) {
+            $scope.serverResponse = response;
+        }, function () {
+            $scope.serverResponse = 'An error has occurred';
+        })
+    };
 
 }
 
