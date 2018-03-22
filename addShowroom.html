@@ -111,10 +111,10 @@
                 <div>
                     <div class="card mb-2" style="width: 24rem;">
 
-                        <img class="card-img-top" src="https://www.tourismthailand.org/fileadmin/upload_img/Shopping/3751/IMG_0094_1391758975.JPG"
+                        <img class="card-img-top" src={{image_url}}
                             alt="Card image cap">
                         <div ng-show="editMode" class="custom-file">
-                            <input type="file" demo-file-model="myFile"  class="custom-file-input" id="customFile">
+                            <input type="file" demo-file-model="myFile"  accept="image/*" class="custom-file-input" id="customFile">
                             <label class="custom-file-label" for="customFile">{{filename}}</label>
                         </div>
 
@@ -172,7 +172,7 @@
                                 <textarea ng-model="selectedShowroom.detail" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                             </div>
                             <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
-                            <button ng-show="editMode" class="btn btn-success" ng-click="uploadFile();saveShowroom(); vm.reloadData()">Save</button>
+                            <button ng-show="editMode" class="btn btn-success" ng-click="saveShowroom(); vm.reloadData()">Save</button>
                             <button ng-hide="editMode" type="button" ng-click="deleteShowroom(); vm.reloadData()" class="btn btn-danger">Delete</button>
                             <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
 

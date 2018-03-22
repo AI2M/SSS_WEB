@@ -112,13 +112,13 @@
                 <div style="padding-left: 50px;">
                     <div class="card mb-2" style="width: 24rem;">
 
-                        <img class="card-img-top" src="http://fb1-ck.lnwfile.com/yt3bxi.jpg" alt="Card image cap">
+                        <img class="card-img-top" src= {{image_url}} alt="Card image cap">
                         <div ng-show="editMode" class="custom-file">
-                            <input type="file" demo-file-model="myFile"  class="custom-file-input" id="customFile">
+                            <input type="file" demo-file-model="myFile" accept="image/*"  class="custom-file-input" id="customFile">
                             <label class="custom-file-label" for="customFile">{{filename}}</label>
                         </div>
                         <div ng-show="editMode" class="custom-file">
-                            <input type="file" demo-file-model="myFile2"  class="custom-file-input" id="customFile">
+                            <input type="file" demo-file-model="myFile2"  accept="audio/*"  class="custom-file-input" id="customFile">
                             <label class="custom-file-label" for="customFile">{{filename2}}</label>
                         </div>
 
@@ -154,7 +154,7 @@
                                 <textarea ng-model="selectedMusicBox.detail" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                             </div>
                             <button ng-hide="editMode" class="btn btn-warning" ng-click="toggleEditMode()">Edit</button>
-                            <button ng-show="editMode" class="btn btn-success" ng-click="uploadFile();saveMusic(); showCase.reloadData() ">Save</button>
+                            <button ng-show="editMode" class="btn btn-success" ng-click="saveMusic(); showCase.reloadData() ">Save</button>
                             <button ng-hide="editMode" type="button" ng-click="deleteMusic(); showCase.reloadData()" class="btn btn-danger">Delete</button>
                             <button ng-show="editMode" class="btn btn-danger" ng-click="cancel()">Cancel</button>
 

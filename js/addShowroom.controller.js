@@ -8,6 +8,7 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
     var file;
     var file2;
     $scope.filename = "Choose picture";
+    $scope.image_url = "";
 
     $scope.loadData = function () {
         $http.get("http://localhost/SSS_web_api/getShowroomData.php")
@@ -15,6 +16,8 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
                 console.log(response);
                 $scope.showrooms = response.data.showrooms;
                 $scope.selectedShowroom = $scope.showrooms[0];
+                $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+                +$scope.selectedShowroom.showroom_id+".jpg"
                 var la = $scope.selectedShowroom.latitude;
                 var long = $scope.selectedShowroom.longitude;
                 $scope.lalong = [la, long];
@@ -30,6 +33,8 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
 
     $scope.selectShowroom = function (index) {
         $scope.selectedShowroom = $scope.showrooms[index];
+        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+        +$scope.selectedShowroom.showroom_id+".jpg"
         var la = $scope.selectedShowroom.latitude;
         var long = $scope.selectedShowroom.longitude;
         $scope.lalong = [la, long];
@@ -49,25 +54,36 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
         var showroomData = $scope.selectedShowroom;
         if ($scope.addMode) {
 
-            $http({
-                method: 'POST',
-                url: 'http://localhost/SSS_web_api/postShowroomData.php',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-                data: showroomData,
-            })
-                .then(function successCallback(response) {
-                    console.log(response);
-                    $scope.loadData();
-                    if (response.data.error == true) {
+            if($scope.myFile!=undefined){
+                $http({
+                    method: 'POST',
+                    url: 'http://localhost/SSS_web_api/postShowroomData.php',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                    data: showroomData,
+                })
+                    .then(function successCallback(response) {
+                        console.log(response);
+                        if (response.data.error == true) {
+                            $scope.loadData();
+                            $scope.errorMessage = "Error,Please enter all information";
+                        }
+                        else {
+                            $scope.uploadFile();
+                            $scope.loadData();
+                            $scope.addMessage = "Succesfully added";
+                        }
+                    }, function errorCallback(response) {
+                        console.log(response);
                         $scope.errorMessage = "Error,Please try again";
-                    }
-                    else {
-                        $scope.addMessage = "Succesfully added";
-                    }
-                }, function errorCallback(response) {
-                    console.log(response);
-                    $scope.errorMessage = "Error,Please try again";
-                });
+                    });
+            }
+            else{
+                $scope.errorMessage = "Error,Please choose picture";
+                $scope.selectedShowroom = $scope.showrooms[0];
+                $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+                +$scope.selectedShowroom.showroom_id+".jpg"
+            }
+            
             $scope.addMode = false;
             //  console.log(showroomData);
             //addmode
@@ -93,11 +109,14 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
                 .then(function successCallback(response) {
                     //console.log( "showroomData = "+$scope.selectedShowroom);
                     console.log(response);
-                    $scope.loadData();
+                    
                     if (response.data.error == true) {
-                        $scope.errorMessage = "Error,Please try again";
+                        $scope.loadData();
+                        $scope.errorMessage = "Error,Please enter all information";
                     }
                     else {
+                        $scope.uploadFile();
+                        $scope.loadData();
                         $scope.addMessage = "Succesfully updated";
                     }
                 }, function errorCallback(response) {
@@ -105,7 +124,6 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
                     $scope.errorMessage = "Error,Please try again";
                 });
         }
-        $scope.myFile = undefined;
         $scope.filename = "Choose picture";
        
     }
@@ -140,6 +158,7 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
         $scope.successMessage = undefined;
         $scope.errorMessage = undefined;
         $scope.addMessage = undefined;
+        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/noimage.jpg";
     }
 
     $scope.cancel = function () {
@@ -147,6 +166,8 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
         $scope.filename = "Choose picture";
         $scope.toggleEditMode();
         $scope.selectedShowroom = $scope.showrooms[0];
+        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+        +$scope.selectedShowroom.showroom_id+".jpg"
 
 
     }
@@ -269,6 +290,8 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
         $scope.myFile = undefined;
         $scope.filename = "Choose picture";
         $scope.selectedShowroom = info;
+        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+                +$scope.selectedShowroom.showroom_id+".jpg"
         var la = $scope.selectedShowroom.latitude;
         var long = $scope.selectedShowroom.longitude;
         $scope.lalong = [la, long];
@@ -297,23 +320,17 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
 
     $scope.uploadFile = function () {
         file = $scope.myFile;
-        file2 = $scope.myFile2;
-        var uploadUrl = "http://localhost/SSS_web_api/server.php", //Url of web service
-            promise = fileUploadService.uploadFileToUrl(file, uploadUrl);
-        var uploadUrl2 = "http://localhost/SSS_web_api/server.php", //Url of web service
-            promise2 = fileUploadService.uploadFileToUrl(file2, uploadUrl2);
+        console.log($scope.selectedShowroom.showroom_id)
+        var newfilename ="showroom_pic"+$scope.selectedShowroom.showroom_id+".jpg";
+        var uploadUrl = "http://localhost/SSS_web_api/server_SH_pic.php", //Url of web service
+            promise = fileUploadService.uploadFileToUrl(file,newfilename, uploadUrl);
 
         promise.then(function (response) {
             $scope.serverResponse = response;
         }, function () {
             $scope.serverResponse = 'An error has occurred';
         })
-
-        promise2.then(function (response) {
-            $scope.serverResponse = response;
-        }, function () {
-            $scope.serverResponse = 'An error has occurred';
-        })
+        $scope.myFile = undefined;
     };
 
 }
