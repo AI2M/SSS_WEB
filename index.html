@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SSS Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <!-- <script src="js/lib/angular.js"></script> -->
+    <script src="js/lib/angular.min.js"></script>
+    
+    <!-- <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script> -->
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+    <script src="js/datatable/datatables.min.js"></script>
+    <script src="js/datatable/angular-datatables.min.js"></script>
+    <script src="js/datatable/datatable.js"></script>
+    <script src="js/datatable/datatables.bootstrap.js"></script>
+    <script src="js/datatable/dataTables.responsive.min.js"></script>
+    <script src="js/datatable/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="js/datatable/DataTables-1.10.16/js/jquery.dataTables.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://l-lin.github.io/angular-datatables/archives/dist/css/angular-datatables.css"
+    />
+    <link rel="stylesheet" href="js/datatable/datatables.bootstrap.css">
+    <link rel="stylesheet" href="js/datatable/datatables.min.css">
+    <link rel="stylesheet" href="js/datatable/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="js/datatable/DataTables-1.10.16/css/dataTables.bootstrap.min.css">
+
+    <!-- <script src="http://code.angularjs.org/1.2.13/angular.js"></script> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/chart.js/dist/Chart.min.js"></script>
+    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="http://jtblin.github.io/angular-chart.js/dist/angular-chart.js"></script>
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+
+    <link href="custom-marker.css" rel="stylesheet" />
+    <script src="js/routing.controller.js"></script>
+    <script src="js/map/script-tags-for-development.js"></script>
+    <!-- <script src="js/addMusic.controller.js"></script> -->
+    <script src="js/upload/directives.js"></script>
+    <script src="js/upload/services.js"></script>
+</head>
+
+<body ng-app="SSS">
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">Smart Small Showroom</a>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" ui-sref="engagements">Engagements
+                            <span class="sr-only">(Engagements)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" ui-sref="customers">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" ui-sref="musics">Musics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" ui-sref="showrooms">Showrooms</a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+
+    </div>
+    <div class="container">
+        <div ui-view></div>
+    </div>
+</body>
+
+</html>

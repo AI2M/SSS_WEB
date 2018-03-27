@@ -599,13 +599,4 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
     $scope.data = [
         [65, 59, 80, 81, 56, 55, 40]
     ];
-
-
-
-
-
-
-
-
-
 }

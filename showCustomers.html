@@ -1,169 +1,34 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="SSS">
-
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>showCustomer</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-
-    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script>
-    <script src="http://jtblin.github.io/angular-chart.js/node_modules/chart.js/dist/Chart.min.js"></script>
-    <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="http://jtblin.github.io/angular-chart.js/dist/angular-chart.js"></script>
-
-
-    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-
-    <script src="js/datatable/datatables.min.js"></script>
-    <script src="js/datatable/angular-datatables.min.js"></script>
-    <script src="js/datatable/datatable.js"></script>
-    <script src="js/datatable/datatables.bootstrap.js"></script>
-    <script src="js/datatable/dataTables.responsive.min.js"></script>
-    <script src="js/datatable/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="js/datatable/DataTables-1.10.16/js/jquery.dataTables.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="http://l-lin.github.io/angular-datatables/archives/dist/css/angular-datatables.css"
-    />
-    <link rel="stylesheet" href="js/datatable/datatables.bootstrap.css">
-    <link rel="stylesheet" href="js/datatable/datatables.min.css">
-    <link rel="stylesheet" href="js/datatable/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="js/datatable/DataTables-1.10.16/css/dataTables.bootstrap.min.css">
-
-    <script src="js/showCus.controller.js"></script>
-
-</head>
-
-<body>
-
-    <div>
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="#">Smart Small Showroom</a>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item ">
-                        <a class="nav-link" href="showTransactions.html">Engagement
-                            <span class="sr-only">(Engagement)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="showCustomers.html">Customer</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href=addShowroom.html>Showroom</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="addMusic.html">Music Box</a>
-                    </li>
-
-
-                </ul>
-                <!-- <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form> -->
-            </div>
-        </nav>
-
-    </div>
-    <div class="container" ng-controller="ShowCusCtrl">
-        <div class="row">
-            <div class="col-md-12">
-                <div>
-                    <!-- <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="customer in customers" ng-click="selectCustomer($index)">
-                            <div ng-if="tabletype==1">
-                                <span class="font-weight-bold">{{ Col1 }} </span>
-                                <span>{{customer.age}}</span>
-                                <span class="font-weight-bold">{{ Col2 }} </span>
-                                <span>{{customer.age_count}}</span>
-                            </div>
-                            <div ng-if="tabletype==2">
-                                <span class="font-weight-bold">{{ Col1 }} </span>
-                                <span>{{customer.sex}}</span>
-                                <span class="font-weight-bold">{{ Col2 }} </span>
-                                <span>{{customer.sex_count}}</span>
-                            </div>
-                            <div ng-if="tabletype==3">
-                                <span class="font-weight-bold">{{ Col1 }} </span>
-                                <span>{{customer.job}}</span>
-                                <span class="font-weight-bold">{{ Col2 }} </span>
-                                <span>{{customer.job_count}}</span>
-                            </div>
-                            <div ng-if="tabletype==4">
-                                <span class="font-weight-bold">{{ Col1 }} </span>
-                                <span>{{customer.salary}}</span>
-                                <span class="font-weight-bold">{{ Col2 }} </span>
-                                <span>{{customer.salary_count}}</span>
-                            </div>
-                            <div ng-if="tabletype==5">
-                                <span class="font-weight-bold">{{ Col1 }} </span>
-                                <span>{{customer.showroom_id}}</span>
-                                <span class="font-weight-bold">{{ Col2 }} </span>
-                                <span>{{customer.counts}}</span>
-                            </div>
-                        </li>
-                    </ul> -->
-                    <center>
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-outline-secondary" ng-click="loadData(1)">
-                                <input type="radio" name="options" id="option1" autocomplete="off" checked> Age
-                            </label>
-                            <label class="btn btn-outline-secondary" ng-click="loadData(2)">
-                                <input type="radio" name="options" id="option2" autocomplete="off"> Gender
-                            </label>
-                            <label class="btn btn-outline-secondary" ng-click="loadData(3)">
-                                <input type="radio" name="options" id="option3" autocomplete="off"> Job
-                            </label>
-                            <label class="btn btn-outline-secondary" ng-click="loadData(4)">
-                                <input type="radio" name="options" id="option4" autocomplete="off"> Salary
-                            </label>
-                            <label class="btn btn-outline-secondary" ng-click="loadData(5)">
-                                <input type="radio" name="options" id="option5" autocomplete="off"> Showroom
-                            </label>
-                        </div>
-
-                    </center>
-                    <center>
-                        <!-- <div id="pie-chart">
-                                <div class="panel panel-default">
-                                    <p></p>
-                                    <h5 class="panel-heading">{{nameDoughnutChart}}</h5>
-                                    <div class="panel-body">
-                                        <canvas id="pie33" class="chart chart-pie" chart-data="num" chart-labels="ids_data" chart-options="options1"></canvas>
-                                    </div>
-                                </div>
-                            </div> -->
-                        <hc-pie-chart id="pieHi" title="Browser usage" data="pieData">Placeholder for pie chart</hc-pie-chart>
-
-
-
-                    </center>
-                    <h2 class="font-weight-bold">Customers</h2>
-                    <div ng-controller="ShowCusCtrl as showCase">
-                        <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" class="table table-striped table-bordered"></table>
-                    </div>
-
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <center>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-secondary" ng-click="loadData(1)">
+                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Age
+                    </label>
+                    <label class="btn btn-outline-secondary" ng-click="loadData(2)">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Gender
+                    </label>
+                    <label class="btn btn-outline-secondary" ng-click="loadData(3)">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Job
+                    </label>
+                    <label class="btn btn-outline-secondary" ng-click="loadData(4)">
+                        <input type="radio" name="options" id="option4" autocomplete="off"> Salary
+                    </label>
+                    <label class="btn btn-outline-secondary" ng-click="loadData(5)">
+                        <input type="radio" name="options" id="option5" autocomplete="off"> Showroom
+                    </label>
                 </div>
+
+            </center>
+            <center>
+                <hc-pie-chart id="pieHi" title="Browser usage" data="pieData">Placeholder for pie chart</hc-pie-chart>
+            </center>
+            <h2 class="font-weight-bold">Customers</h2>
+            <div>
+                <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" class="table table-striped table-bordered"></table>
             </div>
+
         </div>
-
     </div>
-
-</body>
-
-</html>
+</div>
