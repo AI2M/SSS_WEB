@@ -1,675 +1,857 @@
-var App = angular.module('SSS', ['ui.router', 'datatables', 'ngMap','chart.js','ui.bootstrap']);
+var App = angular.module('SSS', ['ngRoute', 'datatables', 'ngMap', 'chart.js', 'ui.bootstrap']);
 
-App.config(function ($stateProvider, $urlRouterProvider) {
+// App.config(function ($stateProvider, $urlRouterProvider) {
 
-  $urlRouterProvider.otherwise('/home');
+//   $urlRouterProvider.otherwise('/home');
 
-  $stateProvider
+//   $stateProvider
 
-    // HOME STATES AND NESTED VIEWS ========================================
+//     // HOME STATES AND NESTED VIEWS ========================================
 
-    // nested list with custom controller
-    .state('home', {
-      url: '/home',
-      template: 'homepage',
-    })
-    .state('musics', {
-      url: '/musics',
-      templateUrl: 'addMusic.html',
-      controller: 'AddMusicCtrl as showCase'
-    })
+//     // nested list with custom controller
+//     .state('home', {
+//       url: '/home',
+//       template: 'homepage',
+//     })
+//     .state('musics', {
+//       url: '/musics',
+//       templateUrl: 'addMusic.html',
+//       controller: 'AddMusicCtrl as showCase'
+//     })
 
-    .state('showrooms', {
-      url: '/showrooms',
-      templateUrl: 'addShowroom.html',
-      controller: 'AddShowroomCtrl as vm'
-    })
-    .state('engagements', {
-      url: '/engagements',
-      templateUrl: 'showTransactions.html',
-      controller: 'ShowTranCtrl as vm'
-    })
-    .state('customers', {
-      url: '/customers',
-      templateUrl: 'showCustomers.html',
-      controller: 'ShowCusCtrl as showCase'
-    })
+//     .state('showrooms', {
+//       url: '/showrooms',
+//       templateUrl: 'addShowroom.html',
+//       controller: 'AddShowroomCtrl as vm'
+//     })
+//     .state('engagements', {
+//       url: '/engagements',
+//       templateUrl: 'showTransactions.html',
+//       controller: 'ShowTranCtrl as vm'
+//     })
+//     .state('customers', {
+//       url: '/customers',
+//       templateUrl: 'showCustomers.html',
+//       controller: 'ShowCusCtrl as showCase'
+//     })
 
 
 
+// });
+
+App.config(function ($routeProvider) {
+    $routeProvider
+        .when('/musics', {
+            resolve: {
+                check: function ($location, $rootScope) {
+                    if (!$rootScope.super_loggedIn) {
+                        $location.path('/');
+                        console.log('nologgin');
+                    }
+                }
+            },
+            templateUrl: 'addMusic.html',
+            controller: 'AddMusicCtrl as showCase'
+        })
+        .when('/showrooms', {
+            resolve: {
+                check: function ($location, $rootScope) {
+                    if (!$rootScope.super_loggedIn) {
+                        $location.path('/');
+                        console.log('nologgin');
+                    }
+                }
+            },
+            templateUrl: 'addShowroom.html',
+            controller: 'AddShowroomCtrl as vm'
+        })
+        .when('/engagements', {
+            resolve: {
+                check: function ($location, $rootScope) {
+                    if (!$rootScope.super_loggedIn) {
+                        $location.path('/');
+                        console.log('nologgin');
+                    }
+                }
+            },
+            templateUrl: 'showTransactions.html',
+            controller: 'ShowTranCtrl as vm'
+        })
+        .when('/customers', {
+            resolve: {
+                check: function ($location, $rootScope) {
+                    if (!$rootScope.super_loggedIn) {
+                        $location.path('/');
+                        console.log('nologgin');
+                    }
+                }
+            },
+            templateUrl: 'showCustomers.html',
+            controller: 'ShowCusCtrl as showCase'
+        })
+        .when('/manage', {
+            resolve: {
+                check: function ($location, $rootScope) {
+                    if (!$rootScope.loggedIn) {
+                        $location.path('/');
+                        console.log('nologgin');
+                    }
+                }
+            },
+            templateUrl: 'ManageShowroom.html',
+            controller: 'MshowCtrl as vm'
+        })
+        .when('/login', {
+            templateUrl: 'login.html',
+            controller: 'NavCtrl'
+        })
+
+        .otherwise({
+            redirectTo: '/login'
+        });
 });
+
+App.controller('NavCtrl', NavCtrl);
+function NavCtrl($scope, $location, $rootScope, $http) {
+    var userData = {};
+    $scope.getUsername = "";
+    $scope.getPassword = "";
+    $scope.manageStatus=false;
+
+    $scope.showrooms = function () {
+        $location.path('/showrooms');
+    }
+    $scope.engagements = function () {
+        $location.path('/engagements');
+    }
+    $scope.customers = function () {
+        $location.path('/customers');
+    }
+    $scope.musics = function () {
+        $location.path('/musics');
+    }
+    $scope.manage = function () {
+        $location.path('/manage');
+    }
+
+
+    $scope.login = function () {
+        $scope.getData();
+       
+    }
+    $rootScope.logout = function () {
+        $rootScope.super_loggedIn = false;
+        $rootScope.loggedIn = false;
+        $location.path('/login');
+    }
+    $scope.getData = function () {
+        userData["username"] = $scope.username;
+        userData["password"] = $scope.password;
+        console.log(userData);
+            $http({
+                method: 'POST',
+                url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/WebLogin.php',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                data: userData,
+            })
+                .then(function successCallback(response) {
+                    console.log(response);
+                    if (response.data.error == false) {
+                        console.log("getData success");
+                        $scope.getUsername = response.data.user[0].username;
+                        $scope.getPassword = response.data.user[0].password;
+                        if ($scope.username ==  $scope.getUsername && $scope.password == $scope.getPassword) {
+                            $rootScope.super_loggedIn = true;
+                            $rootScope.user = $scope.getUsername;
+                            console.log($rootScope.super_loggedIn);
+                            $location.path('/engagements');
+                        }
+                        else {
+                            //alert('Wrong stuff');
+                            
+                        }
+    
+                    }
+                    else {
+                        $scope.manageStatus = true;
+                        console.log("getData error SSS");
+                    }
+    
+                }, function errorCallback(response) {
+                    console.log(response);
+    
+                });
+        
+        
+                $http({
+                    method: 'POST',
+                    url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/WebManageLogin.php',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                    data: userData,
+                })
+                    .then(function successCallback(response) {
+                        console.log(response);
+                        if (response.data.error == false) {
+                            console.log("getData success");
+                            $scope.getUsername = response.data.showroom[0].showroom_id;
+                            $scope.getPassword = response.data.showroom[0].password;
+                            if ($scope.username ==  $scope.getUsername && $scope.password == $scope.getPassword) {
+                                $rootScope.loggedIn = true;
+                                $rootScope.user = $scope.getUsername;
+                                console.log($rootScope.loggedIn);
+                                $location.path('/manage');
+                            }
+                            else {
+                                alert('Wrong stuff');
+                            }
+        
+                        }
+                        else {
+                            console.log("getData error manage");
+                        }
+        
+                    }, function errorCallback(response) {
+                        console.log(response);
+        
+                    });
+            
+
+    }
+
+}
 
 App.controller('AddMusicCtrl', AddMusicCtrl);
 function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope, fileUploadService) {
-  $scope.editMode = false;
-  $scope.addMode = false;
-  $scope.image_url = "";
-  var file;
-  var file2;
-  $scope.filename = "Choose picture";
-  $scope.filename2 = "Choose music";
+    $scope.editMode = false;
+    $scope.addMode = false;
+    $scope.image_url = "";
+    var file;
+    var file2;
+    $scope.filename = "Choose picture";
+    $scope.filename2 = "Choose music";
 
-  $scope.loadData = function () {
-    $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMusicBoxData.php")
-      .then(function successCallback(response) {
-        console.log(response);
-        $scope.musicboxs = response.data.musicboxs;
-        $scope.selectedMusicBox = $scope.musicboxs[0];
-        $scope.image_url = undefined;
+    $scope.loadData = function () {
+        $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMusicBoxData.php")
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.musicboxs = response.data.musicboxs;
+                $scope.selectedMusicBox = $scope.musicboxs[0];
+                $scope.image_url = undefined;
+                $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
+                    + $scope.selectedMusicBox.music_box_id + ".jpg"
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+    }
+    $scope.loadData();
+
+    $scope.selectMusicBox = function (index) {
+        $scope.selectedMusicBox = $scope.musicboxs[index];
         $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
-          + $scope.selectedMusicBox.music_box_id + ".jpg"
-      }, function errorCallback(response) {
-        console.log(response);
-      });
-  }
-  $scope.loadData();
+            + $scope.selectedMusicBox.music_box_id + ".jpg"
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.addMessage = undefined;
+    }
 
-  $scope.selectMusicBox = function (index) {
-    $scope.selectedMusicBox = $scope.musicboxs[index];
-    $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
-      + $scope.selectedMusicBox.music_box_id + ".jpg"
-    $scope.successMessage = undefined;
-    $scope.errorMessage = undefined;
-    $scope.addMessage = undefined;
-  }
+    $scope.saveMusic = function () {
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.addMessage = undefined;
+        $scope.editMode = !$scope.editMode;
+        var musicboxData = $scope.selectedMusicBox;
+        console.log(musicboxData);
+        if ($scope.addMode) {
+            //addmode
 
-  $scope.saveMusic = function () {
-    $scope.successMessage = undefined;
-    $scope.errorMessage = undefined;
-    $scope.addMessage = undefined;
-    $scope.editMode = !$scope.editMode;
-    var musicboxData = $scope.selectedMusicBox;
-    if ($scope.addMode) {
-      //addmode
+            if ($scope.myFile != undefined && $scope.myFile2 != undefined) {
+                $http({
+                    method: 'POST',
+                    url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/postMusicBoxData.php',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                    data: musicboxData,
+                })
+                    .then(function successCallback(response) {
+                        console.log(response);
+                        if (response.data.error == true) {
+                            $scope.loadData();
+                            $scope.errorMessage = "Error,Please enter all information";
 
-      if ($scope.myFile != undefined && $scope.myFile2 != undefined) {
-        $http({
-          method: 'POST',
-          url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/postMusicBoxData.php',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-          data: musicboxData,
-        })
-          .then(function successCallback(response) {
-            console.log(response);
-            if (response.data.error == true) {
-              $scope.loadData();
-              $scope.errorMessage = "Error,Please enter all information";
+                        }
+                        else {
+                            $scope.uploadFile();
+                            $scope.loadData();
+                            $scope.addMessage = "Succesfully added";
+
+                        }
+
+                    }, function errorCallback(response) {
+                        console.log(response);
+                        $scope.errorMessage = "Error,Please try again";
+                    });
 
             }
             else {
-              $scope.uploadFile();
-              $scope.loadData();
-              $scope.addMessage = "Succesfully added";
-
+                $scope.errorMessage = "Error,Please choose picture and music";
+                $scope.selectedMusicBox = $scope.musicboxs[0];
+                $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
+                    + $scope.selectedMusicBox.music_box_id + ".jpg"
             }
 
-          }, function errorCallback(response) {
-            console.log(response);
-            $scope.errorMessage = "Error,Please try again";
-          });
+            $scope.addMode = false;
+        }
+        else {
+            //savemode
+            $http({
+                method: 'POST',
+                url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/putMusicBoxData.php',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                data: musicboxData,
+            })
+                .then(function successCallback(response) {
+                    console.log(response);
+                    if (response.data.error == true) {
+                        $scope.loadData();
+                        $scope.errorMessage = "Error,Please enter all information";
+                    }
+                    else {
+                        $scope.uploadFile();
+                        $scope.loadData();
+                        $scope.addMessage = "Succesfully updated";
+                    }
 
-      }
-      else {
-        $scope.errorMessage = "Error,Please choose picture and music";
+                }, function errorCallback(response) {
+                    console.log(response);
+                    $scope.errorMessage = "Error,Please try again";
+                });
+            $scope.addMode = false;
+        }
+        $scope.filename = "Choose picture";
+        $scope.filename2 = "Choose music";
+    }
+
+    $scope.deleteMusic = function () {
+        var musicboxData = $scope.selectedMusicBox;
+        $http.delete("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/deleteMusicBoxData.php/?music_box_id=" + musicboxData.music_box_id)
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.loadData();
+                $scope.successMessage = "Deleted";
+            }, function errorCallback(response) {
+                console.log(response);
+                $scope.errorMessage = "Error,Please try again";
+            });
+
+    }
+
+    $scope.toggleEditMode = function () {
+        $scope.editMode = !$scope.editMode;
+        $scope.addMode = false;
+    }
+
+    $scope.addMusicbox = function () {
+        $scope.addMode = true;
+        $scope.selectedMusicBox = {
+            // "id": new Date().toTimeString()
+        };
+        $scope.editMode = true;
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.addMessage = undefined;
+        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/noimage.jpg";
+    }
+
+    $scope.cancel = function () {
+        $scope.toggleEditMode();
+        $scope.myFile = undefined;
+        $scope.myFile2 = undefined;
+        $scope.filename = "Choose picture";
+        $scope.filename2 = "Choose music";
         $scope.selectedMusicBox = $scope.musicboxs[0];
         $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
-          + $scope.selectedMusicBox.music_box_id + ".jpg"
-      }
-
-      $scope.addMode = false;
+            + $scope.selectedMusicBox.music_box_id + ".jpg"
     }
-    else {
-      //savemode
-      $http({
-        method: 'POST',
-        url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/putMusicBoxData.php',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-        data: musicboxData,
-      })
-        .then(function successCallback(response) {
-          console.log(response);
-          if (response.data.error == true) {
-            $scope.loadData();
-            $scope.errorMessage = "Error,Please enter all information";
-          }
-          else {
-            $scope.uploadFile();
-            $scope.loadData();
-            $scope.addMessage = "Succesfully updated";
-          }
+    //datatable
+    var vm = this;
+    vm.newPromise = newPromise;
+    vm.reloadData = reloadData;
+    vm.dtInstance = {};
+    vm.message = ' ';
+    vm.someClickHandler = someClickHandler;
 
-        }, function errorCallback(response) {
-          console.log(response);
-          $scope.errorMessage = "Error,Please try again";
+    vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
+        var datain = "";
+        var defer = $q.defer();
+        // var data = {'url' : 'http://139.59.251.210/api-prevent/ajax/getallrounds'};
+        // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
+
+        $http({
+            method: 'GET',
+            url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMusicBoxData.php',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            // data: data,
+        })
+            .then(function (result) {
+                // console.log(result.data);
+                var datain = angular.fromJson(result.data.musicboxs);
+                // // console.log(datain);
+                defer.resolve(datain);
+                // defer.resolve(result.data);
+            });
+        return defer.promise;
+    })
+        // vm.dtOptions = DTOptionsBuilder.fromSource('http://l-lin.github.io/angular-datatables/archives/data.json')
+        .withPaginationType('full')
+        // Active Responsive plugin
+        .withOption('responsive', true)
+        .withOption('rowCallback', rowCallback);
+
+
+
+    vm.dtColumns = [
+        DTColumnBuilder.newColumn('music_box_id').withTitle('Music Box ID'),
+        DTColumnBuilder.newColumn('name').withTitle('Name'),
+        DTColumnBuilder.newColumn('price').withTitle('Price'),
+        DTColumnBuilder.newColumn('detail').notSortable().withTitle('Detail'),
+    ];
+    // $interval(function() {
+    // 	vm.dtInstance.changeData(vm.newPromise());
+    // }, 300000);
+
+    function newPromise() {
+        var defer = $q.defer();
+        // var data = {'url' : 'admindash/currentcon'};
+        // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
+
+        $http({
+            method: 'GET',
+            url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMusicBoxData.php',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            // data: data,
+        })
+            .then(function (result) {
+                // console.log(result.data);
+                var datain = angular.fromJson(result.data.musicboxs);
+                defer.resolve(datain);
+                // defer.resolve(result.data);
+            });
+        return defer.promise;
+    }
+    // $scope.reloadData2 = function(){
+    //     var resetPaging = true;
+    //     vm.dtInstance.reloadData2(callback, resetPaging);
+    //     console.log("aaa")
+    // }
+    function reloadData() {
+        var resetPaging = true;
+        vm.dtInstance.reloadData(callback, resetPaging);
+        console.log("aaa")
+    }
+
+    function callback(json) {
+        console.log(json);
+    }
+    function someClickHandler(info) {
+        //vm.message = info.music_box_id + ' - ' + info.name;
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.addMessage = undefined;
+        $scope.myFile = undefined;
+        $scope.myFile2 = undefined;
+        $scope.filename = "Choose picture";
+        $scope.filename2 = "Choose music";
+        $scope.selectedMusicBox = info;
+        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
+            + $scope.selectedMusicBox.music_box_id + ".jpg"
+    }
+    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
+        $('td', nRow).unbind('click');
+        $('td', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                vm.someClickHandler(aData);
+            });
         });
-      $scope.addMode = false;
+        return nRow;
     }
-    $scope.filename = "Choose picture";
-    $scope.filename2 = "Choose music";
-  }
 
-  $scope.deleteMusic = function () {
-    var musicboxData = $scope.selectedMusicBox;
-    $http.delete("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/deleteMusicBoxData.php/?music_box_id=" + musicboxData.music_box_id)
-      .then(function successCallback(response) {
-        console.log(response);
-        $scope.loadData();
-        $scope.successMessage = "Deleted";
-      }, function errorCallback(response) {
-        console.log(response);
-        $scope.errorMessage = "Error,Please try again";
-      });
+    //upload
 
-  }
-
-  $scope.toggleEditMode = function () {
-    $scope.editMode = !$scope.editMode;
-    $scope.addMode = false;
-  }
-
-  $scope.addMusicbox = function () {
-    $scope.addMode = true;
-    $scope.selectedMusicBox = {
-      // "id": new Date().toTimeString()
-    };
-    $scope.editMode = true;
-    $scope.successMessage = undefined;
-    $scope.errorMessage = undefined;
-    $scope.addMessage = undefined;
-    $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/noimage.jpg";
-  }
-
-  $scope.cancel = function () {
-    $scope.toggleEditMode();
-    $scope.myFile = undefined;
-    $scope.myFile2 = undefined;
-    $scope.filename = "Choose picture";
-    $scope.filename2 = "Choose music";
-    $scope.selectedMusicBox = $scope.musicboxs[0];
-    $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
-      + $scope.selectedMusicBox.music_box_id + ".jpg"
-  }
-  //datatable
-  var vm = this;
-  vm.newPromise = newPromise;
-  vm.reloadData = reloadData;
-  vm.dtInstance = {};
-  vm.message = ' ';
-  vm.someClickHandler = someClickHandler;
-
-  vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
-    var datain = "";
-    var defer = $q.defer();
-    // var data = {'url' : 'http://139.59.251.210/api-prevent/ajax/getallrounds'};
-    // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
-
-    $http({
-      method: 'GET',
-      url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMusicBoxData.php',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      // data: data,
-    })
-      .then(function (result) {
-        // console.log(result.data);
-        var datain = angular.fromJson(result.data.musicboxs);
-        // // console.log(datain);
-        defer.resolve(datain);
-        // defer.resolve(result.data);
-      });
-    return defer.promise;
-  })
-    // vm.dtOptions = DTOptionsBuilder.fromSource('http://l-lin.github.io/angular-datatables/archives/data.json')
-    .withPaginationType('full')
-    // Active Responsive plugin
-    .withOption('responsive', true)
-    .withOption('rowCallback', rowCallback);
-
-
-
-  vm.dtColumns = [
-    DTColumnBuilder.newColumn('music_box_id').withTitle('Music Box ID'),
-    DTColumnBuilder.newColumn('name').withTitle('Name'),
-    DTColumnBuilder.newColumn('price').withTitle('Price'),
-    DTColumnBuilder.newColumn('detail').notSortable().withTitle('Detail'),
-  ];
-  // $interval(function() {
-  // 	vm.dtInstance.changeData(vm.newPromise());
-  // }, 300000);
-
-  function newPromise() {
-    var defer = $q.defer();
-    // var data = {'url' : 'admindash/currentcon'};
-    // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
-
-    $http({
-      method: 'GET',
-      url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMusicBoxData.php',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      // data: data,
-    })
-      .then(function (result) {
-        // console.log(result.data);
-        var datain = angular.fromJson(result.data.musicboxs);
-        defer.resolve(datain);
-        // defer.resolve(result.data);
-      });
-    return defer.promise;
-  }
-  // $scope.reloadData2 = function(){
-  //     var resetPaging = true;
-  //     vm.dtInstance.reloadData2(callback, resetPaging);
-  //     console.log("aaa")
-  // }
-  function reloadData() {
-    var resetPaging = true;
-    vm.dtInstance.reloadData(callback, resetPaging);
-    console.log("aaa")
-  }
-
-  function callback(json) {
-    console.log(json);
-  }
-  function someClickHandler(info) {
-    //vm.message = info.music_box_id + ' - ' + info.name;
-    $scope.successMessage = undefined;
-    $scope.errorMessage = undefined;
-    $scope.addMessage = undefined;
-    $scope.myFile = undefined;
-    $scope.myFile2 = undefined;
-    $scope.filename = "Choose picture";
-    $scope.filename2 = "Choose music";
-    $scope.selectedMusicBox = info;
-    $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
-      + $scope.selectedMusicBox.music_box_id + ".jpg"
-  }
-  function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-    // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
-    $('td', nRow).unbind('click');
-    $('td', nRow).bind('click', function () {
-      $scope.$apply(function () {
-        vm.someClickHandler(aData);
-      });
+    $scope.$watch('myFile', function (newFileObj) {
+        if (newFileObj)
+            $scope.filename = newFileObj.name;
+        console.log($scope.filename);
     });
-    return nRow;
-  }
+    $scope.$watch('myFile2', function (newFileObj) {
+        if (newFileObj)
+            $scope.filename2 = newFileObj.name;
+        console.log($scope.filename2);
+    });
+    $scope.uploadFile = function () {
+        file = $scope.myFile;
+        var newfilename = "music_pic" + $scope.selectedMusicBox.music_box_id + ".jpg";
+        var newfilename2 = "music_sound" + $scope.selectedMusicBox.music_box_id + ".mp3";
+        file2 = $scope.myFile2;
+        var uploadUrl = "http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/server_MS_pic.php", //Url of web service
+            promise = fileUploadService.uploadFileToUrl(file, newfilename, uploadUrl);
+        var uploadUrl2 = "http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/server_MS_sound.php", //Url of web service
+            promise2 = fileUploadService.uploadFileToUrl(file2, newfilename2, uploadUrl2);
 
-  //upload
-
-  $scope.$watch('myFile', function (newFileObj) {
-    if (newFileObj)
-      $scope.filename = newFileObj.name;
-    console.log($scope.filename);
-  });
-  $scope.$watch('myFile2', function (newFileObj) {
-    if (newFileObj)
-      $scope.filename2 = newFileObj.name;
-    console.log($scope.filename2);
-  });
-  $scope.uploadFile = function () {
-    file = $scope.myFile;
-    var newfilename = "music_pic" + $scope.selectedMusicBox.music_box_id + ".jpg";
-    var newfilename2 = "music_sound" + $scope.selectedMusicBox.music_box_id + ".mp3";
-    file2 = $scope.myFile2;
-    var uploadUrl = "http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/server_MS_pic.php", //Url of web service
-      promise = fileUploadService.uploadFileToUrl(file, newfilename, uploadUrl);
-    var uploadUrl2 = "http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/server_MS_sound.php", //Url of web service
-      promise2 = fileUploadService.uploadFileToUrl(file2, newfilename2, uploadUrl2);
-
-    promise.then(function (response) {
-      $scope.serverResponse = response;
-    }, function () {
-      $scope.serverResponse = 'An error has occurred';
-    })
-    promise2.then(function (response) {
-      $scope.serverResponse = response;
-    }, function () {
-      $scope.serverResponse = 'An error has occurred';
-    })
-    $scope.myFile = undefined;
-    $scope.myFile2 = undefined;
-  };
+        promise.then(function (response) {
+            $scope.serverResponse = response;
+        }, function () {
+            $scope.serverResponse = 'An error has occurred';
+        })
+        promise2.then(function (response) {
+            $scope.serverResponse = response;
+        }, function () {
+            $scope.serverResponse = 'An error has occurred';
+        })
+        $scope.myFile = undefined;
+        $scope.myFile2 = undefined;
+    };
 
 }
 
 App.controller('AddShowroomCtrl', AddShowroomCtrl);
 function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope, NgMap, fileUploadService) {
 
-  $scope.editMode = false;
-  $scope.addMode = false;
-  $scope.lalong = [];
-  var file;
-  var file2;
-  $scope.filename = "Choose picture";
-  $scope.image_url = "";
+    $scope.editMode = false;
+    $scope.addMode = false;
+    $scope.lalong = [];
+    var file;
+    var file2;
+    $scope.filename = "Choose picture";
+    $scope.image_url = "";
 
-  $scope.loadData = function () {
-    $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getShowroomData.php")
-      .then(function successCallback(response) {
-        console.log(response);
-        $scope.showrooms = response.data.showrooms;
-        $scope.selectedShowroom = $scope.showrooms[0];
+    $scope.loadData = function () {
+        $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getShowroomData.php")
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.showrooms = response.data.showrooms;
+                $scope.selectedShowroom = $scope.showrooms[0];
+                $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+                    + $scope.selectedShowroom.showroom_id + ".jpg"
+                var la = $scope.selectedShowroom.latitude;
+                var long = $scope.selectedShowroom.longitude;
+                $scope.lalong = [la, long];
+                vm.positions = [];
+                vm.positions[0] = { pos: $scope.lalong };
+                console.log("lalong = " + $scope.lalong);
+                console.log($scope.showrooms[0].longitude)
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+    }
+    $scope.loadData();
+
+    $scope.selectShowroom = function (index) {
+        $scope.selectedShowroom = $scope.showrooms[index];
         $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
-          + $scope.selectedShowroom.showroom_id + ".jpg"
+            + $scope.selectedShowroom.showroom_id + ".jpg"
         var la = $scope.selectedShowroom.latitude;
         var long = $scope.selectedShowroom.longitude;
         $scope.lalong = [la, long];
         vm.positions = [];
         vm.positions[0] = { pos: $scope.lalong };
         console.log("lalong = " + $scope.lalong);
-        console.log($scope.showrooms[0].longitude)
-      }, function errorCallback(response) {
-        console.log(response);
-      });
-  }
-  $scope.loadData();
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.addMessage = undefined;
+    }
 
-  $scope.selectShowroom = function (index) {
-    $scope.selectedShowroom = $scope.showrooms[index];
-    $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
-      + $scope.selectedShowroom.showroom_id + ".jpg"
-    var la = $scope.selectedShowroom.latitude;
-    var long = $scope.selectedShowroom.longitude;
-    $scope.lalong = [la, long];
-    vm.positions = [];
-    vm.positions[0] = { pos: $scope.lalong };
-    console.log("lalong = " + $scope.lalong);
-    $scope.successMessage = undefined;
-    $scope.errorMessage = undefined;
-    $scope.addMessage = undefined;
-  }
+    $scope.saveShowroom = function () {
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.addMessage = undefined;
+        $scope.editMode = !$scope.editMode;
+        var showroomData = $scope.selectedShowroom;
+        if ($scope.addMode) {
 
-  $scope.saveShowroom = function () {
-    $scope.successMessage = undefined;
-    $scope.errorMessage = undefined;
-    $scope.addMessage = undefined;
-    $scope.editMode = !$scope.editMode;
-    var showroomData = $scope.selectedShowroom;
-    if ($scope.addMode) {
-
-      if ($scope.myFile != undefined) {
-        $http({
-          method: 'POST',
-          url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/postShowroomData.php',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-          data: showroomData,
-        })
-          .then(function successCallback(response) {
-            console.log(response);
-            if (response.data.error == true) {
-              $scope.loadData();
-              $scope.errorMessage = "Error,Please enter all information";
+            if ($scope.myFile != undefined) {
+                $http({
+                    method: 'POST',
+                    url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/postShowroomData.php',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                    data: showroomData,
+                })
+                    .then(function successCallback(response) {
+                        console.log(response);
+                        if (response.data.error == true) {
+                            $scope.loadData();
+                            $scope.errorMessage = "Error,Please enter all information";
+                        }
+                        else {
+                            $scope.uploadFile();
+                            $scope.loadData();
+                            $scope.addMessage = "Succesfully added";
+                        }
+                    }, function errorCallback(response) {
+                        console.log(response);
+                        $scope.errorMessage = "Error,Please try again";
+                    });
             }
             else {
-              $scope.uploadFile();
-              $scope.loadData();
-              $scope.addMessage = "Succesfully added";
+                $scope.errorMessage = "Error,Please choose picture";
+                $scope.selectedShowroom = $scope.showrooms[0];
+                $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+                    + $scope.selectedShowroom.showroom_id + ".jpg"
             }
-          }, function errorCallback(response) {
-            console.log(response);
-            $scope.errorMessage = "Error,Please try again";
-          });
-      }
-      else {
-        $scope.errorMessage = "Error,Please choose picture";
+
+            $scope.addMode = false;
+            //  console.log(showroomData);
+            //addmode
+            // $http.post("http://localhost:3000/showrooms/", showroomData)
+            //     .then(function successCallback(response) {
+            //         console.log(response);
+            //         $scope.loadData();
+            //         $scope.addMessage = "Succesfully added";
+            //     }, function errorCallback(response) {
+            //         console.log(response);
+            //         $scope.errorMessage = "Error,Please try again";
+            //     });
+            // $scope.addMode = false;
+        }
+        else {
+            //savemode
+            $http({
+                method: 'POST',
+                url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/putShowroomData.php',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                data: showroomData,
+            })
+                .then(function successCallback(response) {
+                    //console.log( "showroomData = "+$scope.selectedShowroom);
+                    console.log(response);
+
+                    if (response.data.error == true) {
+                        $scope.loadData();
+                        $scope.errorMessage = "Error,Please enter all information";
+                    }
+                    else {
+                        $scope.uploadFile();
+                        $scope.loadData();
+                        $scope.addMessage = "Succesfully updated";
+                    }
+                }, function errorCallback(response) {
+                    console.log(response);
+                    $scope.errorMessage = "Error,Please try again";
+                });
+        }
+        $scope.filename = "Choose picture";
+
+    }
+
+    $scope.deleteShowroom = function () {
+        var showroomData = $scope.selectedShowroom;
+        $http.delete("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/deleteShowroomData.php/?showroom_id=" + showroomData.showroom_id)
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.loadData();
+                $scope.successMessage = "Deleted";
+            }, function errorCallback(response) {
+                console.log(response);
+                $scope.errorMessage = "Error,Please try again";
+            });
+
+    }
+
+    $scope.toggleEditMode = function () {
+        $scope.editMode = !$scope.editMode;
+        $scope.addMode = false;
+    }
+
+
+    $scope.addShowroom = function () {
+        $scope.addMode = true;
+
+        $scope.selectedShowroom = {
+            // "showroom_id": new Date().toTimeString()
+        };
+        $scope.editMode = true;
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.addMessage = undefined;
+        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/noimage.jpg";
+    }
+
+    $scope.cancel = function () {
+        $scope.myFile = undefined;
+        $scope.filename = "Choose picture";
+        $scope.toggleEditMode();
         $scope.selectedShowroom = $scope.showrooms[0];
         $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
-          + $scope.selectedShowroom.showroom_id + ".jpg"
-      }
+            + $scope.selectedShowroom.showroom_id + ".jpg"
 
-      $scope.addMode = false;
-      //  console.log(showroomData);
-      //addmode
-      // $http.post("http://localhost:3000/showrooms/", showroomData)
-      //     .then(function successCallback(response) {
-      //         console.log(response);
-      //         $scope.loadData();
-      //         $scope.addMessage = "Succesfully added";
-      //     }, function errorCallback(response) {
-      //         console.log(response);
-      //         $scope.errorMessage = "Error,Please try again";
-      //     });
-      // $scope.addMode = false;
+
     }
-    else {
-      //savemode
-      $http({
-        method: 'POST',
-        url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/putShowroomData.php',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-        data: showroomData,
-      })
-        .then(function successCallback(response) {
-          //console.log( "showroomData = "+$scope.selectedShowroom);
-          console.log(response);
-
-          if (response.data.error == true) {
-            $scope.loadData();
-            $scope.errorMessage = "Error,Please enter all information";
-          }
-          else {
-            $scope.uploadFile();
-            $scope.loadData();
-            $scope.addMessage = "Succesfully updated";
-          }
-        }, function errorCallback(response) {
-          console.log(response);
-          $scope.errorMessage = "Error,Please try again";
-        });
-    }
-    $scope.filename = "Choose picture";
-
-  }
-
-  $scope.deleteShowroom = function () {
-    var showroomData = $scope.selectedShowroom;
-    $http.delete("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/deleteShowroomData.php/?showroom_id=" + showroomData.showroom_id)
-      .then(function successCallback(response) {
-        console.log(response);
-        $scope.loadData();
-        $scope.successMessage = "Deleted";
-      }, function errorCallback(response) {
-        console.log(response);
-        $scope.errorMessage = "Error,Please try again";
-      });
-
-  }
-
-  $scope.toggleEditMode = function () {
-    $scope.editMode = !$scope.editMode;
-    $scope.addMode = false;
-  }
+    //map
+    var vm = this;
+    vm.types = "['address']";
 
 
-  $scope.addShowroom = function () {
-    $scope.addMode = true;
-
-    $scope.selectedShowroom = {
-      // "showroom_id": new Date().toTimeString()
-    };
-    $scope.editMode = true;
-    $scope.successMessage = undefined;
-    $scope.errorMessage = undefined;
-    $scope.addMessage = undefined;
-    $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/noimage.jpg";
-  }
-
-  $scope.cancel = function () {
-    $scope.myFile = undefined;
-    $scope.filename = "Choose picture";
-    $scope.toggleEditMode();
-    $scope.selectedShowroom = $scope.showrooms[0];
-    $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
-      + $scope.selectedShowroom.showroom_id + ".jpg"
-
-
-  }
-  //map
-  var vm = this;
-  vm.types = "['address']";
-
-
-  vm.placeChanged = function () {
-    vm.place = this.getPlace();
-    console.log('location', vm.place.geometry.location);
-    vm.map.setCenter(vm.place.geometry.location);
-  }
-
-  vm.addMarker = function (event) {
-
-    if ($scope.editMode == true) {
-      vm.positions = [];
-      var ll = event.latLng;
-      vm.positions[0] = { pos: [ll.lat(), ll.lng()] };
-      console.log("laaaaa======" + ll.lat());
-      console.log("longgg======" + ll.lng());
-      $scope.selectedShowroom.latitude = ll.lat();
-      $scope.selectedShowroom.longitude = ll.lng();
+    vm.placeChanged = function () {
+        vm.place = this.getPlace();
+        console.log('location', vm.place.geometry.location);
+        vm.map.setCenter(vm.place.geometry.location);
     }
 
-  }
+    vm.addMarker = function (event) {
 
-  NgMap.getMap().then(function (map) {
-    vm.map = map;
-    vm.positions = [];
-    vm.positions[0] = { pos: $scope.lalong };
-  });
+        if ($scope.editMode == true) {
+            vm.positions = [];
+            var ll = event.latLng;
+            vm.positions[0] = { pos: [ll.lat(), ll.lng()] };
+            console.log("laaaaa======" + ll.lat());
+            console.log("longgg======" + ll.lng());
+            $scope.selectedShowroom.latitude = ll.lat();
+            $scope.selectedShowroom.longitude = ll.lng();
+        }
 
-  //datatable
-  vm.newPromise = newPromise;
-  vm.reloadData = reloadData;
-  vm.dtInstance = {};
-  vm.message = ' ';
-  vm.someClickHandler = someClickHandler;
+    }
 
-  vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
-    var datain = "";
-    var defer = $q.defer();
-    // var data = {'url' : 'http://139.59.251.210/api-prevent/ajax/getallrounds'};
-    // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
-
-    $http({
-      method: 'GET',
-      url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getShowroomData.php',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      // data: data,
-    })
-      .then(function (result) {
-        // console.log(result.data);
-        var datain = angular.fromJson(result.data.showrooms);
-        // // console.log(datain);
-        defer.resolve(datain);
-        // defer.resolve(result.data);
-      });
-    return defer.promise;
-  })
-    // vm.dtOptions = DTOptionsBuilder.fromSource('http://l-lin.github.io/angular-datatables/archives/data.json')
-    .withPaginationType('full')
-    // Active Responsive plugin
-    .withOption('responsive', true)
-    .withOption('rowCallback', rowCallback);
-
-
-
-  vm.dtColumns = [
-    DTColumnBuilder.newColumn('showroom_id').withTitle('Showroom ID'),
-    DTColumnBuilder.newColumn('location').withTitle('Name'),
-    DTColumnBuilder.newColumn('region').notSortable().withTitle('Region'),
-    DTColumnBuilder.newColumn('detail').notSortable().withTitle('Detail'),
-  ];
-  // $interval(function() {
-  // 	vm.dtInstance.changeData(vm.newPromise());
-  // }, 300000);
-
-  function newPromise() {
-    var defer = $q.defer();
-    // var data = {'url' : 'admindash/currentcon'};
-    // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
-
-    $http({
-      method: 'GET',
-      url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getShowroomData.php',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      // data: data,
-    })
-      .then(function (result) {
-        // console.log(result.data);
-        var datain = angular.fromJson(result.data.showrooms);
-        defer.resolve(datain);
-        // defer.resolve(result.data);
-      });
-    return defer.promise;
-  }
-  function reloadData() {
-    var resetPaging = true;
-    vm.dtInstance.reloadData(callback, resetPaging);
-    console.log("bbb")
-  }
-
-  function callback(json) {
-    console.log(json);
-  }
-  function someClickHandler(info) {
-    //vm.message = info.music_box_id + ' - ' + info.name;
-    $scope.successMessage = undefined;
-    $scope.errorMessage = undefined;
-    $scope.addMessage = undefined;
-    $scope.myFile = undefined;
-    $scope.filename = "Choose picture";
-    $scope.selectedShowroom = info;
-    $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
-      + $scope.selectedShowroom.showroom_id + ".jpg"
-    var la = $scope.selectedShowroom.latitude;
-    var long = $scope.selectedShowroom.longitude;
-    $scope.lalong = [la, long];
-    vm.positions = [];
-    vm.positions[0] = { pos: $scope.lalong };
-    console.log("lalong = " + $scope.lalong);
-
-  }
-  function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-    // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
-    $('td', nRow).unbind('click');
-    $('td', nRow).bind('click', function () {
-      $scope.$apply(function () {
-        vm.someClickHandler(aData);
-      });
+    NgMap.getMap().then(function (map) {
+        vm.map = map;
+        vm.positions = [];
+        vm.positions[0] = { pos: $scope.lalong };
     });
-    return nRow;
-  }
 
-  //upload 
-  $scope.$watch('myFile', function (newFileObj) {
-    if (newFileObj)
-      $scope.filename = newFileObj.name;
-    console.log($scope.filename);
-  });
+    //datatable
+    vm.newPromise = newPromise;
+    vm.reloadData = reloadData;
+    vm.dtInstance = {};
+    vm.message = ' ';
+    vm.someClickHandler = someClickHandler;
 
-  $scope.uploadFile = function () {
-    file = $scope.myFile;
-    console.log($scope.selectedShowroom.showroom_id)
-    var newfilename = "showroom_pic" + $scope.selectedShowroom.showroom_id + ".jpg";
-    var uploadUrl = "http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/server_SH_pic.php", //Url of web service
-      promise = fileUploadService.uploadFileToUrl(file, newfilename, uploadUrl);
+    vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
+        var datain = "";
+        var defer = $q.defer();
+        // var data = {'url' : 'http://139.59.251.210/api-prevent/ajax/getallrounds'};
+        // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
 
-    promise.then(function (response) {
-      $scope.serverResponse = response;
-    }, function () {
-      $scope.serverResponse = 'An error has occurred';
+        $http({
+            method: 'GET',
+            url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getShowroomData.php',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            // data: data,
+        })
+            .then(function (result) {
+                // console.log(result.data);
+                var datain = angular.fromJson(result.data.showrooms);
+                // // console.log(datain);
+                defer.resolve(datain);
+                // defer.resolve(result.data);
+            });
+        return defer.promise;
     })
-    $scope.myFile = undefined;
-  };
+        // vm.dtOptions = DTOptionsBuilder.fromSource('http://l-lin.github.io/angular-datatables/archives/data.json')
+        .withPaginationType('full')
+        // Active Responsive plugin
+        .withOption('responsive', true)
+        .withOption('rowCallback', rowCallback);
+
+
+
+    vm.dtColumns = [
+        DTColumnBuilder.newColumn('showroom_id').withTitle('Showroom ID'),
+        DTColumnBuilder.newColumn('location').withTitle('Name'),
+        DTColumnBuilder.newColumn('region').notSortable().withTitle('Region'),
+        DTColumnBuilder.newColumn('detail').notSortable().withTitle('Detail'),
+    ];
+    // $interval(function() {
+    // 	vm.dtInstance.changeData(vm.newPromise());
+    // }, 300000);
+
+    function newPromise() {
+        var defer = $q.defer();
+        // var data = {'url' : 'admindash/currentcon'};
+        // $http.get('http://l-lin.github.io/angular-datatables/archives/data.json')
+
+        $http({
+            method: 'GET',
+            url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getShowroomData.php',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            // data: data,
+        })
+            .then(function (result) {
+                // console.log(result.data);
+                var datain = angular.fromJson(result.data.showrooms);
+                defer.resolve(datain);
+                // defer.resolve(result.data);
+            });
+        return defer.promise;
+    }
+    function reloadData() {
+        var resetPaging = true;
+        vm.dtInstance.reloadData(callback, resetPaging);
+        console.log("bbb")
+    }
+
+    function callback(json) {
+        console.log(json);
+    }
+    function someClickHandler(info) {
+        //vm.message = info.music_box_id + ' - ' + info.name;
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.addMessage = undefined;
+        $scope.myFile = undefined;
+        $scope.filename = "Choose picture";
+        $scope.selectedShowroom = info;
+        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+            + $scope.selectedShowroom.showroom_id + ".jpg"
+        var la = $scope.selectedShowroom.latitude;
+        var long = $scope.selectedShowroom.longitude;
+        $scope.lalong = [la, long];
+        vm.positions = [];
+        vm.positions[0] = { pos: $scope.lalong };
+        console.log("lalong = " + $scope.lalong);
+
+    }
+    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
+        $('td', nRow).unbind('click');
+        $('td', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                vm.someClickHandler(aData);
+            });
+        });
+        return nRow;
+    }
+
+    //upload 
+    $scope.$watch('myFile', function (newFileObj) {
+        if (newFileObj)
+            $scope.filename = newFileObj.name;
+        console.log($scope.filename);
+    });
+
+    $scope.uploadFile = function () {
+        file = $scope.myFile;
+        console.log($scope.selectedShowroom.showroom_id)
+        var newfilename = "showroom_pic" + $scope.selectedShowroom.showroom_id + ".jpg";
+        var uploadUrl = "http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/server_SH_pic.php", //Url of web service
+            promise = fileUploadService.uploadFileToUrl(file, newfilename, uploadUrl);
+
+        promise.then(function (response) {
+            $scope.serverResponse = response;
+        }, function () {
+            $scope.serverResponse = 'An error has occurred';
+        })
+        $scope.myFile = undefined;
+    };
 
 }
 
@@ -1015,9 +1197,9 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 }
 
             }
-            $scope.date7 = $scope.x_axis[6] + "/" + (now.getMonth() + 1) +"/"+now.getFullYear() ;
-            $scope.date1 = $scope.x_axis[0] + "/" + (now.getMonth() + 1) +"/"+now.getFullYear() ;
-            $scope.nameLineChart = "Last 7 Day Engagements , Between "+$scope.date1+" - "+$scope.date7;
+            $scope.date7 = $scope.x_axis[6] + "/" + (now.getMonth() + 1) + "/" + now.getFullYear();
+            $scope.date1 = $scope.x_axis[0] + "/" + (now.getMonth() + 1) + "/" + now.getFullYear();
+            $scope.nameLineChart = "Last 7 Day Engagements , Between " + $scope.date1 + " - " + $scope.date7;
             // console.log($scope.x_axis);
             // console.log($scope.y_axis);
             $scope.options = {
@@ -1039,10 +1221,10 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         }
         else if (type == 1) {
             $scope.thismonth = now.getMonth();
-            $scope.namemonth = ["January","February","March","April","May","June","July" ,"August"
-            ,"September","October","November","December"]
-            $scope.nameLineChart = "This Month Engagements , Now "+$scope.namemonth[$scope.thismonth];
-            
+            $scope.namemonth = ["January", "February", "March", "April", "May", "June", "July", "August"
+                , "September", "October", "November", "December"]
+            $scope.nameLineChart = "This Month Engagements , Now " + $scope.namemonth[$scope.thismonth];
+
             //this month
             $scope.x_axis = [];
             $scope.y_axis = [[]];
@@ -1102,7 +1284,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         }
         else {
             $scope.thisyear = now.getFullYear();
-            $scope.nameLineChart = "This Year Engagements , Now "+$scope.thisyear;
+            $scope.nameLineChart = "This Year Engagements , Now " + $scope.thisyear;
             //this year
             $scope.x_axis = [];
             $scope.y_axis = [[]];
@@ -1257,13 +1439,13 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
 
     $scope.loadData = function (type) {
         $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getCustomerData.php/?type=all")
-                .then(function successCallback(response) {
-                    console.log(response);
-                    $scope.customersall = response.data.customers;
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.customersall = response.data.customers;
 
-                }, function errorCallback(response) {
-                    console.log(response);
-                });
+            }, function errorCallback(response) {
+                console.log(response);
+            });
         if (type == 1) {
             $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getCustomerData.php/?type=age")
                 .then(function successCallback(response) {
@@ -1425,7 +1607,7 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
         $scope.ids_datause = [];
         $scope.num = [];
         $scope.numuse = [];
-        
+
         var data = $scope.customers;
 
         for (var i = 0; i < data.length; i++) {
@@ -1452,9 +1634,9 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
         }
 
         $scope.s_name = [];
-        for(var i = 0 ;i< $scope.ids_data.length;i++){
-            for(var k = 0 ; k<$scope.customersall.length;k++){
-                if($scope.ids_data[i]==$scope.customersall[k].showroom_id){
+        for (var i = 0; i < $scope.ids_data.length; i++) {
+            for (var k = 0; k < $scope.customersall.length; k++) {
+                if ($scope.ids_data[i] == $scope.customersall[k].showroom_id) {
                     $scope.s_name[i] = $scope.customersall[k].location;
                 }
             }
@@ -1462,8 +1644,8 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
         $scope.ids_data = $scope.s_name;
     }
 
-     //bubble sort 
-     $scope.sorting = function (arr, arr2) {
+    //bubble sort 
+    $scope.sorting = function (arr, arr2) {
         for (var i = 0; i < arr.length; i++) {
             // Last i elements are already in place   
             for (var j = 0; j < (arr.length); j++) {
@@ -1719,5 +1901,191 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
     }
 
 }
+
+App.controller('MshowCtrl', MshowCtrl);
+function MshowCtrl($scope, $http,NgMap,$rootScope) {
+    console.log($rootScope.user);
+    $scope.id=$rootScope.user;
+    $scope.m_and_s="";
+    $scope.musicboxs="";
+    $scope.showroom_detail="";
+    $scope.list_musicbox_id=[];
+    $scope.list_musicbox_name=[];
+    $scope.list_pos=[];
+    $scope.newpos=[];
+    $scope.addBtn=false;
+    $scope.new=false;
+
+    $scope.loadData = function () {
+        $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMandSData.php/?showroom_id="+ $scope.id)
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.m_and_s = response.data.m_and_s;
+                if(response.data.error==true)
+                {
+                    console.log("error");
+                    $scope.new=true;
+                }
+                else{
+                    $scope.selectedM_and_S= $scope.m_and_s[0];
+                    $scope.new=false;
+                }
+         
+
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+
+            $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMusicBoxData.php")
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.musicboxs = response.data.musicboxs;
+                $scope.push_MusicBox_id();
+
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+            $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getShowroomData.php/?showroom_id="+$scope.id)
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.showroom_detail = response.data.showroom;
+
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+    }
+    $scope.loadData();
+
+    $scope.selectM_and_S= function (index) {
+        $scope.selectedM_and_S= $scope.m_and_s[index];
+    }
+
+    $scope.selectM_and_S2= function (name) {
+        for(var j=0;j<$scope.musicboxs.length;j++){
+            if(name==$scope.musicboxs[j].name)
+            {
+                $scope.selectedM_and_S= $scope.musicboxs[j];
+            }
+        }
+        $scope.addBtn=true;
+        // for(var i =0;i<9;i++){
+        //     console.log("m="+$scope.selectedM[i]);
+        // }
+       
+    
+
+    }
+
+    $scope.newpos_id = [];
+    $scope.match_ID_and_name = function(arr_name){
+        $scope.newpos_id = [];
+        for (var i = 0 ;i< arr_name.length;i++){
+            for(var j =0 ; j<$scope.list_musicbox_name.length;j++){
+                if(arr_name[i]==$scope.list_musicbox_name[j]){
+                    $scope.newpos_id[i]=$scope.list_musicbox_id[j];
+                }
+                
+            }
+        }
+        console.log($scope.newpos_id);
+
+    }
+
+    $scope.SubmitPos = function(){
+        var pos={};
+        
+        $scope.newpos=[];
+        $scope.newpos_name = [];
+        $scope.musicID_of_mands=[];//9tua
+
+        if($scope.new==false){
+            for(var t=0;t<9;t++){
+                $scope.musicID_of_mands[t]="none";
+                for(var j=0;j<$scope.m_and_s.length;j++){
+                    if($scope.m_and_s[j].position==t+1)
+                    {
+                        $scope.musicID_of_mands[t]=$scope.m_and_s[j].name;
+                    }
+                }
+            }
+            console.log( "aaa ="+$scope.musicID_of_mands);
+        }
+        
+        for(var i=0;i<9;i++)
+        {
+            if($scope.selectedM[i]==undefined){
+                if($scope.new==false)
+                {
+                    $scope.newpos.push($scope.musicID_of_mands[i]);
+                }
+                else
+                {
+                    $scope.newpos.push("none");
+                }
+              
+            }
+            else{
+                $scope.newpos.push($scope.selectedM[i]);
+            }
+           
+        }
+        $scope.match_ID_and_name($scope.newpos);
+        $scope.newpos = $scope.newpos_id;
+       
+        pos["m1"] = $scope.newpos[0];
+        pos["m2"] = $scope.newpos[1];
+        pos["m3"] = $scope.newpos[2];
+        pos["m4"] = $scope.newpos[3];
+        pos["m5"] = $scope.newpos[4];
+        pos["m6"] = $scope.newpos[5];
+        pos["m7"] = $scope.newpos[6];
+        pos["m8"] = $scope.newpos[7];
+        pos["m9"] = $scope.newpos[8];
+        
+       // console.log(pos);
+        console.log("newpos = "+$scope.newpos);
+        
+        $http({
+            method: 'PUT',
+            url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/putMandSData.php/?showroom_id='+$scope.id,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+            data: pos,
+        })
+            .then(function successCallback(response) {
+                console.log(response);
+                $scope.loadData();
+                if (response.data.error == true) {
+                    $scope.errorMessage = "Error,Please try again";
+                    console.log("error");
+                }
+                else {
+                    $scope.addMessage = "Succesfully updated";
+                    console.log("success");
+                }
+
+            }, function errorCallback(response) {
+                console.log(response);
+                $scope.errorMessage = "Error,Please try again";
+               // console.log("error");
+            });
+        
+    }
+    $scope.push_MusicBox_id = function(){
+        $scope.list_musicbox_id=[];
+        $scope.list_musicbox_name=[];
+        $scope.list_musicbox_id[0]="0";
+        $scope.list_musicbox_name[0]="none";
+        for(var i=0;i<$scope.musicboxs.length;i++){
+            $scope.list_musicbox_id.push($scope.musicboxs[i].music_box_id);
+            $scope.list_musicbox_name.push($scope.musicboxs[i].name);
+        }
+        console.log($scope.list_musicbox_id);
+        console.log($scope.list_musicbox_name);
+    }
+
+
+
+}
+
 
 

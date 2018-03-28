@@ -1,13 +1,15 @@
-<div class="col-md-6">
+<div class="row" style="margin-top:50px">
 
-    <h2 class="font-weight-bold">Engagement</h2>
-    <p>------note : col musicBox ยังไม่ได้ทำเพราะ Data ไม่ตรง-----</p>
-    <div ng-controller="ShowTranCtrl as showCase">
-        <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" class="table table-striped table-bordered"></table>
-    </div>
+    <div class="col-md-5">
+
+        <h2 class="font-weight-bold">Engagement</h2>
+        <p>------note : col musicBox ยังไม่ได้ทำเพราะ Data ไม่ตรง-----</p>
+        <div ng-controller="ShowTranCtrl as showCase">
+            <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" class="table table-striped table-bordered"></table>
+        </div>
 
 
-    <!-- <ul class="list-group">
+        <!-- <ul class="list-group">
                     <li class="list-group-item" ng-repeat="transaction in transactions" ng-click="selectTransaction($index)">
                         <span> {{transaction.id}} </span>
                         <span class="font-weight-bold">{{" date: "}} </span>
@@ -16,28 +18,28 @@
                 </ul> -->
 
 
-</div>
-<div class="col-md-6">
-    <center>
-        <div class="btn-group btn-group-toggle" data-toggle="">
-            <label ng-hide="tab_7day" class="btn btn-outline-secondary" ng-click="loadData(1)">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked> Last 7 Day
-            </label>
-        </div>
-        <div class="btn-group btn-group-toggle" data-toggle="">
-            <label ng-hide="tab_month" class="btn btn-outline-secondary" ng-click="loadData(2)">
-                <input type="radio" name="options" id="option2" autocomplete="off"> This Month
-            </label>
-        </div>
-        <div class="btn-group btn-group-toggle" data-toggle="">
-            <label class="btn btn-outline-secondary" ng-click="loadData(3)">
-                <input type="radio" name="options" id="option3" autocomplete="off"> This Year
-            </label>
-        </div>
+    </div>
+    <div class="col-md-6">
+        <center>
+            <div class="btn-group btn-group-toggle" data-toggle="">
+                <label ng-hide="tab_7day" class="btn btn-outline-secondary" ng-click="loadData(1)">
+                    <input type="radio" name="options" id="option1" autocomplete="off" checked> Last 7 Day
+                </label>
+            </div>
+            <div class="btn-group btn-group-toggle" data-toggle="">
+                <label ng-hide="tab_month" class="btn btn-outline-secondary" ng-click="loadData(2)">
+                    <input type="radio" name="options" id="option2" autocomplete="off"> This Month
+                </label>
+            </div>
+            <div class="btn-group btn-group-toggle" data-toggle="">
+                <label class="btn btn-outline-secondary" ng-click="loadData(3)">
+                    <input type="radio" name="options" id="option3" autocomplete="off"> This Year
+                </label>
+            </div>
 
-    </center>
-    <center>
-        <!-- <div id="bar-chart">
+        </center>
+        <center>
+            <!-- <div id="bar-chart">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <span class="font-weight-bold">{{nameBarChart}}</span>
@@ -48,27 +50,27 @@
                             </div>
                         </div>
                     </div> -->
-        <div class="panel panel-default">
-            <div class="panel-heading">{{nameLineChart}} </div>
-            <div class="panel-body">
-                <canvas id="line" class="chart chart-line" chart-data="y_axis" chart-labels="x_axis" chart-click="onClickChart" chart-hover="onHover"
-                    chart-series="series" chart-options="options" chart-dataset-override="datasetOverride"></canvas>
+            <div class="panel panel-default">
+                <div class="panel-heading">{{nameLineChart}} </div>
+                <div class="panel-body">
+                    <canvas id="line" class="chart chart-line" chart-data="y_axis" chart-labels="x_axis" chart-click="onClickChart" chart-hover="onHover"
+                        chart-series="series" chart-options="options" chart-dataset-override="datasetOverride"></canvas>
+                </div>
             </div>
-        </div>
-    </center>
-    <center style="padding-top:50px">
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                Select Tpye
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <button class="dropdown-item" type="button" ng-repeat="item in DropdownItems" ng-click="Change(item)">{{item}}</button>
+        </center>
+        <center style="padding-top:50px">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    Select Tpye
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <button class="dropdown-item" type="button" ng-repeat="item in DropdownItems" ng-click="Change(item)">{{item}}</button>
 
+                </div>
             </div>
-        </div>
 
-        <!-- <div id="doughnut-chart">
+            <!-- <div id="doughnut-chart">
                         <div class="panel panel-default">
                             <div class="panel-heading">{{nameDoughnutChart}}</div>
                             <div class="panel-body">
@@ -76,21 +78,22 @@
                             </div>
                         </div>
                     </div> -->
-        <div id="bar-chart">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-heading">{{nameBarChart}}</div>
-                </div>
-                <div class="panel-body">
-                    <canvas id="bar" class="chart chart-bar" chart-data="numuse" chart-labels="ids_data" chart-options="options2"></canvas>
+            <div id="bar-chart">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-heading">{{nameBarChart}}</div>
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="bar" class="chart chart-bar" chart-data="numuse" chart-labels="ids_data" chart-options="options2"></canvas>
+                    </div>
                 </div>
             </div>
-        </div>
-    </center>
+        </center>
 
+    </div>
 </div>
-</div>
-<div class="row-md-1">
+
+<div class="row-md-1" style="margin-bottom:50px">
     <div style="padding-top:20px">
         <ng-map style="height: 500px;" id="map" zoom="17" scrollwheel="true" zoom-to-include-markers="auto">
             <marker ng-repeat="p in vm.positions" position="{{p}}" icon={{vm.pic[$index]}} label='"{{vm.value[$index]}}"'></marker>

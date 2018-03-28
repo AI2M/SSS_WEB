@@ -15,8 +15,9 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-    <!-- <script src="js/lib/angular.js"></script> -->
-    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/angular.js"></script>
+    <!-- <script src="js/lib/angular.min.js"></script> -->
+    <script src="js/lib/angular-route.js"></script>
     
     <!-- <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular/angular.min.js"></script> -->
     <script src="http://jtblin.github.io/angular-chart.js/node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
@@ -55,7 +56,7 @@
 
 <body ng-app="SSS">
     <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" ng-hide="loggedIn">
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -63,21 +64,19 @@
             </button>
             <a class="navbar-brand" href="#">Smart Small Showroom</a>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
+            <div ng-controller="NavCtrl" class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul ng-show="super_loggedIn" class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" ui-sref="engagements">Engagements
-                            <span class="sr-only">(Engagements)</span>
-                        </a>
+                        <button class="btn btn-link"ng-click="engagements()" ui-sref="engagements">Engagements</button>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" ui-sref="customers">Customers</a>
+                        <button class="btn btn-link" ng-click="customers()" ui-sref="customers">Customers</button>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" ui-sref="musics">Musics</a>
+                        <button class="btn btn-link" ng-click="musics()" ui-sref="musics">Musics</button>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" ui-sref="showrooms">Showrooms</a>
+                        <button class="btn btn-link" ng-click="showrooms()" ui-sref="showrooms">Showrooms</button>
                     </li>
                 </ul>
 
@@ -86,7 +85,7 @@
 
     </div>
     <div class="container">
-        <div ui-view></div>
+        <div ng-view></div>
     </div>
 </body>
 
