@@ -15,10 +15,10 @@
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
 
-            }).success(function (response) {
+            }).then(function (response) {
                 deffered.resolve(response);
 
-            }).error(function (response) {
+            }),(function (response) {
                 deffered.reject(response);
             });
 
