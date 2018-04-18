@@ -17,9 +17,11 @@
 
             }).then(function (response) {
                 deffered.resolve(response);
+                console.log(response);
 
             }),(function (response) {
                 deffered.reject(response);
+                console.log(response);
             });
 
             return deffered.promise;

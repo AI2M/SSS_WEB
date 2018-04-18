@@ -1,6 +1,6 @@
 <div class="row" style="margin-top:50px">
 
-    <div class="col-md-5">
+    <div class="col-md-5" style="padding-top: 20px">
 
         <h2 class="font-weight-bold">Engagement</h2>
         <p>------note : col musicBox ยังไม่ได้ทำเพราะ Data ไม่ตรง-----</p>
@@ -19,7 +19,7 @@
 
 
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6" style="padding-top: 20px">
         <center>
             <div class="btn-group btn-group-toggle" data-toggle="">
                 <label ng-hide="tab_7day" class="btn btn-outline-secondary" ng-click="loadData(1)">
@@ -70,6 +70,12 @@
                 </div>
             </div>
 
+
+
+
+
+
+
             <!-- <div id="doughnut-chart">
                         <div class="panel panel-default">
                             <div class="panel-heading">{{nameDoughnutChart}}</div>
@@ -93,8 +99,35 @@
     </div>
 </div>
 
+
+  
+
+
+
+<div class="row" style="padding-top: 20px; padding-left: 15%" >
+
+    <h4>
+        showroom number :
+    </h4>
+
+    <div class="col-md-2">
+        <input type="text" ng-model="sh1" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="col-md-2">
+        <input type="text" ng-model="sh2" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="col-md-2">
+        <input type="text" ng-model="sh3" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <button type="button" class="btn btn-success" ng-click="CompareChart()">Compare</button>
+</div>
+<div id="BarHi"></div>
+
+
+
+
 <div class="row-md-1" style="margin-bottom:50px">
-    <div style="padding-top:20px">
+    <div style="padding-top:20px;padding-bottom: 20px">
         <ng-map style="height: 500px;" id="map" zoom="17" scrollwheel="true" zoom-to-include-markers="auto">
             <marker ng-repeat="p in vm.positions" position="{{p}}" icon={{vm.pic[$index]}} label='"{{vm.value[$index]}}"'></marker>
             <!-- <custom-marker id="foo" position="[18.574725983616,99.008361756933]" on-click="vm.closeCustomMarker()">

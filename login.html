@@ -1,4 +1,4 @@
-<center>
+<!-- <center>
   <div style="margin-top:50px">
     <form ng-hide="super_loggedIn ||loggedIn" action="/" id="myLogin">
       <input ng-model="username" type="text" name="username" id="username" placeholder="Username">
@@ -14,4 +14,86 @@
 
   </div>
 
-</center>
+</center> -->
+
+  <div style="margin-top: 50px; margin-bottom: 50px">
+    <div class="row">
+      <div class="col-md-4">
+        <form class="login-form" ng-hide="super_loggedIn ||loggedIn" style="margin-top: 50px">
+          <div class="form-group">
+            <label for="exampleInputEmail1" class="text-uppercase">Username or Showroom</label>
+            <input type="text"  ng-model="username" class="form-control">
+
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1" class="text-uppercase">Password</label>
+            <input type="password" ng-model="password" class="form-control">
+          </div>
+
+
+          <div class="form-check">
+            <button type="submit" ng-click="login()" class="btn btn-login float-right">Login</button>
+          </div>
+
+        </form>
+        <div ng-show="super_loggedIn ||loggedIn" style="padding-top: 50px">
+          <center>
+            <img height="200" width="200"  style="padding-bottom: 20px" src="https://i.pinimg.com/originals/57/43/47/574347ddf6be999e0027de121104f2ff.png">
+              
+            <h4> Username : <span> {{user}}</span></h4>
+            
+                  <button ng-click="logout()" class="btn btn-login">Logout</button>
+    
+          </center>  
+         
+
+        </div>
+      </div>
+      <div class="col-md-8 banner-sec">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <!-- <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li> -->
+          </ol>
+          <div class="carousel-inner" role="listbox">
+            <div class="carousel-item active">
+              <img class="d-block img-fluid" src="http://www.cm-musicbox.com/wp-content/uploads/2018/01/24294054_1727557217277278_8390492318349868346_n-768x512.jpg"
+                alt="First slide">
+              <div class="carousel-caption d-none d-md-block">
+                <div class="banner-text">
+                  <h2>CM MUSIC BOX</h2>
+                  <p>" ของขวัญพิเศษ แด่คนพิเศษ " </p>
+
+                   <p> กล่องดนตรี เพลงที่ใช่ สำหรับคนที่ชอบ ส่งมอบความรู้สึกดีๆ ให้แก่กัน เก็บไว้เป็นความทรงจำตลอดไป</p>
+                </div>
+              </div>              
+            </div>
+            <!-- <div class="carousel-item">
+              <img class="d-block img-fluid" src="https://www.incantovallarta.com/wp-content/uploads/2018/01/background-of-treble-clef-with-pentagram-and-colored-musical-notes_23-2147635181.jpg" alt="First slide">
+              <div class="carousel-caption d-none d-md-block">
+                <div class="banner-text">
+                    <h2>This is Heaven</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
+                </div>	
+            </div>
+            </div>
+            <div class="carousel-item">
+              <img class="d-block img-fluid" src="https://images.pexels.com/photos/7097/people-coffee-tea-meeting.jpg" alt="First slide">
+              <div class="carousel-caption d-none d-md-block">
+                <div class="banner-text">
+                    <h2>This is Heaven</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
+                </div>	
+            </div>
+            </div> -->
+
+
+
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+

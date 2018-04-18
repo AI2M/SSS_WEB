@@ -116,7 +116,9 @@ function NavCtrl($scope, $location, $rootScope, $http) {
     var userData = {};
     $scope.getUsername = "";
     $scope.getPassword = "";
-    $scope.manageStatus=false;
+    $scope.manageStatus = false;
+    $scope.wrongStatus1 = false;
+    $scope.wrongStatus2 = false;
 
     $scope.showrooms = function () {
         $location.path('/showrooms');
@@ -136,8 +138,10 @@ function NavCtrl($scope, $location, $rootScope, $http) {
 
 
     $scope.login = function () {
+        $scope.wrongStatus1 = false;
+        $scope.wrongStatus2 = false;
         $scope.getData();
-       
+
     }
     $rootScope.logout = function () {
         $rootScope.super_loggedIn = false;
@@ -148,73 +152,98 @@ function NavCtrl($scope, $location, $rootScope, $http) {
         userData["username"] = $scope.username;
         userData["password"] = $scope.password;
         console.log(userData);
-            $http({
-                method: 'POST',
-                url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/WebLogin.php',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-                data: userData,
-            })
-                .then(function successCallback(response) {
-                    console.log(response);
-                    if (response.data.error == false) {
-                        console.log("getData success");
-                        $scope.getUsername = response.data.user[0].username;
-                        $scope.getPassword = response.data.user[0].password;
-                        if ($scope.username ==  $scope.getUsername && $scope.password == $scope.getPassword) {
-                            $rootScope.super_loggedIn = true;
-                            $rootScope.user = $scope.getUsername;
-                            console.log($rootScope.super_loggedIn);
-                            $location.path('/engagements');
-                        }
-                        else {
-                            //alert('Wrong stuff');
-                            
-                        }
-    
+        $http({
+            method: 'POST',
+            url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/WebLogin.php',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+            data: userData,
+        })
+            .then(function successCallback(response) {
+                console.log(response);
+                if (response.data.error == false) {
+                    console.log("getData success");
+                    $scope.getUsername = response.data.user[0].username;
+                    $scope.getPassword = response.data.user[0].password;
+                    if ($scope.username == $scope.getUsername && $scope.password == $scope.getPassword) {
+                        $rootScope.super_loggedIn = true;
+                        $rootScope.user = $scope.getUsername;
+                        console.log($rootScope.super_loggedIn);
+                        $location.path('/engagements');
                     }
-                    else {
-                        $scope.manageStatus = true;
-                        console.log("getData error SSS");
-                    }
-    
-                }, function errorCallback(response) {
-                    console.log(response);
-    
-                });
+                    // else {
+                    //     //alert('Wrong stuff');
+
+                    //     //alert("wrong username or password1");
+                    //     $scope.wrongStatus1 = true;
+                    //     alert("wrong paass1");
+
+
+
+                    // }
+
+                }
+                else {
+                    $scope.manageStatus = true;
+
+
+                    console.log("getData error SSS");
+                    $http({
+                        method: 'POST',
+                        url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/WebManageLogin.php',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                        data: userData,
+                    })
+                        .then(function successCallback(response) {
+                            console.log(response);
+                            if (response.data.error == false) {
+                                console.log("getData success");
+                                $scope.getUsername = response.data.showroom[0].showroom_id;
+                                $scope.getPassword = response.data.showroom[0].password;
+                                if ($scope.username == $scope.getUsername && $scope.password == $scope.getPassword) {
+                                    $rootScope.loggedIn = true;
+                                    $rootScope.user = $scope.getUsername;
+                                    console.log($rootScope.loggedIn);
+                                    $location.path('/manage');
+                                }
+                                // else {
+        
+                                //     //alert("wrong username or password2");
+                                //     $scope.wrongStatus2 = true;
+                                //     alert("wrong paass2");
         
         
-                $http({
-                    method: 'POST',
-                    url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/WebManageLogin.php',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-                    data: userData,
-                })
-                    .then(function successCallback(response) {
-                        console.log(response);
-                        if (response.data.error == false) {
-                            console.log("getData success");
-                            $scope.getUsername = response.data.showroom[0].showroom_id;
-                            $scope.getPassword = response.data.showroom[0].password;
-                            if ($scope.username ==  $scope.getUsername && $scope.password == $scope.getPassword) {
-                                $rootScope.loggedIn = true;
-                                $rootScope.user = $scope.getUsername;
-                                console.log($rootScope.loggedIn);
-                                $location.path('/manage');
+                                // }
+        
                             }
                             else {
-                                alert('Wrong stuff');
+        
+        
+                                console.log("getData error manage");
+                                //alert("wrong username or password2");
+                                $scope.wrongStatus2 = true;
+                                alert("Wrong username or password");
+        
+        
                             }
         
-                        }
-                        else {
-                            console.log("getData error manage");
-                        }
+                        }, function errorCallback(response) {
+                            console.log(response);
         
-                    }, function errorCallback(response) {
-                        console.log(response);
+                        });
+    
+
+
+                }
+
+            }, function errorCallback(response) {
+                console.log(response);
+
+            });
+
+
+           
         
-                    });
-            
+
 
     }
 
@@ -451,7 +480,7 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
     function reloadData() {
         var resetPaging = true;
         vm.dtInstance.reloadData(callback, resetPaging);
-        console.log("aaa")
+        //console.log("reloadData")
     }
 
     function callback(json) {
@@ -505,16 +534,18 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
         promise.then(function (response) {
             $scope.serverResponse = response;
+            $scope.myFile = undefined;
         }, function () {
             $scope.serverResponse = 'An error has occurred';
         })
         promise2.then(function (response) {
             $scope.serverResponse = response;
+            $scope.myFile2 = undefined;
         }, function () {
             $scope.serverResponse = 'An error has occurred';
         })
-        $scope.myFile = undefined;
-        $scope.myFile2 = undefined;
+       
+        
     };
 
 }
@@ -847,10 +878,11 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
 
         promise.then(function (response) {
             $scope.serverResponse = response;
+            $scope.myFile = undefined;
         }, function () {
             $scope.serverResponse = 'An error has occurred';
         })
-        $scope.myFile = undefined;
+        
     };
 
 }
@@ -1132,6 +1164,154 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
     }
 
+    //chart Compare
+    $scope.sh1 = 0;
+    $scope.sh2 = 0;
+    $scope.sh3 = 0;
+    $scope.CompareChart = function () {
+        $scope.labels_data = [$scope.sh1, $scope.sh2, $scope.sh3]
+        $scope.data_sh1 = [];
+        $scope.data_sh2 = [];
+        $scope.data_sh3 = [];
+        $scope.series_data = [];
+        $scope.series_data2 = [];
+        $scope.data_all = [[], [], []];
+        $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMultiChartData.php/?showroom1=" + $scope.sh1 +
+            "&showroom2=" + $scope.sh2 + "&showroom3=" + $scope.sh3)
+            .then(function successCallback(response) {
+
+                if (response.data.error == true) {
+                    console.log("error get data");
+
+                }
+                else {
+                    console.log(response);
+                    $scope.multiChartData = response.data.chartData;
+                    for (var i = 0; i < $scope.multiChartData.length; i++) {
+                        if ($scope.multiChartData[i].showroom_id == $scope.sh1 && $scope.data_sh1.length < 3) {
+                            $scope.data_sh1.push($scope.multiChartData[i].Cnum);
+                            if ($scope.series_data.indexOf($scope.multiChartData[i].music_box_id) == -1) {
+                                $scope.series_data.push($scope.multiChartData[i].music_box_id);
+                            }
+                        }
+                        else if ($scope.multiChartData[i].showroom_id == $scope.sh2 && $scope.data_sh2.length < 3) {
+                            $scope.data_sh2.push($scope.multiChartData[i].Cnum);
+                            if ($scope.series_data.indexOf($scope.multiChartData[i].music_box_id) == -1) {
+                                $scope.series_data.push($scope.multiChartData[i].music_box_id);
+                            }
+                        }
+                        else if ($scope.multiChartData[i].showroom_id == $scope.sh3 && $scope.data_sh3.length < 3) {
+                            $scope.data_sh3.push($scope.multiChartData[i].Cnum);
+                            if ($scope.series_data.indexOf($scope.multiChartData[i].music_box_id) == -1) {
+                                $scope.series_data.push($scope.multiChartData[i].music_box_id);
+                            }
+                        }
+                        else {
+
+                        }
+                    }
+                    var counting1 = 0;
+                    var counting2 = 0;
+                    var counting3 = 0;
+                    for (var e = 0; e < $scope.series_data.length; e++) {
+                        $scope.data_all[0][e] = 0;
+                        $scope.data_all[1][e] = 0;
+                        $scope.data_all[2][e] = 0;
+                    }
+
+                    for (var j = 0; j < $scope.multiChartData.length; j++) {
+                        if ($scope.multiChartData[j].showroom_id == $scope.sh1 && counting1 < 3) {
+                            // $scope.data_sh1.push($scope.multiChartData[i].Cnum);
+                            for (var k = 0; k < $scope.series_data.length; k++) {
+
+                                if ($scope.multiChartData[j].music_box_id == $scope.series_data[k]) {
+                                    $scope.data_all[0][k] = parseInt($scope.multiChartData[j].Cnum);
+                                    counting1++;
+                                }
+                            }
+
+                        }
+                        else if ($scope.multiChartData[j].showroom_id == $scope.sh2 && counting2 < 3) {
+                            for (var k = 0; k < $scope.series_data.length; k++) {
+                                if ($scope.multiChartData[j].music_box_id == $scope.series_data[k]) {
+                                    $scope.data_all[1][k] = parseInt($scope.multiChartData[j].Cnum);
+                                    counting2++;
+                                }
+                            }
+
+                        }
+                        else if ($scope.multiChartData[j].showroom_id == $scope.sh3 && counting3 < 3) {
+                            for (var k = 0; k < $scope.series_data.length; k++) {
+                                if ($scope.multiChartData[j].music_box_id == $scope.series_data[k]) {
+                                    $scope.data_all[2][k] = parseInt($scope.multiChartData[j].Cnum);
+                                    counting3++;
+                                }
+                            }
+
+                        }
+                        else {
+
+                        }
+                    }
+                    for (var i = 0; i < $scope.series_data.length; i++) {
+                        $scope.series_data2.push({ name: "music:" + $scope.series_data[i], data: [$scope.data_all[0][i], $scope.data_all[1][i], $scope.data_all[2][i]] });
+                    }
+
+                    console.log($scope.data_sh1);
+                    console.log($scope.data_sh2);
+                    console.log($scope.data_sh3);
+                    console.log($scope.series_data);
+                    console.log($scope.data_all);
+                    console.log($scope.series_data2);
+                    $scope.HiBarChart();
+
+                }
+
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+
+    }
+    $scope.HiBarChart = function () {
+        Highcharts.chart('BarHi', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Compare Showroom '
+            },
+            xAxis: {
+                categories: [
+                    "showroom : " + $scope.sh1,
+                    "showroom : " + $scope.sh2,
+                    "showroom : " + $scope.sh3
+                ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Engagements (Click)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y} click</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: $scope.series_data2
+        });
+    }
+
     //dropdown
     $scope.DropdownItems = ["Showroom", "Music Box"];
     $scope.Change = function (DropdownItems) {
@@ -1140,9 +1320,12 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             $scope.ShowroomChart();
 
         }
-        else {
+        else if (DropdownItems == "Music Box") {
             //console.log("click Music Box");
             $scope.MusicBoxChart();
+
+        }
+        else {
 
         }
 
@@ -1903,40 +2086,39 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
 }
 
 App.controller('MshowCtrl', MshowCtrl);
-function MshowCtrl($scope, $http,NgMap,$rootScope) {
+function MshowCtrl($scope, $http, NgMap, $rootScope) {
     console.log($rootScope.user);
-    $scope.id=$rootScope.user;
-    $scope.m_and_s="";
-    $scope.musicboxs="";
-    $scope.showroom_detail="";
-    $scope.list_musicbox_id=[];
-    $scope.list_musicbox_name=[];
-    $scope.list_pos=[];
-    $scope.newpos=[];
-    $scope.addBtn=false;
-    $scope.new=false;
+    $scope.id = $rootScope.user;
+    $scope.m_and_s = "";
+    $scope.musicboxs = "";
+    $scope.showroom_detail = "";
+    $scope.list_musicbox_id = [];
+    $scope.list_musicbox_name = [];
+    $scope.list_pos = [];
+    $scope.newpos = [];
+    $scope.addBtn = false;
+    $scope.new = false;
 
     $scope.loadData = function () {
-        $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMandSData.php/?showroom_id="+ $scope.id)
+        $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMandSData.php/?showroom_id=" + $scope.id)
             .then(function successCallback(response) {
                 console.log(response);
                 $scope.m_and_s = response.data.m_and_s;
-                if(response.data.error==true)
-                {
+                if (response.data.error == true) {
                     console.log("error");
-                    $scope.new=true;
+                    $scope.new = true;
                 }
-                else{
-                    $scope.selectedM_and_S= $scope.m_and_s[0];
-                    $scope.new=false;
+                else {
+                    $scope.selectedM_and_S = $scope.m_and_s[0];
+                    $scope.new = false;
                 }
-         
+
 
             }, function errorCallback(response) {
                 console.log(response);
             });
 
-            $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMusicBoxData.php")
+        $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMusicBoxData.php")
             .then(function successCallback(response) {
                 console.log(response);
                 $scope.musicboxs = response.data.musicboxs;
@@ -1945,7 +2127,7 @@ function MshowCtrl($scope, $http,NgMap,$rootScope) {
             }, function errorCallback(response) {
                 console.log(response);
             });
-            $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getShowroomData.php/?showroom_id="+$scope.id)
+        $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getShowroomData.php/?showroom_id=" + $scope.id)
             .then(function successCallback(response) {
                 console.log(response);
                 $scope.showroom_detail = response.data.showroom;
@@ -1956,82 +2138,77 @@ function MshowCtrl($scope, $http,NgMap,$rootScope) {
     }
     $scope.loadData();
 
-    $scope.selectM_and_S= function (index) {
-        $scope.selectedM_and_S= $scope.m_and_s[index];
+    $scope.selectM_and_S = function (index) {
+        $scope.selectedM_and_S = $scope.m_and_s[index];
     }
 
-    $scope.selectM_and_S2= function (name) {
-        for(var j=0;j<$scope.musicboxs.length;j++){
-            if(name==$scope.musicboxs[j].name)
-            {
-                $scope.selectedM_and_S= $scope.musicboxs[j];
+    $scope.selectM_and_S2 = function (name) {
+        for (var j = 0; j < $scope.musicboxs.length; j++) {
+            if (name == $scope.musicboxs[j].name) {
+                $scope.selectedM_and_S = $scope.musicboxs[j];
             }
         }
-        $scope.addBtn=true;
+        $scope.addBtn = true;
         // for(var i =0;i<9;i++){
         //     console.log("m="+$scope.selectedM[i]);
         // }
-       
-    
+
+
 
     }
 
     $scope.newpos_id = [];
-    $scope.match_ID_and_name = function(arr_name){
+    $scope.match_ID_and_name = function (arr_name) {
         $scope.newpos_id = [];
-        for (var i = 0 ;i< arr_name.length;i++){
-            for(var j =0 ; j<$scope.list_musicbox_name.length;j++){
-                if(arr_name[i]==$scope.list_musicbox_name[j]){
-                    $scope.newpos_id[i]=$scope.list_musicbox_id[j];
+        for (var i = 0; i < arr_name.length; i++) {
+            for (var j = 0; j < $scope.list_musicbox_name.length; j++) {
+                if (arr_name[i] == $scope.list_musicbox_name[j]) {
+                    $scope.newpos_id[i] = $scope.list_musicbox_id[j];
                 }
-                
+
             }
         }
         console.log($scope.newpos_id);
 
     }
 
-    $scope.SubmitPos = function(){
-        var pos={};
-        
-        $scope.newpos=[];
-        $scope.newpos_name = [];
-        $scope.musicID_of_mands=[];//9tua
+    $scope.SubmitPos = function () {
+        var pos = {};
 
-        if($scope.new==false){
-            for(var t=0;t<9;t++){
-                $scope.musicID_of_mands[t]="none";
-                for(var j=0;j<$scope.m_and_s.length;j++){
-                    if($scope.m_and_s[j].position==t+1)
-                    {
-                        $scope.musicID_of_mands[t]=$scope.m_and_s[j].name;
+        $scope.newpos = [];
+        $scope.newpos_name = [];
+        $scope.musicID_of_mands = [];//9tua
+
+        if ($scope.new == false) {
+            for (var t = 0; t < 9; t++) {
+                $scope.musicID_of_mands[t] = "none";
+                for (var j = 0; j < $scope.m_and_s.length; j++) {
+                    if ($scope.m_and_s[j].position == t + 1) {
+                        $scope.musicID_of_mands[t] = $scope.m_and_s[j].name;
                     }
                 }
             }
-            console.log( "aaa ="+$scope.musicID_of_mands);
+            console.log("aaa =" + $scope.musicID_of_mands);
         }
-        
-        for(var i=0;i<9;i++)
-        {
-            if($scope.selectedM[i]==undefined){
-                if($scope.new==false)
-                {
+
+        for (var i = 0; i < 9; i++) {
+            if ($scope.selectedM[i] == undefined) {
+                if ($scope.new == false) {
                     $scope.newpos.push($scope.musicID_of_mands[i]);
                 }
-                else
-                {
+                else {
                     $scope.newpos.push("none");
                 }
-              
+
             }
-            else{
+            else {
                 $scope.newpos.push($scope.selectedM[i]);
             }
-           
+
         }
         $scope.match_ID_and_name($scope.newpos);
         $scope.newpos = $scope.newpos_id;
-       
+
         pos["m1"] = $scope.newpos[0];
         pos["m2"] = $scope.newpos[1];
         pos["m3"] = $scope.newpos[2];
@@ -2041,13 +2218,13 @@ function MshowCtrl($scope, $http,NgMap,$rootScope) {
         pos["m7"] = $scope.newpos[6];
         pos["m8"] = $scope.newpos[7];
         pos["m9"] = $scope.newpos[8];
-        
-       // console.log(pos);
-        console.log("newpos = "+$scope.newpos);
-        
+
+        // console.log(pos);
+        console.log("newpos = " + $scope.newpos);
+
         $http({
             method: 'PUT',
-            url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/putMandSData.php/?showroom_id='+$scope.id,
+            url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/putMandSData.php/?showroom_id=' + $scope.id,
             headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
             data: pos,
         })
@@ -2066,16 +2243,16 @@ function MshowCtrl($scope, $http,NgMap,$rootScope) {
             }, function errorCallback(response) {
                 console.log(response);
                 $scope.errorMessage = "Error,Please try again";
-               // console.log("error");
+                // console.log("error");
             });
-        
+
     }
-    $scope.push_MusicBox_id = function(){
-        $scope.list_musicbox_id=[];
-        $scope.list_musicbox_name=[];
-        $scope.list_musicbox_id[0]="0";
-        $scope.list_musicbox_name[0]="none";
-        for(var i=0;i<$scope.musicboxs.length;i++){
+    $scope.push_MusicBox_id = function () {
+        $scope.list_musicbox_id = [];
+        $scope.list_musicbox_name = [];
+        $scope.list_musicbox_id[0] = "0";
+        $scope.list_musicbox_name[0] = "none";
+        for (var i = 0; i < $scope.musicboxs.length; i++) {
             $scope.list_musicbox_id.push($scope.musicboxs[i].music_box_id);
             $scope.list_musicbox_name.push($scope.musicboxs[i].name);
         }
