@@ -266,7 +266,7 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 $scope.musicboxs = response.data.musicboxs;
                 $scope.selectedMusicBox = $scope.musicboxs[0];
                 $scope.image_url = undefined;
-                $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
+                $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"
                     + $scope.selectedMusicBox.music_box_id + ".jpg"
             }, function errorCallback(response) {
                 console.log(response);
@@ -276,7 +276,7 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
     $scope.selectMusicBox = function (index) {
         $scope.selectedMusicBox = $scope.musicboxs[index];
-        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
+        $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"
             + $scope.selectedMusicBox.music_box_id + ".jpg"
         $scope.successMessage = undefined;
         $scope.errorMessage = undefined;
@@ -323,7 +323,7 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             else {
                 $scope.errorMessage = "Error,Please choose picture and music";
                 $scope.selectedMusicBox = $scope.musicboxs[0];
-                $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
+                $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"
                     + $scope.selectedMusicBox.music_box_id + ".jpg"
             }
 
@@ -397,7 +397,7 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         $scope.filename = "Choose picture";
         $scope.filename2 = "Choose music";
         $scope.selectedMusicBox = $scope.musicboxs[0];
-        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
+        $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"
             + $scope.selectedMusicBox.music_box_id + ".jpg"
     }
     //datatable
@@ -496,7 +496,7 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         $scope.filename = "Choose picture";
         $scope.filename2 = "Choose music";
         $scope.selectedMusicBox = info;
-        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/music_boxes/music_pic"
+        $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"
             + $scope.selectedMusicBox.music_box_id + ".jpg"
     }
     function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
@@ -567,7 +567,7 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
                 console.log(response);
                 $scope.showrooms = response.data.showrooms;
                 $scope.selectedShowroom = $scope.showrooms[0];
-                $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+                $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/showrooms/showroom_pic"
                     + $scope.selectedShowroom.showroom_id + ".jpg"
                 var la = $scope.selectedShowroom.latitude;
                 var long = $scope.selectedShowroom.longitude;
@@ -584,7 +584,7 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
 
     $scope.selectShowroom = function (index) {
         $scope.selectedShowroom = $scope.showrooms[index];
-        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+        $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/showrooms/showroom_pic"
             + $scope.selectedShowroom.showroom_id + ".jpg"
         var la = $scope.selectedShowroom.latitude;
         var long = $scope.selectedShowroom.longitude;
@@ -631,7 +631,7 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
             else {
                 $scope.errorMessage = "Error,Please choose picture";
                 $scope.selectedShowroom = $scope.showrooms[0];
-                $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+                $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/showrooms/showroom_pic"
                     + $scope.selectedShowroom.showroom_id + ".jpg"
             }
 
@@ -717,7 +717,7 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
         $scope.filename = "Choose picture";
         $scope.toggleEditMode();
         $scope.selectedShowroom = $scope.showrooms[0];
-        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+        $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/showrooms/showroom_pic"
             + $scope.selectedShowroom.showroom_id + ".jpg"
 
 
@@ -841,7 +841,7 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
         $scope.myFile = undefined;
         $scope.filename = "Choose picture";
         $scope.selectedShowroom = info;
-        $scope.image_url = "/Applications/XAMPP/xamppfiles/images/showrooms/showroom_pic"
+        $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/showrooms/showroom_pic"
             + $scope.selectedShowroom.showroom_id + ".jpg"
         var la = $scope.selectedShowroom.latitude;
         var long = $scope.selectedShowroom.longitude;
@@ -916,6 +916,8 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
     $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getShowroomData.php")
         .then(function successCallback(response) {
             $scope.showrooms = response.data.showrooms;
+            $scope.list_showroomFunc();
+            console.log($scope.list_showrooms);
             // console.log(response);
         }, function errorCallback(response) {
             console.log(response);
@@ -1077,7 +1079,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Engagements (Click)'
+                        labelString: 'Engagements (Clicks)'
                     }
                 }],
                 xAxes: [{
@@ -1149,7 +1151,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Engagements (Click)'
+                        labelString: 'Engagements (Clicks)'
                     }
                 }],
                 xAxes: [{
@@ -1163,12 +1165,47 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
 
     }
+    //list showroom
+    $scope.list_showrooms=[];
+
+    $scope.list_showroomFunc = function(){
+        for(var i =0;i<$scope.showrooms.length;i++){
+            $scope.list_showrooms.push($scope.showrooms[i].location);
+        }
+
+    }
+    //$scope.list_showroomFunc();
 
     //chart Compare
-    $scope.sh1 = 0;
-    $scope.sh2 = 0;
-    $scope.sh3 = 0;
+    
+
+    $scope.s1;
+    $scope.s2;
+    $scope.s3;
+
     $scope.CompareChart = function () {
+            //change showroom name to id 
+            $scope.sh1;
+            $scope.sh2;
+            $scope.sh3;
+            
+     for(var w=0;w<$scope.showrooms.length;w++){
+        // console.log($scope.showrooms[w].location);
+        if($scope.s1==$scope.showrooms[w].location){
+           $scope.sh1 = $scope.showrooms[w].showroom_id;
+        }
+        if($scope.s2==$scope.showrooms[w].location){
+            $scope.sh2 = $scope.showrooms[w].showroom_id;
+         }
+         if($scope.s3==$scope.showrooms[w].location){
+            $scope.sh3 = $scope.showrooms[w].showroom_id;
+         }
+        
+    }
+    // console.log( $scope.sh1);
+    // console.log( $scope.sh2);
+    // console.log( $scope.sh3);
+
         $scope.labels_data = [$scope.sh1, $scope.sh2, $scope.sh3]
         $scope.data_sh1 = [];
         $scope.data_sh2 = [];
@@ -1253,8 +1290,15 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
                         }
                     }
+                    for(var n=0;n<$scope.series_data.length;n++){
+                        for(var m=0;m<$scope.musicboxs.length;m++){
+                            if($scope.series_data[n]==$scope.musicboxs[m].music_box_id){
+                                $scope.series_data[n] = $scope.musicboxs[m].name; 
+                            }
+                        }
+                    }
                     for (var i = 0; i < $scope.series_data.length; i++) {
-                        $scope.series_data2.push({ name: "music:" + $scope.series_data[i], data: [$scope.data_all[0][i], $scope.data_all[1][i], $scope.data_all[2][i]] });
+                        $scope.series_data2.push({ name: "music box : " + $scope.series_data[i], data: [$scope.data_all[0][i], $scope.data_all[1][i], $scope.data_all[2][i]] });
                     }
 
                     console.log($scope.data_sh1);
@@ -1282,22 +1326,22 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             },
             xAxis: {
                 categories: [
-                    "showroom : " + $scope.sh1,
-                    "showroom : " + $scope.sh2,
-                    "showroom : " + $scope.sh3
+                    "showroom : " + $scope.s1,
+                    "showroom : " + $scope.s2,
+                    "showroom : " + $scope.s3
                 ],
                 crosshair: true
             },
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Engagements (Click)'
+                    text: 'Engagements (Clicks)'
                 }
             },
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y} click</b></td></tr>',
+                    '<td style="padding:0"><b>{point.y} clicks</b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
                 useHTML: true
@@ -1390,7 +1434,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Engagements (Click)'
+                            labelString: 'Engagements (Clicks)'
                         }
                     }],
                     xAxes: [{
@@ -1452,7 +1496,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Engagements (Click)'
+                            labelString: 'Engagements (Clicks)'
                         }
                     }],
                     xAxes: [{
@@ -1499,7 +1543,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Engagements (Click)'
+                            labelString: 'Engagements (Clicks)'
                         }
                     }],
                     xAxes: [{
@@ -1547,7 +1591,11 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         vm.dtColumns = [
             DTColumnBuilder.newColumn('datetime').withTitle('Datetime'),
             DTColumnBuilder.newColumn('showroom_id').withTitle('Showroom ID'),
-            DTColumnBuilder.newColumn('location').notSortable().withTitle('Showroom Name')
+            DTColumnBuilder.newColumn('location').notSortable().withTitle('Showroom Name'),
+            DTColumnBuilder.newColumn('music_box_id').withTitle('Music Box ID'),
+            DTColumnBuilder.newColumn('name').notSortable().withTitle('Music Box Name'),
+            DTColumnBuilder.newColumn('position').withTitle('Position'),
+            
 
 
         ];
@@ -2086,7 +2134,7 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
 }
 
 App.controller('MshowCtrl', MshowCtrl);
-function MshowCtrl($scope, $http, NgMap, $rootScope) {
+function MshowCtrl($scope, $http, NgMap, $rootScope,fileUploadService) {
     console.log($rootScope.user);
     $scope.id = $rootScope.user;
     $scope.m_and_s = "";
@@ -2110,7 +2158,9 @@ function MshowCtrl($scope, $http, NgMap, $rootScope) {
                 }
                 else {
                     $scope.selectedM_and_S = $scope.m_and_s[0];
+                   // $scope.image_url="http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"+$scope.selectedM_and_S.music_box_id+".jpg";
                     $scope.new = false;
+                    
                 }
 
 
@@ -2131,6 +2181,9 @@ function MshowCtrl($scope, $http, NgMap, $rootScope) {
             .then(function successCallback(response) {
                 console.log(response);
                 $scope.showroom_detail = response.data.showroom;
+                $scope.image_url2 = "http://202.28.24.69/~oasys10/SSS_web/images/promotions/promotion_pic" + $scope.showroom_detail[0].showroom_id + ".jpg";
+
+
 
             }, function errorCallback(response) {
                 console.log(response);
@@ -2140,12 +2193,14 @@ function MshowCtrl($scope, $http, NgMap, $rootScope) {
 
     $scope.selectM_and_S = function (index) {
         $scope.selectedM_and_S = $scope.m_and_s[index];
+        $scope.image_url="http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"+$scope.selectedM_and_S.music_box_id+".jpg";
     }
 
     $scope.selectM_and_S2 = function (name) {
         for (var j = 0; j < $scope.musicboxs.length; j++) {
             if (name == $scope.musicboxs[j].name) {
                 $scope.selectedM_and_S = $scope.musicboxs[j];
+                $scope.image_url="http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"+$scope.selectedM_and_S.music_box_id+".jpg";
             }
         }
         $scope.addBtn = true;
@@ -2223,7 +2278,7 @@ function MshowCtrl($scope, $http, NgMap, $rootScope) {
         console.log("newpos = " + $scope.newpos);
 
         $http({
-            method: 'PUT',
+            method: 'POST',
             url: 'http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/putMandSData.php/?showroom_id=' + $scope.id,
             headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
             data: pos,
@@ -2260,8 +2315,38 @@ function MshowCtrl($scope, $http, NgMap, $rootScope) {
         console.log($scope.list_musicbox_name);
     }
 
+    $scope.myFile;
+    $scope.filename = "Choose Picture";
 
+    //upload 
+    $scope.$watch('myFile', function (newFileObj) {
+        if (newFileObj)
+        {
+            $scope.filename = newFileObj.name;
+            $scope.addBtn=true;
+        console.log($scope.filename);
+        }
+           
+    });
 
+    $scope.uploadFile = function () {
+        file = $scope.myFile;
+        console.log($scope.showroom_detail[0].showroom_id)
+        var newfilename = "promotion_pic" + $scope.showroom_detail[0].showroom_id + ".jpg";
+        var uploadUrl = "http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/server_SH_M_pic.php", //Url of web service
+            promise = fileUploadService.uploadFileToUrl(file, newfilename, uploadUrl);
+
+        promise.then(function (response) {
+            $scope.serverResponse = response;
+            $scope.myFile = undefined;
+            $scope.filename = "Choose Picture";
+        }, function () {
+            $scope.serverResponse = 'An error has occurred';
+        })
+        
+    };
+
+    
 }
 
 
