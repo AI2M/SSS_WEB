@@ -1,4 +1,4 @@
-var App = angular.module('SSS', ['ngRoute', 'datatables', 'ngMap', 'chart.js', 'ui.bootstrap']);
+var App = angular.module('SSS', ['ngRoute', 'datatables', 'ngMap', 'chart.js', 'ui.bootstrap','ngStorage']);
 
 // App.config(function ($stateProvider, $urlRouterProvider) {
 
@@ -43,8 +43,8 @@ App.config(function ($routeProvider) {
     $routeProvider
         .when('/musics', {
             resolve: {
-                check: function ($location, $rootScope) {
-                    if (!$rootScope.super_loggedIn) {
+                check: function ($location, $sessionStorage) {
+                    if (!$sessionStorage.super_loggedIn) {
                         $location.path('/');
                         console.log('nologgin');
                     }
@@ -55,8 +55,8 @@ App.config(function ($routeProvider) {
         })
         .when('/showrooms', {
             resolve: {
-                check: function ($location, $rootScope) {
-                    if (!$rootScope.super_loggedIn) {
+                check: function ($location, $sessionStorage) {
+                    if (!$sessionStorage.super_loggedIn) {
                         $location.path('/');
                         console.log('nologgin');
                     }
@@ -67,8 +67,8 @@ App.config(function ($routeProvider) {
         })
         .when('/engagements', {
             resolve: {
-                check: function ($location, $rootScope) {
-                    if (!$rootScope.super_loggedIn) {
+                check: function ($location, $sessionStorage) {
+                    if (!$sessionStorage.super_loggedIn) {
                         $location.path('/');
                         console.log('nologgin');
                     }
@@ -79,8 +79,8 @@ App.config(function ($routeProvider) {
         })
         .when('/customers', {
             resolve: {
-                check: function ($location, $rootScope) {
-                    if (!$rootScope.super_loggedIn) {
+                check: function ($location, $sessionStorage) {
+                    if (!$sessionStorage.super_loggedIn) {
                         $location.path('/');
                         console.log('nologgin');
                     }
@@ -91,8 +91,8 @@ App.config(function ($routeProvider) {
         })
         .when('/manage', {
             resolve: {
-                check: function ($location, $rootScope) {
-                    if (!$rootScope.loggedIn) {
+                check: function ($location, $sessionStorage) {
+                    if (!$sessionStorage.loggedIn) {
                         $location.path('/');
                         console.log('nologgin');
                     }
@@ -112,7 +112,21 @@ App.config(function ($routeProvider) {
 });
 
 App.controller('NavCtrl', NavCtrl);
-function NavCtrl($scope, $location, $rootScope, $http) {
+function NavCtrl($scope, $location, $rootScope, $http,$localStorage, $sessionStorage) {
+    console.log($sessionStorage.loggedIn);
+    if($sessionStorage.loggedIn==true){
+        $rootScope.loggedIn=true;
+        $rootScope.user=$sessionStorage.user;
+        
+    }
+    else if($sessionStorage.super_loggedIn==true){
+        $rootScope.super_loggedIn=true;
+        $rootScope.user=$sessionStorage.user;
+    }
+    else{
+
+    }
+    
     var userData = {};
     $scope.getUsername = "";
     $scope.getPassword = "";
@@ -146,6 +160,8 @@ function NavCtrl($scope, $location, $rootScope, $http) {
     $rootScope.logout = function () {
         $rootScope.super_loggedIn = false;
         $rootScope.loggedIn = false;
+        $sessionStorage.super_loggedIn = false;
+        $sessionStorage.loggedIn = false;
         $location.path('/login');
     }
     $scope.getData = function () {
@@ -167,7 +183,12 @@ function NavCtrl($scope, $location, $rootScope, $http) {
                     if ($scope.username == $scope.getUsername && $scope.password == $scope.getPassword) {
                         $rootScope.super_loggedIn = true;
                         $rootScope.user = $scope.getUsername;
+                        $sessionStorage.user = $scope.getUsername;
+                        $sessionStorage.username = $scope.username;
+                        $sessionStorage.password = $scope.password;
                         console.log($rootScope.super_loggedIn);
+                        $sessionStorage.super_loggedIn = true;
+                        console.log($sessionStorage.SessionMessage);
                         $location.path('/engagements');
                     }
                     // else {
@@ -203,6 +224,9 @@ function NavCtrl($scope, $location, $rootScope, $http) {
                                     $rootScope.loggedIn = true;
                                     $rootScope.user = $scope.getUsername;
                                     console.log($rootScope.loggedIn);
+                                    $sessionStorage.loggedIn = true ;
+                                    $sessionStorage.user = $scope.getUsername;
+                                    console.log($sessionStorage.SessionMessage);
                                     $location.path('/manage');
                                 }
                                 // else {
@@ -361,7 +385,7 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
     $scope.deleteMusic = function () {
         var musicboxData = $scope.selectedMusicBox;
-        $http.delete("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/deleteMusicBoxData.php/?music_box_id=" + musicboxData.music_box_id)
+        $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/deleteMusicBoxData.php/?music_box_id=" + musicboxData.music_box_id)
             .then(function successCallback(response) {
                 console.log(response);
                 $scope.loadData();
@@ -681,7 +705,7 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
 
     $scope.deleteShowroom = function () {
         var showroomData = $scope.selectedShowroom;
-        $http.delete("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/deleteShowroomData.php/?showroom_id=" + showroomData.showroom_id)
+        $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/deleteShowroomData.php/?showroom_id=" + showroomData.showroom_id)
             .then(function successCallback(response) {
                 console.log(response);
                 $scope.loadData();
@@ -1166,9 +1190,11 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
     }
     //list showroom
-    $scope.list_showrooms=[];
+    
 
     $scope.list_showroomFunc = function(){
+        $scope.list_showrooms=[];
+        $scope.list_showrooms[0]="none";
         for(var i =0;i<$scope.showrooms.length;i++){
             $scope.list_showrooms.push($scope.showrooms[i].location);
         }
@@ -1190,21 +1216,41 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             $scope.sh3;
             
      for(var w=0;w<$scope.showrooms.length;w++){
-        // console.log($scope.showrooms[w].location);
+         console.log($scope.showrooms[w].location);
         if($scope.s1==$scope.showrooms[w].location){
            $scope.sh1 = $scope.showrooms[w].showroom_id;
+           break;
         }
-        if($scope.s2==$scope.showrooms[w].location){
-            $scope.sh2 = $scope.showrooms[w].showroom_id;
-         }
-         if($scope.s3==$scope.showrooms[w].location){
-            $scope.sh3 = $scope.showrooms[w].showroom_id;
-         }
+        else{
+            $scope.sh1=0;
+        }
         
     }
-    // console.log( $scope.sh1);
-    // console.log( $scope.sh2);
-    // console.log( $scope.sh3);
+    for(var w=0;w<$scope.showrooms.length;w++){
+        console.log($scope.showrooms[w].location);
+       if($scope.s2==$scope.showrooms[w].location){
+          $scope.sh2 = $scope.showrooms[w].showroom_id;
+          break;
+       }
+       else{
+           $scope.sh2=0;
+       }
+       
+   }
+   for(var w=0;w<$scope.showrooms.length;w++){
+    console.log($scope.showrooms[w].location);
+   if($scope.s3==$scope.showrooms[w].location){
+      $scope.sh3 = $scope.showrooms[w].showroom_id;
+      break;
+   }
+   else{
+       $scope.sh3=0;
+   }
+   
+}
+    console.log( $scope.sh1);
+    console.log( $scope.sh2);
+    console.log( $scope.sh3);
 
         $scope.labels_data = [$scope.sh1, $scope.sh2, $scope.sh3]
         $scope.data_sh1 = [];
@@ -1219,6 +1265,8 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
                 if (response.data.error == true) {
                     console.log("error get data");
+                    $scope.series_data = [];
+                    $scope.HiBarChart();
 
                 }
                 else {
@@ -1619,16 +1667,16 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
     $scope.AddPos = function () {
         for (var k = 0; k < $scope.transactionMaps.length; k++) {
             vm.positions.push([$scope.transactionMaps[k].latitude, $scope.transactionMaps[k].longitude]);
-            if ($scope.transactionMaps[k].count < 2) {
+            if ($scope.transactionMaps[k].count < 50) {
                 vm.pic.push("js/map/icon/m1.png");
             }
-            else if ($scope.transactionMaps[k].count < 4) {
+            else if ($scope.transactionMaps[k].count < 100) {
                 vm.pic.push("js/map/icon/m2.png");
             }
-            else if ($scope.transactionMaps[k].count < 6) {
+            else if ($scope.transactionMaps[k].count < 500) {
                 vm.pic.push("js/map/icon/m3.png");
             }
-            else if ($scope.transactionMaps[k].count < 8) {
+            else if ($scope.transactionMaps[k].count < 1000) {
                 vm.pic.push("js/map/icon/m4.png");
             }
             else {
