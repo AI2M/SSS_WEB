@@ -1,4 +1,4 @@
-var App = angular.module('SSS', ['ngRoute', 'datatables', 'ngMap', 'chart.js', 'ui.bootstrap','ngStorage']);
+var App = angular.module('SSS', ['ngRoute', 'datatables', 'ngMap', 'chart.js', 'ui.bootstrap', 'ngStorage']);
 
 // App.config(function ($stateProvider, $urlRouterProvider) {
 
@@ -112,21 +112,21 @@ App.config(function ($routeProvider) {
 });
 
 App.controller('NavCtrl', NavCtrl);
-function NavCtrl($scope, $location, $rootScope, $http,$localStorage, $sessionStorage) {
+function NavCtrl($scope, $location, $rootScope, $http, $localStorage, $sessionStorage) {
     console.log($sessionStorage.loggedIn);
-    if($sessionStorage.loggedIn==true){
-        $rootScope.loggedIn=true;
-        $rootScope.user=$sessionStorage.user;
-        
-    }
-    else if($sessionStorage.super_loggedIn==true){
-        $rootScope.super_loggedIn=true;
-        $rootScope.user=$sessionStorage.user;
-    }
-    else{
+    if ($sessionStorage.loggedIn == true) {
+        $rootScope.loggedIn = true;
+        $rootScope.user = $sessionStorage.user;
 
     }
-    
+    else if ($sessionStorage.super_loggedIn == true) {
+        $rootScope.super_loggedIn = true;
+        $rootScope.user = $sessionStorage.user;
+    }
+    else {
+
+    }
+
     var userData = {};
     $scope.getUsername = "";
     $scope.getPassword = "";
@@ -224,37 +224,37 @@ function NavCtrl($scope, $location, $rootScope, $http,$localStorage, $sessionSto
                                     $rootScope.loggedIn = true;
                                     $rootScope.user = $scope.getUsername;
                                     console.log($rootScope.loggedIn);
-                                    $sessionStorage.loggedIn = true ;
+                                    $sessionStorage.loggedIn = true;
                                     $sessionStorage.user = $scope.getUsername;
                                     console.log($sessionStorage.SessionMessage);
                                     $location.path('/manage');
                                 }
                                 // else {
-        
+
                                 //     //alert("wrong username or password2");
                                 //     $scope.wrongStatus2 = true;
                                 //     alert("wrong paass2");
-        
-        
+
+
                                 // }
-        
+
                             }
                             else {
-        
-        
+
+
                                 console.log("getData error manage");
                                 //alert("wrong username or password2");
                                 $scope.wrongStatus2 = true;
                                 alert("Wrong username or password");
-        
-        
+
+
                             }
-        
+
                         }, function errorCallback(response) {
                             console.log(response);
-        
+
                         });
-    
+
 
 
                 }
@@ -265,8 +265,8 @@ function NavCtrl($scope, $location, $rootScope, $http,$localStorage, $sessionSto
             });
 
 
-           
-        
+
+
 
 
     }
@@ -568,8 +568,8 @@ function AddMusicCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         }, function () {
             $scope.serverResponse = 'An error has occurred';
         })
-       
-        
+
+
     };
 
 }
@@ -906,13 +906,13 @@ function AddShowroomCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval
         }, function () {
             $scope.serverResponse = 'An error has occurred';
         })
-        
+
     };
 
 }
 
 App.controller('ShowTranCtrl', ShowTranCtrl);
-function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope, NgMap) {
+function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $compile, $scope, NgMap, $window) {
     var vm = this;
     vm.dtInstance = {};
     // vm.newPromise = newPromise;
@@ -1190,12 +1190,12 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
 
     }
     //list showroom
-    
 
-    $scope.list_showroomFunc = function(){
-        $scope.list_showrooms=[];
-        $scope.list_showrooms[0]="none";
-        for(var i =0;i<$scope.showrooms.length;i++){
+
+    $scope.list_showroomFunc = function () {
+        $scope.list_showrooms = [];
+        $scope.list_showrooms[0] = "none";
+        for (var i = 0; i < $scope.showrooms.length; i++) {
             $scope.list_showrooms.push($scope.showrooms[i].location);
         }
 
@@ -1203,133 +1203,295 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
     //$scope.list_showroomFunc();
 
     //chart Compare
-    
+
 
     $scope.s1;
     $scope.s2;
     $scope.s3;
 
-    $scope.CompareChart = function () {
-            //change showroom name to id 
-            $scope.sh1;
-            $scope.sh2;
-            $scope.sh3;
-            
-     for(var w=0;w<$scope.showrooms.length;w++){
-         console.log($scope.showrooms[w].location);
-        if($scope.s1==$scope.showrooms[w].location){
-           $scope.sh1 = $scope.showrooms[w].showroom_id;
-           break;
+    $scope.compareClick = function () {
+
+        if ($scope.s1 == $scope.s2 && $scope.s1 != undefined && $scope.s1 != "none") {
+            // console.log($scope.s1);
+            // console.log($scope.s2);
+            $window.alert("Duplicate item, please select again");
         }
-        else{
-            $scope.sh1=0;
+        else if ($scope.s1 == $scope.s3 && $scope.s1 != undefined && $scope.s1 != "none") {
+            // console.log($scope.s1);
+            // console.log($scope.s3);
+            $window.alert("Duplicate item, please select again");
         }
-        
+        else if ($scope.s2 == $scope.s3 && $scope.s2 != undefined && $scope.s2 != "none") {
+            // console.log($scope.s2);
+            // console.log($scope.s3);
+            $window.alert("Duplicate item, please select again");
+        }
+        else {
+            $scope.CompareChart2();
+        }
     }
-    for(var w=0;w<$scope.showrooms.length;w++){
-        console.log($scope.showrooms[w].location);
-       if($scope.s2==$scope.showrooms[w].location){
-          $scope.sh2 = $scope.showrooms[w].showroom_id;
-          break;
-       }
-       else{
-           $scope.sh2=0;
-       }
-       
-   }
-   for(var w=0;w<$scope.showrooms.length;w++){
-    console.log($scope.showrooms[w].location);
-   if($scope.s3==$scope.showrooms[w].location){
-      $scope.sh3 = $scope.showrooms[w].showroom_id;
-      break;
-   }
-   else{
-       $scope.sh3=0;
-   }
-   
-}
-    console.log( $scope.sh1);
-    console.log( $scope.sh2);
-    console.log( $scope.sh3);
+
+
+    // $scope.CompareChart = function () {
+    //     //change showroom name to id 
+    //     $scope.sh1;
+    //     $scope.sh2;
+    //     $scope.sh3;
+
+    //     for (var w = 0; w < $scope.showrooms.length; w++) {
+    //         console.log($scope.showrooms[w].location);
+    //         if ($scope.s1 == $scope.showrooms[w].location) {
+    //             $scope.sh1 = $scope.showrooms[w].showroom_id;
+    //             break;
+    //         }
+    //         else {
+    //             $scope.sh1 = 0;
+    //         }
+
+    //     }
+    //     for (var w = 0; w < $scope.showrooms.length; w++) {
+    //         console.log($scope.showrooms[w].location);
+    //         if ($scope.s2 == $scope.showrooms[w].location) {
+    //             $scope.sh2 = $scope.showrooms[w].showroom_id;
+    //             break;
+    //         }
+    //         else {
+    //             $scope.sh2 = 0;
+    //         }
+
+    //     }
+    //     for (var w = 0; w < $scope.showrooms.length; w++) {
+    //         console.log($scope.showrooms[w].location);
+    //         if ($scope.s3 == $scope.showrooms[w].location) {
+    //             $scope.sh3 = $scope.showrooms[w].showroom_id;
+    //             break;
+    //         }
+    //         else {
+    //             $scope.sh3 = 0;
+    //         }
+
+    //     }
+    //     console.log($scope.sh1);
+    //     console.log($scope.sh2);
+    //     console.log($scope.sh3);
+
+    //     $scope.labels_data = [$scope.sh1, $scope.sh2, $scope.sh3]
+    //     $scope.data_sh1 = [];
+    //     $scope.data_sh2 = [];
+    //     $scope.data_sh3 = [];
+    //     $scope.series_data = [];
+    //     $scope.series_data2 = [];
+    //     $scope.data_all = [[], [], []];
+    //     $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMultiChartData.php/?showroom1=" + $scope.sh1 +
+    //         "&showroom2=" + $scope.sh2 + "&showroom3=" + $scope.sh3)
+    //         .then(function successCallback(response) {
+
+    //             if (response.data.error == true) {
+    //                 console.log("error get data");
+    //                 $scope.series_data = [];
+    //                 $scope.HiBarChart();
+
+    //             }
+    //             else {
+    //                 console.log(response);
+    //                 $scope.multiChartData = response.data.chartData;
+    //                 for (var i = 0; i < $scope.multiChartData.length; i++) {
+    //                     if ($scope.multiChartData[i].showroom_id == $scope.sh1 && $scope.data_sh1.length < 3) {
+    //                         $scope.data_sh1.push($scope.multiChartData[i].Cnum);
+    //                         if ($scope.series_data.indexOf($scope.multiChartData[i].music_box_id) == -1) {
+    //                             $scope.series_data.push($scope.multiChartData[i].music_box_id);
+    //                         }
+    //                     }
+    //                     else if ($scope.multiChartData[i].showroom_id == $scope.sh2 && $scope.data_sh2.length < 3) {
+    //                         $scope.data_sh2.push($scope.multiChartData[i].Cnum);
+    //                         if ($scope.series_data.indexOf($scope.multiChartData[i].music_box_id) == -1) {
+    //                             $scope.series_data.push($scope.multiChartData[i].music_box_id);
+    //                         }
+    //                     }
+    //                     else if ($scope.multiChartData[i].showroom_id == $scope.sh3 && $scope.data_sh3.length < 3) {
+    //                         $scope.data_sh3.push($scope.multiChartData[i].Cnum);
+    //                         if ($scope.series_data.indexOf($scope.multiChartData[i].music_box_id) == -1) {
+    //                             $scope.series_data.push($scope.multiChartData[i].music_box_id);
+    //                         }
+    //                     }
+    //                     else {
+
+    //                     }
+    //                 }
+    //                 var counting1 = 0;
+    //                 var counting2 = 0;
+    //                 var counting3 = 0;
+    //                 for (var e = 0; e < $scope.series_data.length; e++) {
+    //                     $scope.data_all[0][e] = 0;
+    //                     $scope.data_all[1][e] = 0;
+    //                     $scope.data_all[2][e] = 0;
+    //                 }
+
+    //                 for (var j = 0; j < $scope.multiChartData.length; j++) {
+    //                     if ($scope.multiChartData[j].showroom_id == $scope.sh1 && counting1 < 3) {
+    //                         // $scope.data_sh1.push($scope.multiChartData[i].Cnum);
+    //                         for (var k = 0; k < $scope.series_data.length; k++) {
+
+    //                             if ($scope.multiChartData[j].music_box_id == $scope.series_data[k]) {
+    //                                 $scope.data_all[0][k] = parseInt($scope.multiChartData[j].Cnum);
+    //                                 counting1++;
+    //                             }
+    //                         }
+
+    //                     }
+    //                     else if ($scope.multiChartData[j].showroom_id == $scope.sh2 && counting2 < 3) {
+    //                         for (var k = 0; k < $scope.series_data.length; k++) {
+    //                             if ($scope.multiChartData[j].music_box_id == $scope.series_data[k]) {
+    //                                 $scope.data_all[1][k] = parseInt($scope.multiChartData[j].Cnum);
+    //                                 counting2++;
+    //                             }
+    //                         }
+
+    //                     }
+    //                     else if ($scope.multiChartData[j].showroom_id == $scope.sh3 && counting3 < 3) {
+    //                         for (var k = 0; k < $scope.series_data.length; k++) {
+    //                             if ($scope.multiChartData[j].music_box_id == $scope.series_data[k]) {
+    //                                 $scope.data_all[2][k] = parseInt($scope.multiChartData[j].Cnum);
+    //                                 counting3++;
+    //                             }
+    //                         }
+
+    //                     }
+    //                     else {
+
+    //                     }
+    //                 }
+    //                 for (var n = 0; n < $scope.series_data.length; n++) {
+    //                     for (var m = 0; m < $scope.musicboxs.length; m++) {
+    //                         if ($scope.series_data[n] == $scope.musicboxs[m].music_box_id) {
+    //                             $scope.series_data[n] = $scope.musicboxs[m].name;
+    //                         }
+    //                     }
+    //                 }
+    //                 for (var i = 0; i < $scope.series_data.length; i++) {
+    //                     $scope.series_data2.push({ name: "music box : " + $scope.series_data[i], data: [$scope.data_all[0][i], $scope.data_all[1][i], $scope.data_all[2][i]] });
+    //                 }
+
+    //                 console.log($scope.data_sh1);
+    //                 console.log($scope.data_sh2);
+    //                 console.log($scope.data_sh3);
+    //                 console.log($scope.series_data);
+    //                 console.log($scope.data_all);
+    //                 console.log($scope.series_data2);
+    //                 $scope.HiBarChart();
+
+    //             }
+
+    //         }, function errorCallback(response) {
+    //             console.log(response);
+    //         });
+
+    // }
+
+    //compare2 
+    $scope.CompareChart2 = function () {
+        $scope.sh1;
+        $scope.sh2;
+        $scope.sh3;
+
+        for (var w = 0; w < $scope.showrooms.length; w++) {
+            console.log($scope.showrooms[w].location);
+            if ($scope.s1 == $scope.showrooms[w].location) {
+                $scope.sh1 = $scope.showrooms[w].showroom_id;
+                break;
+            }
+            else {
+                $scope.sh1 = 0;
+            }
+
+        }
+        for (var w = 0; w < $scope.showrooms.length; w++) {
+            console.log($scope.showrooms[w].location);
+            if ($scope.s2 == $scope.showrooms[w].location) {
+                $scope.sh2 = $scope.showrooms[w].showroom_id;
+                break;
+            }
+            else {
+                $scope.sh2 = 0;
+            }
+
+        }
+        for (var w = 0; w < $scope.showrooms.length; w++) {
+            console.log($scope.showrooms[w].location);
+            if ($scope.s3 == $scope.showrooms[w].location) {
+                $scope.sh3 = $scope.showrooms[w].showroom_id;
+                break;
+            }
+            else {
+                $scope.sh3 = 0;
+            }
+
+        }
+        console.log($scope.sh1);
+        console.log($scope.sh2);
+        console.log($scope.sh3);
+  
+        $scope.m_id = [];
+        $scope.m_name = [];
+        $scope.data_all = [[],[],[]];
+        $scope.series_music = [];
 
         $scope.labels_data = [$scope.sh1, $scope.sh2, $scope.sh3]
-        $scope.data_sh1 = [];
-        $scope.data_sh2 = [];
-        $scope.data_sh3 = [];
-        $scope.series_data = [];
-        $scope.series_data2 = [];
-        $scope.data_all = [[], [], []];
         $http.get("http://202.28.24.69/~oasys10/SSS_web/SSS_web_api/getMultiChartData.php/?showroom1=" + $scope.sh1 +
             "&showroom2=" + $scope.sh2 + "&showroom3=" + $scope.sh3)
             .then(function successCallback(response) {
-
                 if (response.data.error == true) {
                     console.log("error get data");
-                    $scope.series_data = [];
+                    $scope.m_id = [];
                     $scope.HiBarChart();
 
                 }
                 else {
-                    console.log(response);
                     $scope.multiChartData = response.data.chartData;
+                    //get music id
                     for (var i = 0; i < $scope.multiChartData.length; i++) {
-                        if ($scope.multiChartData[i].showroom_id == $scope.sh1 && $scope.data_sh1.length < 3) {
-                            $scope.data_sh1.push($scope.multiChartData[i].Cnum);
-                            if ($scope.series_data.indexOf($scope.multiChartData[i].music_box_id) == -1) {
-                                $scope.series_data.push($scope.multiChartData[i].music_box_id);
-                            }
-                        }
-                        else if ($scope.multiChartData[i].showroom_id == $scope.sh2 && $scope.data_sh2.length < 3) {
-                            $scope.data_sh2.push($scope.multiChartData[i].Cnum);
-                            if ($scope.series_data.indexOf($scope.multiChartData[i].music_box_id) == -1) {
-                                $scope.series_data.push($scope.multiChartData[i].music_box_id);
-                            }
-                        }
-                        else if ($scope.multiChartData[i].showroom_id == $scope.sh3 && $scope.data_sh3.length < 3) {
-                            $scope.data_sh3.push($scope.multiChartData[i].Cnum);
-                            if ($scope.series_data.indexOf($scope.multiChartData[i].music_box_id) == -1) {
-                                $scope.series_data.push($scope.multiChartData[i].music_box_id);
-                            }
-                        }
-                        else {
 
+                        if ($scope.m_id.indexOf($scope.multiChartData[i].music_box_id) == -1) {
+                            $scope.m_id.push($scope.multiChartData[i].music_box_id);
+                        }
+
+                    }
+                    //get music name 
+                    for (var i =0; i<$scope.m_id.length;i++){
+                        for(var j=0;j<$scope.musicboxs.length;j++){
+                            if($scope.m_id[i]==$scope.musicboxs[j].music_box_id){
+                                $scope.m_name[i] = $scope.musicboxs[j].name;
+                            }
                         }
                     }
-                    var counting1 = 0;
-                    var counting2 = 0;
-                    var counting3 = 0;
-                    for (var e = 0; e < $scope.series_data.length; e++) {
-                        $scope.data_all[0][e] = 0;
-                        $scope.data_all[1][e] = 0;
-                        $scope.data_all[2][e] = 0;
+                    //create 0 to num of music 
+                    for (var i = 0; i < $scope.m_id.length; i++) {
+                        $scope.data_all[0][i] = 0;
+                        $scope.data_all[1][i] = 0;
+                        $scope.data_all[2][i] = 0;
                     }
+                    //get num of music
 
                     for (var j = 0; j < $scope.multiChartData.length; j++) {
-                        if ($scope.multiChartData[j].showroom_id == $scope.sh1 && counting1 < 3) {
-                            // $scope.data_sh1.push($scope.multiChartData[i].Cnum);
-                            for (var k = 0; k < $scope.series_data.length; k++) {
-
-                                if ($scope.multiChartData[j].music_box_id == $scope.series_data[k]) {
+                        if ($scope.multiChartData[j].showroom_id == $scope.sh1) {
+                            for (var k = 0; k < $scope.m_id.length; k++) {
+                                if ($scope.multiChartData[j].music_box_id == $scope.m_id[k]) {
                                     $scope.data_all[0][k] = parseInt($scope.multiChartData[j].Cnum);
-                                    counting1++;
                                 }
                             }
-
                         }
-                        else if ($scope.multiChartData[j].showroom_id == $scope.sh2 && counting2 < 3) {
-                            for (var k = 0; k < $scope.series_data.length; k++) {
-                                if ($scope.multiChartData[j].music_box_id == $scope.series_data[k]) {
+                        else if ($scope.multiChartData[j].showroom_id == $scope.sh2) {
+                            for (var k = 0; k < $scope.m_id.length; k++) {
+                                if ($scope.multiChartData[j].music_box_id == $scope.m_id[k]) {
                                     $scope.data_all[1][k] = parseInt($scope.multiChartData[j].Cnum);
-                                    counting2++;
                                 }
                             }
 
                         }
-                        else if ($scope.multiChartData[j].showroom_id == $scope.sh3 && counting3 < 3) {
-                            for (var k = 0; k < $scope.series_data.length; k++) {
-                                if ($scope.multiChartData[j].music_box_id == $scope.series_data[k]) {
+                        else if ($scope.multiChartData[j].showroom_id == $scope.sh3) {
+                            for (var k = 0; k < $scope.m_id.length; k++) {
+                                if ($scope.multiChartData[j].music_box_id == $scope.m_id[k]) {
                                     $scope.data_all[2][k] = parseInt($scope.multiChartData[j].Cnum);
-                                    counting3++;
                                 }
                             }
 
@@ -1337,33 +1499,29 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                         else {
 
                         }
-                    }
-                    for(var n=0;n<$scope.series_data.length;n++){
-                        for(var m=0;m<$scope.musicboxs.length;m++){
-                            if($scope.series_data[n]==$scope.musicboxs[m].music_box_id){
-                                $scope.series_data[n] = $scope.musicboxs[m].name; 
-                            }
-                        }
-                    }
-                    for (var i = 0; i < $scope.series_data.length; i++) {
-                        $scope.series_data2.push({ name: "music box : " + $scope.series_data[i], data: [$scope.data_all[0][i], $scope.data_all[1][i], $scope.data_all[2][i]] });
+                       
                     }
 
-                    console.log($scope.data_sh1);
-                    console.log($scope.data_sh2);
-                    console.log($scope.data_sh3);
-                    console.log($scope.series_data);
-                    console.log($scope.data_all);
-                    console.log($scope.series_data2);
-                    $scope.HiBarChart();
+                    //fill data into series 
+                    for (var i = 0; i < $scope.m_id.length; i++) {
+                        $scope.series_music.push({ name: "music box : " + $scope.m_name[i], data: [$scope.data_all[0][i], $scope.data_all[1][i], $scope.data_all[2][i]] });
+                    }
 
                 }
+                console.log( $scope.m_id);
+                console.log( $scope.m_name);
+                console.log( $scope.data_all);
+                console.log( $scope.series_music);
+                $scope.HiBarChart();
+
+
 
             }, function errorCallback(response) {
                 console.log(response);
             });
 
     }
+
     $scope.HiBarChart = function () {
         Highcharts.chart('BarHi', {
             chart: {
@@ -1400,7 +1558,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                     borderWidth: 0
                 }
             },
-            series: $scope.series_data2
+            series: $scope.series_music
         });
     }
 
@@ -1436,6 +1594,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
         $scope.series = ['Transaction'];
         if (type == 0) {
             // last 7 day21
+            $scope.x_axis_temp = [];
             $scope.x_axis = [];
             $scope.y_axis = [[]];
             var i, t;
@@ -1451,13 +1610,17 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
                         j = i + 28;
 
                     }
-                    $scope.x_axis.push(j);
+                    $scope.x_axis_temp.push(j);
                 }
                 else {
-                    $scope.x_axis.push(i);
+                    $scope.x_axis_temp.push(i);
                 }
 
             }
+            for(var i = $scope.x_axis_temp.length-1;i>=0;i--){
+                $scope.x_axis.push($scope.x_axis_temp[i]);
+            }
+
             for (var z = 0; z < 7; z++) {
                 $scope.y_axis[0].push(0);
             }
@@ -1643,7 +1806,7 @@ function ShowTranCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $
             DTColumnBuilder.newColumn('music_box_id').withTitle('Music Box ID'),
             DTColumnBuilder.newColumn('name').notSortable().withTitle('Music Box Name'),
             DTColumnBuilder.newColumn('position').withTitle('Position'),
-            
+
 
 
         ];
@@ -2182,7 +2345,7 @@ function ShowCusCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $interval, $c
 }
 
 App.controller('MshowCtrl', MshowCtrl);
-function MshowCtrl($scope, $http, NgMap, $rootScope,fileUploadService) {
+function MshowCtrl($scope, $http, NgMap, $rootScope, fileUploadService) {
     console.log($rootScope.user);
     $scope.id = $rootScope.user;
     $scope.m_and_s = "";
@@ -2206,9 +2369,9 @@ function MshowCtrl($scope, $http, NgMap, $rootScope,fileUploadService) {
                 }
                 else {
                     $scope.selectedM_and_S = $scope.m_and_s[0];
-                   // $scope.image_url="http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"+$scope.selectedM_and_S.music_box_id+".jpg";
+                    $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic" + $scope.selectedM_and_S.music_box_id + ".jpg";
                     $scope.new = false;
-                    
+
                 }
 
 
@@ -2241,14 +2404,14 @@ function MshowCtrl($scope, $http, NgMap, $rootScope,fileUploadService) {
 
     $scope.selectM_and_S = function (index) {
         $scope.selectedM_and_S = $scope.m_and_s[index];
-        $scope.image_url="http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"+$scope.selectedM_and_S.music_box_id+".jpg";
+        $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic" + $scope.selectedM_and_S.music_box_id + ".jpg";
     }
 
     $scope.selectM_and_S2 = function (name) {
         for (var j = 0; j < $scope.musicboxs.length; j++) {
             if (name == $scope.musicboxs[j].name) {
                 $scope.selectedM_and_S = $scope.musicboxs[j];
-                $scope.image_url="http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic"+$scope.selectedM_and_S.music_box_id+".jpg";
+                $scope.image_url = "http://202.28.24.69/~oasys10/SSS_web/images/music_boxes/music_pic" + $scope.selectedM_and_S.music_box_id + ".jpg";
             }
         }
         $scope.addBtn = true;
@@ -2368,13 +2531,12 @@ function MshowCtrl($scope, $http, NgMap, $rootScope,fileUploadService) {
 
     //upload 
     $scope.$watch('myFile', function (newFileObj) {
-        if (newFileObj)
-        {
+        if (newFileObj) {
             $scope.filename = newFileObj.name;
-            $scope.addBtn=true;
-        console.log($scope.filename);
+            $scope.addBtn = true;
+            console.log($scope.filename);
         }
-           
+
     });
 
     $scope.uploadFile = function () {
@@ -2391,10 +2553,10 @@ function MshowCtrl($scope, $http, NgMap, $rootScope,fileUploadService) {
         }, function () {
             $scope.serverResponse = 'An error has occurred';
         })
-        
+
     };
 
-    
+
 }
 
 
